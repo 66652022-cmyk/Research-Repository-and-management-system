@@ -1,5 +1,5 @@
 <?php
-session_start();
+
 require_once '../config/database.php';
 require_once '../classes/UnifiedAuth.php';
 
@@ -226,7 +226,13 @@ if ($_POST) {
                 >
                     Sign In
                 </button>
-                <div id="googleSignInBtn"></div>
+                <div id="g_id_onload" 
+                    data-client_id="1027047820121-8ttrsc7g4io22un3o971io4tnj961cbq.apps.googleusercontent.com"
+                    data-callback="handleGoogleLogin"
+                    data-auto_select="false"
+                    data-use_fedcm_for_prompt="false">
+                </div>
+                <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="outline" data-text="signin_with"></div>
 
                 <script src="../js/handleGoogleLogin.js"></script>
                 <script src="https://accounts.google.com/gsi/client" async defer></script>
