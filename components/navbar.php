@@ -27,7 +27,7 @@
             <a href="#" class="hover:text-blue-200">Archives</a>
             <a href="#" class="hover:text-blue-200">Search</a>
             <a href="#" class="hover:text-blue-200">About</a>
-            <a href="./pages/Login.php" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg">Log-in</a>
+            <a href="/THESIS/pages/Login.php" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg">Log-in</a>
         </div>
     </div>
     <script src="/THESIS/js/sidebar.js"></script>

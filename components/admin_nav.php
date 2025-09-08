@@ -7,10 +7,12 @@
     </div>
 
     <div class="text-white text-right">
-      <strong><?php echo htmlspecialchars($_SESSION['admin_name']); ?></strong><br>
-      <span><?php echo ucfirst(str_replace('_', ' ', $_SESSION['admin_role'])); ?></span><br>
-      <small><?php echo htmlspecialchars($_SESSION['admin_email']); ?></small><br>
-      <small>Login: <?php echo date('Y-m-d H:i:s', $_SESSION['admin_login_time']); ?></small><br>
+      <strong><?php echo htmlspecialchars($_SESSION['user_name'] ?? ''); ?></strong><br>
+      <span><?php echo ucfirst(str_replace('_', ' ', $_SESSION['user_role'] ?? '')); ?></span><br>
+      <small><?php echo htmlspecialchars($_SESSION['user_email'] ?? ''); ?></small><br>
+      <small>Login: <?php echo isset($_SESSION['user_login_time']) 
+          ? date('Y-m-d H:i:s', $_SESSION['user_login_time']) 
+          : ''; ?></small><br>
     </div>
   </div>
 </header>
