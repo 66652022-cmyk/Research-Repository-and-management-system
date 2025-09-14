@@ -13,9 +13,9 @@ if (!isset($_SESSION['user_id'])) {
     </head>
 
     <body>
-        <h1>Student Dashboard</h1>
+        <h1>English Critique Dashboard</h1>
         <p>Welcome, <?php echo $_SESSION['user_name']; ?>!</p>
-        <p>Role: Student</p>
+        <p>Role: English Critique</p>
         <a href="#" onclick="confirmLogout()">Logout</a>
     </body>
     <script>

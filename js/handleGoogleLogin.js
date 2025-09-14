@@ -36,9 +36,8 @@ function handleGoogleLogin(response) {
         
         return response.json();
     })
-
     .then(result => {
-    console.log('Server response:', result);
+        console.log('Server response:', result);
         if (result.success === false) {
             alert('Login failed: ' + (result.message || 'Unknown error'));
             return;
@@ -57,7 +56,6 @@ function handleGoogleLogin(response) {
             alert('Login successful but no redirect specified');
         }
     })
-
     .catch(err => {
         console.error("Google login error:", err);
         
@@ -71,7 +69,7 @@ function handleGoogleLogin(response) {
     });
 }
 
-//(for debugging)
+// Test connection function (for debugging)
 function testConnection() {
     console.log('Testing connection...');
     
@@ -100,34 +98,32 @@ function testConnection() {
     });
 }
 
-function initGoogleSignIn() {
-    if (typeof google !== 'undefined' && google.accounts) {
-        console.log('Google Sign-In library loaded');
-    } else {
-        console.log('Waiting for Google Sign-In library...');
-        setTimeout(initGoogleSignIn, 500);
-    }
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    initGoogleSignIn();
-});
+// Single initialization function
 document.addEventListener('DOMContentLoaded', function() {
     // Wait until Google client library is loaded
     function renderButton() {
         if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
             console.log('Google Sign-In library loaded');
             
+            // Initialize Google Sign-In
             google.accounts.id.initialize({
                 client_id: "1027047820121-8ttrsc7g4io22un3o971io4tnj961cbq.apps.googleusercontent.com",
                 callback: handleGoogleLogin
             });
 
+            // Render button with proper centering
             google.accounts.id.renderButton(
                 document.getElementById("googleSignInBtn"),
-                { theme: "outline", size: "large", text: "signin_with" }
+                { 
+                    theme: "outline", 
+                    size: "large", 
+                    text: "signin_with",
+                    width: 280, // Fixed width for better centering
+                    shape: "rectangular"
+                }
             );
 
+            // Show the one-tap prompt
             google.accounts.id.prompt();
         } else {
             console.log('Waiting for Google Sign-In library...');
@@ -138,5 +134,5 @@ document.addEventListener('DOMContentLoaded', function() {
     renderButton();
 });
 
-// You can also call testConnection() from browser console for debugging
+// You can call testConnection() from browser console for debugging
 // testConnection();

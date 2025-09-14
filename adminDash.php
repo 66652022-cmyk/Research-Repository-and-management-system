@@ -75,6 +75,7 @@ $stats = [
     <?php include 'components/admin_nav.php'; ?>
     
     <!-- Main Layout Container -->
+     
     <div id="contentWrapper" class="transition duration-300"></div>
         <div class="flex min-h-screen">
             <!-- Sidebar -->
@@ -229,6 +230,10 @@ $stats = [
                         </button>
                     </div>
                 </div>
+                <!-- adviser page -->
+                <div id="adviser-section" class="section hidden">
+                    <?php include 'dashboards/adviser_dash.php'; ?>
+                </div>
             </main>
         </div>
     </div>
@@ -294,7 +299,6 @@ $stats = [
         </div>
     </div>
 
-
     <script>
         // Sample data
         let users = [
@@ -323,18 +327,12 @@ $stats = [
         function showSection(section) {
             document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
             document.getElementById(section + '-section').classList.remove('hidden');
-            
-            // Update active nav item
+
+            // Optionally, set active sidebar nav style
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.classList.remove('bg-royal-blue-light');
             });
             event.target.closest('.nav-item').classList.add('bg-royal-blue-light');
-            
-            if (section === 'dashboard') {
-                updateDashboardStats();
-            } else if (section === 'reset-password') {
-                populateResetPasswordUsers();
-            }
         }
 
         // Dashboard functions
@@ -658,7 +656,7 @@ document.getElementById('addUserForm').addEventListener('submit', async function
 
         function confirmLogout() {
             if (confirm("Are you sure you want to log out?")) {
-                window.location.href = 'classes/adminLogout.php';
+                window.location.href = 'classes/LogoutHandling.php';
             }
         }
 

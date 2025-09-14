@@ -1,4 +1,3 @@
-<!-- admin_nav.php -->
 <header class="bg-royal-blue py-4 shadow-lg">
   <div class="container mx-auto px-4 flex justify-between items-center">
     <div>
@@ -13,6 +12,8 @@
       <small>Login: <?php echo isset($_SESSION['user_login_time']) 
           ? date('Y-m-d H:i:s', $_SESSION['user_login_time']) 
           : ''; ?></small><br>
+     
     </div>
+    
   </div>
 </header>

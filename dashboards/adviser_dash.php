@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 if (!isset($_SESSION['user_id'])) {
     header('Location: /THESIS/login.php');
     exit;
@@ -9,14 +11,17 @@ if (!isset($_SESSION['user_id'])) {
 <html lang="en">
     <head>
     <meta charset="UTF-8">
-    <title>Student Dashboard</title>
+    <title>Research Adviser</title>
     </head>
 
-    <body>
-        <h1>Student Dashboard</h1>
+    <body class="bg-black">
+        <div id="adviser-dashboard" class="section">
+        <h1 class="bg-black">Research Adviser Dashboard</h1>
         <p>Welcome, <?php echo $_SESSION['user_name']; ?>!</p>
-        <p>Role: Student</p>
+        <p>Role:Research Adviser</p>
         <a href="#" onclick="confirmLogout()">Logout</a>
+        </div>
+       
     </body>
     <script>
         function confirmLogout() {

@@ -9,13 +9,13 @@ if (!isset($_SESSION['user_id'])) {
 <html lang="en">
     <head>
     <meta charset="UTF-8">
-    <title>Student Dashboard</title>
+    <title>Research Director</title>
     </head>
 
     <body>
-        <h1>Student Dashboard</h1>
+        <h1>Research Director Dashboard</h1>
         <p>Welcome, <?php echo $_SESSION['user_name']; ?>!</p>
-        <p>Role: Student</p>
+        <p>Role: Research Director</p>
         <a href="#" onclick="confirmLogout()">Logout</a>
     </body>
     <script>

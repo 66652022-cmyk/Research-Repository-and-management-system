@@ -10,32 +10,32 @@ class UnifiedAuth {
         ],
         'research_director' => [
             'level' => 4,
-            'dashboard' => '/THESIS/research_director_dash.php',
+            'dashboard' => '/THESIS/dashboards/research_director_dash.php',
             'name' => 'Research Director'
         ],
         'research_faculty' => [
             'level' => 3,
-            'dashboard' => '/THESIS/faculty_dash.php',
+            'dashboard' => '/THESIS/dashboards/faculty_dash.php',
             'name' => 'Research Faculty'
         ],
-        'research_adviser' => [
+        'adviser' => [
             'level' => 3,
-            'dashboard' => '/THESIS/adviser_dash.php',
+            'dashboard' => '/THESIS/dashboards/adviser_dash.php',
             'name' => 'Research Adviser'
         ],
-        'english_critique' => [
+        'critique_english' => [
             'level' => 2,
-            'dashboard' => '/THESIS/critique_dash.php',
+            'dashboard' => '/THESIS/dashboards/critique_dash.php',
             'name' => 'English Critique'
         ],
-        'statistician' => [
+        'critique_statistician' => [
             'level' => 2,
-            'dashboard' => '/THESIS/statistician_dash.php',
+            'dashboard' => '/THESIS/dashboards/statistician_dash.php',
             'name' => 'Statistician'
         ],
         'financial_critique' => [
             'level' => 2,
-            'dashboard' => '/THESIS/finance_dash.php',
+            'dashboard' => '/THESIS/dashboards/finance_dash.php',
             'name' => 'Financial Critique'
         ],
         'student' => [
@@ -176,11 +176,11 @@ class UnifiedAuth {
     public function createUser($data) {
     // Set default password if not provided
     if (empty($data['password'])) {
-        $data['password'] = 'Password123!';
+        $data['password'] = 'pssword123';
     }
-
+    
     // Valid roles based on your database enum
-    $validRoles = ['super_admin', 'research_director', 'adviser', 'critique_english', 'critique_statistician', 'student'];
+    $validRoles = ['super_admin', 'research_faculty', 'financial_critique', 'research_director', 'adviser', 'critique_english', 'critique_statistician', 'student'];
     
     if (!in_array($data['role'], $validRoles)) {
         return ['success' => false, 'message' => 'Invalid role specified.'];

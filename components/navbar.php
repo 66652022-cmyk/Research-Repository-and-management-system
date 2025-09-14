@@ -2,13 +2,24 @@
     <div class="container mx-auto px-4">
         <div class="flex justify-between items-center py-4">
             <div class="flex items-center space-x-2">
-                <i class="fas fa-book-open text-2xl"></i>
-                <span class="text-xl font-bold">HCC Inc. Management and Research Repository</span>
+                <!-- <i class="fas fa-book-open text-2xl"></i> -->
+                <div class="playfair">
+                <div class="text-4xl font-semibold letter-spacing-wide tracking-wider">
+                    HOLY CROSS COLLEGE INC.
+                </div>
+                <!-- <div class="text-xs font-normal letter-spacing-wider mt-1 tracking-widest">
+                    S T A . &nbsp; R O S A , &nbsp; N . E . &nbsp; I N C .
+                </div> -->
+                <div class="text-xl font-medium mt-2 tracking-wide">
+                    <i class="fas fa-book-open text-2xl"></i>
+                    Management and Research Repository
+                </div>
+            </div>
             </div>
             <div class="hidden md:flex space-x-8">
                 <a href="/THESIS/index.php" class="hover:text-blue-200">Home</a>
                 <a href="#" class="hover:text-blue-200">Archives</a>
-                <a href="#" class="hover:text-blue-200">Search</a>
+                <a href="/THESIS/landing_search.php" class="hover:text-blue-200">Search</a>
                 <a href="#" class="hover:text-blue-200">About</a>
             </div>
             <div class="hidden md:flex items-center space-x-4">
@@ -25,7 +36,7 @@
             <button id="close-sidebar" class="self-end text-white text-2xl mb-4">&times;</button>
             <a href="../index.php" class="hover:text-blue-200">Home</a>
             <a href="#" class="hover:text-blue-200">Archives</a>
-            <a href="#" class="hover:text-blue-200">Search</a>
+            <a href="/THESIS/landing_search.php" class="hover:text-blue-200">Search</a>
             <a href="#" class="hover:text-blue-200">About</a>
             <a href="/THESIS/pages/Login.php" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg">Log-in</a>
         </div>
