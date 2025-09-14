@@ -14,9 +14,9 @@ if (!isset($_SESSION['user_id'])) {
     <title>Research Adviser</title>
     </head>
 
-    <body class="bg-black">
+    <body>
         <div id="adviser-dashboard" class="section">
-        <h1 class="bg-black">Research Adviser Dashboard</h1>
+        <h1>Research Adviser Dashboard</h1>
         <p>Welcome, <?php echo $_SESSION['user_name']; ?>!</p>
         <p>Role:Research Adviser</p>
         <a href="#" onclick="confirmLogout()">Logout</a>

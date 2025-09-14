@@ -5,7 +5,7 @@ if (!isset($_SESSION['user_logged_in']) || $_SESSION['user_logged_in'] !== true)
     exit();
 }
 
-// Optional: restrict to only super_admin
+//restrict to only super_admin
 if ($_SESSION['user_role'] !== 'super_admin') {
     header('Location: /THESIS/pages/Login.php');
     exit();
@@ -76,13 +76,8 @@ $stats = [
     
     <!-- Main Layout Container -->
      
-    <div id="contentWrapper" class="transition duration-300"></div>
-        <div class="flex min-h-screen">
-            <!-- Sidebar -->
-            <aside class="w-64 bg-royal-blue-dark text-white shadow-lg">
-                <?php include 'components/admin_sidebar.php'; ?>
-            </aside>
-            
+    <div id="contentWrapper" class="pt-16 transition-all duration-300">
+        <main class="min-h-screen bg-gray-50 p-6">           
             <!-- Main Content -->
             <main class="flex-1 p-6 overflow-y-auto bg-gray-50">
                 <!-- Dashboard Section -->
@@ -158,20 +153,21 @@ $stats = [
                         <div class="flex flex-wrap gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Filter by User Type:</label>
-                                <select id="userTypeFilter" onchange="filterUsers()" class="border border-gray-300 rounded-md px-3 py-2">
+                                <select id="userTypeFilter" class="border border-gray-300 rounded-md px-3 py-2">
                                     <option value="">All Types</option>
-                                    <option value="research director">Research Director</option>
-                                    <option value="research faculty">Research Faculty</option>
-                                    <option value="research adviser">Research Adviser</option>
-                                    <option value="english critique">English Critique</option>
-                                    <option value="statistician">Statistician</option>
-                                    <option value="financial critique">Financial Critique</option>
-                                    <option value="students">Students</option>
+                                    <option value="super_admin">Admin</option>
+                                    <option value="research_director">Research Director</option>
+                                    <option value="research_faculty">Research Faculty</option>
+                                    <option value="adviser">Research Adviser</option>
+                                    <option value="critique_english">English Critique</option>
+                                    <option value="critique_statistician">Statistician</option>
+                                    <option value="financial_critique">Financial Critique</option>
+                                    <option value="student">Students</option>
                                 </select>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Sort:</label>
-                                <select id="sortFilter" onchange="sortUsers()" class="border border-gray-300 rounded-md px-3 py-2">
+                                <select id="sortFilter" class="border border-gray-300 rounded-md px-3 py-2">
                                     <option value="az">A-Z</option>
                                     <option value="za">Z-A</option>
                                     <option value="recent">Most Recent</option>
@@ -180,7 +176,7 @@ $stats = [
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Search:</label>
-                                <input type="text" id="searchInput" onkeyup="filterUsers()" placeholder="Search by name or email..." class="border border-gray-300 rounded-md px-3 py-2">
+                                <input type="text" id="searchInput" placeholder="Search by name or email..." class="border border-gray-300 rounded-md px-3 py-2"autocomplete="off"spellcheck="false">
                             </div>
                         </div>
                     </div>
@@ -235,7 +231,7 @@ $stats = [
                     <?php include 'dashboards/adviser_dash.php'; ?>
                 </div>
             </main>
-        </div>
+        </main>
     </div>
     <!-- Add User Modal -->
     <div id="addUserModal"
@@ -300,51 +296,98 @@ $stats = [
     </div>
 
     <script>
-        // Sample data
-        let users = [
-            { id: 1, name: "John Smith", email: "john.smith@university.edu", type: "research director", created: "2024-01-15" },
-            { id: 2, name: "Sarah Johnson", email: "sarah.johnson@university.edu", type: "research faculty", created: "2024-01-20" },
-            { id: 3, name: "Michael Brown", email: "michael.brown@university.edu", type: "statistician", created: "2024-02-01" },
-            { id: 4, name: "Emily Davis", email: "emily.davis@university.edu", type: "english critique", created: "2024-02-10" },
-            { id: 5, name: "James Wilson", email: "james.wilson@university.edu", type: "students", created: "2024-02-15" },
-            { id: 6, name: "Lisa Anderson", email: "lisa.anderson@university.edu", type: "research adviser", created: "2024-02-20" },
-            { id: 7, name: "David Martinez", email: "david.martinez@university.edu", type: "financial critique", created: "2024-02-25" },
-            { id: 8, name: "Jennifer Taylor", email: "jennifer.taylor@university.edu", type: "students", created: "2024-03-01" },
-            { id: 9, name: "Robert Garcia", email: "robert.garcia@university.edu", type: "research faculty", created: "2024-03-05" },
-            { id: 10, name: "Amanda Thompson", email: "amanda.thompson@university.edu", type: "english critique", created: "2024-03-10" },
-            { id: 11, name: "Christopher Lee", email: "christopher.lee@university.edu", type: "statistician", created: "2024-03-15" },
-            { id: 12, name: "Michelle Rodriguez", email: "michelle.rodriguez@university.edu", type: "students", created: "2024-03-20" },
-            { id: 13, name: "Daniel White", email: "daniel.white@university.edu", type: "research director", created: "2024-03-25" },
-            { id: 14, name: "Jessica Moore", email: "jessica.moore@university.edu", type: "research adviser", created: "2024-03-30" },
-            { id: 15, name: "Kevin Clark", email: "kevin.clark@university.edu", type: "financial critique", created: "2024-04-01" }
-        ];
-        
-        let filteredUsers = [...users];
+        let users = [];
+        let filteredUsers = [];
         let sortColumn = 0;
         let sortDirection = 'asc';
 
-        // Navigation
+        async function fetchUsers() {
+            try {
+                const res = await fetch('queries/getuser.php');
+                const data = await res.json();
+                if (data.success) {
+                    users = data.users;
+                    filteredUsers = [...users];
+                    renderUserTable();
+                    updateDashboardStats();
+                } else {
+                    alert(data.message || 'Failed to fetch users');
+                }
+            } catch (error) {
+                console.error('Error fetching users:', error);
+            }
+        }
+
+        // Initialize all event handlers properly
+        function initializeEventHandlers() {
+            // Clear search input
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.value = '';
+                
+                // Add debounced search
+                let searchTimeout;
+                searchInput.addEventListener('input', function() {
+                    clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout(filterUsers, 300);
+                });
+            }
+            
+            // Filter dropdown
+            const userTypeFilter = document.getElementById('userTypeFilter');
+            if (userTypeFilter) {
+                userTypeFilter.addEventListener('change', filterUsers);
+            }
+            
+            // Sort dropdown
+            const sortFilter = document.getElementById('sortFilter');
+            if (sortFilter) {
+                sortFilter.addEventListener('change', sortUsers);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeEventHandlers();
+            fetchUsers();
+
+            showSection('emails');
+        });
+
         function showSection(section) {
             document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
-            document.getElementById(section + '-section').classList.remove('hidden');
-
-            // Optionally, set active sidebar nav style
+            
+            const targetSection = document.getElementById(section + '-section');
+            if (targetSection) {
+                targetSection.classList.remove('hidden');
+            }
+        
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.classList.remove('bg-royal-blue-light');
             });
-            event.target.closest('.nav-item').classList.add('bg-royal-blue-light');
+            
+            if (section !== 'emails') {
+                const searchInput = document.getElementById('searchInput');
+                if (searchInput) {
+                    searchInput.value = '';
+                    filterUsers();
+                }
+            }
         }
 
-        // Dashboard functions
         function updateDashboardStats() {
-            document.getElementById('total-users').textContent = users.length;
-            document.getElementById('active-users').textContent = users.filter(u => u.status === 'Active').length;
-            document.getElementById('email-count').textContent = users.length;
+            const totalUsersEl = document.getElementById('total-users');
+            const activeUsersEl = document.getElementById('active-users');
+            const emailCountEl = document.getElementById('email-count');
+            
+            if (totalUsersEl) totalUsersEl.textContent = users.length;
+            if (activeUsersEl) activeUsersEl.textContent = users.filter(u => u.status === 'Active').length;
+            if (emailCountEl) emailCountEl.textContent = users.length;
         }
 
-        // Table functions
         function renderUserTable() {
             const tbody = document.getElementById('userTableBody');
+            if (!tbody) return;
+            
             tbody.innerHTML = '';
             
             filteredUsers.forEach(user => {
@@ -365,14 +408,17 @@ $stats = [
         }
 
         function filterUsers() {
-            const typeFilter = document.getElementById('userTypeFilter').value.toLowerCase();
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const typeFilter = document.getElementById('userTypeFilter');
+            const searchInput = document.getElementById('searchInput');
+            
+            const typeValue = typeFilter ? typeFilter.value.toLowerCase() : '';
+            const searchValue = searchInput ? searchInput.value.toLowerCase().trim() : '';
             
             filteredUsers = users.filter(user => {
-                const typeMatch = !typeFilter || user.type.toLowerCase() === typeFilter;
-                const searchMatch = !searchTerm || 
-                    user.name.toLowerCase().includes(searchTerm) ||
-                    user.email.toLowerCase().includes(searchTerm);
+                const typeMatch = !typeValue || user.type.toLowerCase() === typeValue;
+                const searchMatch = !searchValue || 
+                    user.name.toLowerCase().includes(searchValue) ||
+                    user.email.toLowerCase().includes(searchValue);
                 return typeMatch && searchMatch;
             });
             
@@ -380,14 +426,34 @@ $stats = [
         }
 
         function sortUsers() {
-            const sortValue = document.getElementById('sortFilter').value;
+            const sortFilter = document.getElementById('sortFilter');
+            if (!sortFilter) return;
+            
+            const sortValue = sortFilter.value;
+            
+            // Helper function to extract last name from full name
+            function getLastName(fullName) {
+                if (!fullName || typeof fullName !== 'string') return '';
+                
+                const nameParts = fullName.trim().split(/\s+/);
+                // Return the last part of the name as the last name
+                return nameParts[nameParts.length - 1].toLowerCase();
+            }
             
             switch(sortValue) {
                 case 'az':
-                    filteredUsers.sort((a, b) => a.name.localeCompare(b.name));
+                    filteredUsers.sort((a, b) => {
+                        const lastNameA = getLastName(a.name);
+                        const lastNameB = getLastName(b.name);
+                        return lastNameA.localeCompare(lastNameB);
+                    });
                     break;
                 case 'za':
-                    filteredUsers.sort((a, b) => b.name.localeCompare(a.name));
+                    filteredUsers.sort((a, b) => {
+                        const lastNameA = getLastName(a.name);
+                        const lastNameB = getLastName(b.name);
+                        return lastNameB.localeCompare(lastNameA);
+                    });
                     break;
                 case 'recent':
                     filteredUsers.sort((a, b) => new Date(b.created) - new Date(a.created));
@@ -400,206 +466,39 @@ $stats = [
             renderUserTable();
         }
 
-        // Modal functions
         function showAddUserModal() {
-            document.getElementById('addUserModal').classList.remove('hidden');
-            document.getElementById('addUserModal').classList.add('flex');
-            document.getElementById('contentWrapper').classList.add('blur-sm');
+            const modal = document.getElementById('addUserModal');
+            const contentWrapper = document.getElementById('contentWrapper');
             
-            // Reset form state
-            document.getElementById('addUserForm').reset();
-            
-            // Hide all conditional fields initially
-            document.getElementById('courseGroup').classList.add('hidden');
-            document.getElementById('educAttainmentGroup').classList.add('hidden');
-            document.getElementById('specializationGroup').classList.add('hidden');
+            if (modal && contentWrapper) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                contentWrapper.classList.add('blur-sm');
+                
+                const form = document.getElementById('addUserForm');
+                if (form) form.reset();
+                
+                ['courseGroup', 'educAttainmentGroup', 'specializationGroup'].forEach(id => {
+                    const element = document.getElementById(id);
+                    if (element) element.classList.add('hidden');
+                });
+                
+                const searchInput = document.getElementById('searchInput');
+                if (searchInput) searchInput.blur();
+            }
         }
 
         function hideAddUserModal() {
-            document.getElementById('addUserModal').classList.add('hidden');
-            document.getElementById('addUserModal').classList.remove('flex');
-            document.getElementById('addUserForm').reset();
-            document.getElementById('contentWrapper').classList.remove('blur-sm');
+            const modal = document.getElementById('addUserModal');
+            const contentWrapper = document.getElementById('contentWrapper');
             
-            // Reset all form fields and remove required attributes
-            const inputs = ['course', 'educationalAttainment', 'specialization'];
-            inputs.forEach(id => {
-                document.getElementById(id).removeAttribute('required');
-            });
-        }
-
-        // REPLACE THE OLD FORM SUBMISSION CODE WITH THIS NEW VERSION:
-        
-        // Dynamic form fields handler
-        document.getElementById('userType').addEventListener('change', function() {
-            const role = this.value;
-            const courseGroup = document.getElementById('courseGroup');
-            const educGroup = document.getElementById('educAttainmentGroup');
-            const specGroup = document.getElementById('specializationGroup');
-            
-            // Get the required attribute elements
-            const courseInput = document.getElementById('course');
-            const educInput = document.getElementById('educationalAttainment');
-            const specInput = document.getElementById('specialization');
-
-            if (role === 'students') {
-                // Students - show only course
-                courseGroup.classList.remove('hidden');
-                educGroup.classList.add('hidden');
-                specGroup.classList.add('hidden');
+            if (modal && contentWrapper) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                contentWrapper.classList.remove('blur-sm');
                 
-                // Set required attributes
-                courseInput.setAttribute('required', 'required');
-                educInput.removeAttribute('required');
-                specInput.removeAttribute('required');
-            } else if (role) {
-                // Faculty/Staff - show course, education, and specialization
-                courseGroup.classList.remove('hidden');
-                educGroup.classList.remove('hidden');
-                specGroup.classList.remove('hidden');
-                
-                // Set required attributes
-                courseInput.removeAttribute('required'); // Course is optional for faculty
-                educInput.setAttribute('required', 'required');
-                specInput.setAttribute('required', 'required');
-            } else {
-                // Default - hide all
-                courseGroup.classList.add('hidden');
-                educGroup.classList.add('hidden');
-                specGroup.classList.add('hidden');
-                
-                // Remove required attributes
-                courseInput.removeAttribute('required');
-                educInput.removeAttribute('required');
-                specInput.removeAttribute('required');
-            }
-        });
-
-document.getElementById('addUserForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-
-    const name = document.getElementById('userName').value.trim();
-    const email = document.getElementById('userEmail').value.trim();
-    const userType = document.getElementById('userType').value;
-    const course = document.getElementById('course').value.trim();
-    const educationalAttainment = document.getElementById('educationalAttainment').value;
-    const specialization = document.getElementById('specialization').value.trim();
-
-    console.log('Form data collected:', { name, email, userType, course, educationalAttainment, specialization });
-
-    if (!name || !email || !userType) {
-        alert('Please fill in all required fields.');
-        return;
-    }
-
-    if (userType === 'students' && !course) {
-        alert('Course is required for students.');
-        return;
-    }
-
-    if (userType !== 'students') {
-        if (!educationalAttainment) {
-            alert('Educational attainment is required for this role.');
-            return;
-        }
-        if (!specialization) {
-            alert('Specialization is required for this role.');
-            return;
-        }
-    }
-
-    const roleMap = {
-        "research director": "research_director",
-        "research faculty": "adviser",
-        "research adviser": "adviser", 
-        "english critique": "critique_english",
-        "statistician": "critique_statistician",
-        "financial critique": "critique_statistician",
-        "students": "student"
-    };
-
-    const dbRole = roleMap[userType];
-    console.log('Role mapping:', userType, '->', dbRole);
-    
-    if (!dbRole) {
-        alert('Invalid role selected.');
-        return;
-    }
-
-    // Prepare user data
-    const userData = {
-        name: name,
-        email: email,
-        role: dbRole,
-        course: userType === 'students' ? course : (course || null),
-        educational_attainment: userType !== 'students' ? educationalAttainment : null,
-        specialization: userType !== 'students' ? specialization : null
-    };
-
-    console.log('Sending user data:', userData);
-
-    try {
-        const response = await fetch('classes/process_add_user.php', {
-            method: 'POST',
-            headers: { 
-                'Content-Type': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            body: JSON.stringify(userData)
-        });
-
-        console.log('Response status:', response.status);
-        console.log('Response headers:', response.headers);
-
-        const responseText = await response.text();
-        console.log('Raw response:', responseText);
-
-        let result;
-        try {
-            result = JSON.parse(responseText);
-            console.log('Parsed JSON result:', result);
-        } catch (jsonError) {
-            console.error('JSON parsing error:', jsonError);
-            console.error('Response was:', responseText);
-            alert('Server returned invalid response. Check console for details.');
-            return;
-        }
-
-        if (result.success) {
-            const newUser = {
-                id: result.user_id,
-                name: userData.name,
-                email: userData.email,
-                type: userType,
-                status: 'Active',
-                created: new Date().toISOString().split('T')[0]
-            };
-
-            console.log('Adding new user to table:', newUser);
-
-            users.push(newUser);
-            filteredUsers = [...users];
-            renderUserTable();
-            updateDashboardStats();
-
-            hideAddUserModal();
-            alert('User added successfully! Default password: Password123!');
-        } else {
-            console.error('Server error:', result);
-            alert('Error: ' + (result.message || 'Unknown error occurred'));
-        }
-    } catch (error) {
-        console.error('Network error details:', error);
-        alert('Network error occurred. Check console for details.');
-    }
-});
-
-        // User management functions
-        function editUser(id) {
-            const user = users.find(u => u.id === id);
-            if (user) {
-                alert(`Edit user: ${user.name} (${user.email})`);
-                // Add edit functionality here
+                const form = document.getElementById('addUserForm');
+                if (form) form.reset();
             }
         }
 
@@ -608,49 +507,8 @@ document.getElementById('addUserForm').addEventListener('submit', async function
                 users = users.filter(u => u.id !== id);
                 filteredUsers = [...users];
                 renderUserTable();
+                updateDashboardStats();
                 alert('User deleted successfully!');
-            }
-        }
-
-        // Reset password functions
-        function populateResetPasswordUsers() {
-            const select = document.getElementById('resetPasswordUser');
-            select.innerHTML = '<option value="">Select a user...</option>';
-            
-            users.forEach(user => {
-                const option = document.createElement('option');
-                option.value = user.id;
-                option.textContent = `${user.name} (${user.email})`;
-                select.appendChild(option);
-            });
-        }
-
-        function resetPassword() {
-            const userId = document.getElementById('resetPasswordUser').value;
-            const newPassword = document.getElementById('newPassword').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            
-            if (!userId) {
-                alert('Please select a user.');
-                return;
-            }
-            
-            if (!newPassword) {
-                alert('Please enter a new password.');
-                return;
-            }
-            
-            if (newPassword !== confirmPassword) {
-                alert('Passwords do not match.');
-                return;
-            }
-            
-            const user = users.find(u => u.id === parseInt(userId));
-            if (user) {
-                alert(`Password reset successfully for ${user.name}`);
-                document.getElementById('newPassword').value = '';
-                document.getElementById('confirmPassword').value = '';
-                document.getElementById('resetPasswordUser').value = '';
             }
         }
 
@@ -659,11 +517,6 @@ document.getElementById('addUserForm').addEventListener('submit', async function
                 window.location.href = 'classes/LogoutHandling.php';
             }
         }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            renderUserTable();
-            updateDashboardStats();
-        });
     </script>
 </body>
 </html>
