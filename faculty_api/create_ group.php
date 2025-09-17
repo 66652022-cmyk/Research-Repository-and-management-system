@@ -3,7 +3,7 @@ header('Content-Type: application/json');
 require_once '../config/database.php';
 
 $db = new Database();
-$pdo = $db->connect();
+$dbConn = $db->connect();
 
 $name = $_POST['groupName'] ?? '';
 $thesisTitle = $_POST['thesisTitle'] ?? '';
@@ -29,26 +29,34 @@ if (!$user_id) {
 }
 
 try {
-    $pdo->beginTransaction();
+    mysqli_autocommit($dbConn, false); // Start transaction
 
     // Insert group
-    $stmt = $pdo->prepare("INSERT INTO groups (name, description, adviser_id, english_critique_id, statistician_id, financial_analyst_id, status) VALUES (?, ?, ?, ?, ?, ?, 'active')");
-    $stmt->execute([$name, $thesisTitle, $adviser_id, $english_critique_id, $statistician_id, $financial_analyst_id]);
-    $group_id = $pdo->lastInsertId();
+    $stmt = mysqli_prepare($dbConn, "INSERT INTO groups (name, description, adviser_id, english_critique_id, statistician_id, financial_analyst_id, status) VALUES (?, ?, ?, ?, ?, ?, 'active')");
+    if ($stmt === false) {
+        throw new Exception("Prepare failed: " . mysqli_error($dbConn));
+    }
+    mysqli_stmt_bind_param($stmt, 'ssssss', $name, $thesisTitle, $adviser_id, $english_critique_id, $statistician_id, $financial_analyst_id);
+    mysqli_stmt_execute($stmt);
+    $group_id = mysqli_insert_id($dbConn);
 
     // Insert group members
-    $stmtMember = $pdo->prepare("INSERT INTO group_members (group_id, student_id, role) VALUES (?, ?, ?)");
+    $stmtMember = mysqli_prepare($dbConn, "INSERT INTO group_members (group_id, student_id, role) VALUES (?, ?, ?)");
+    if ($stmtMember === false) {
+        throw new Exception("Prepare failed: " . mysqli_error($dbConn));
+    }
     $first = true;
     foreach ($members as $student_id) {
         $role = $first ? 'leader' : 'member';
-        $stmtMember->execute([$group_id, $student_id, $role]);
+        mysqli_stmt_bind_param($stmtMember, 'iss', $group_id, $student_id, $role);
+        mysqli_stmt_execute($stmtMember);
         $first = false;
     }
 
-    $pdo->commit();
+    mysqli_commit($dbConn);
     echo json_encode(['success' => true]);
 } catch (Exception $e) {
-    $pdo->rollBack();
+    mysqli_rollback($dbConn);
     http_response_code(500);
     echo json_encode(['success' => false, 'message' => 'Failed to create group: ' . $e->getMessage()]);
 }

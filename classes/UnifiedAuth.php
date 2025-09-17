@@ -49,18 +49,69 @@ class UnifiedAuth {
         $database = new Database();
         $this->db = $database->connect();
     }
+
+    private function prepareAndExecute($query, $params = []) {
+        $stmt = mysqli_prepare($this->db, $query);
+        if (!$stmt) {
+            throw new Exception("Prepare failed: " . mysqli_error($this->db));
+        }
+
+        if (!empty($params)) {
+            $types = '';
+            foreach ($params as $param) {
+                if (is_int($param)) {
+                    $types .= 'i';
+                } elseif (is_float($param)) {
+                    $types .= 'd';
+                } else {
+                    $types .= 's';
+                }
+            }
+
+            mysqli_stmt_bind_param($stmt, $types, ...$params);
+        }
+
+        if (!mysqli_stmt_execute($stmt)) {
+            mysqli_stmt_close($stmt);
+            throw new Exception("Execute failed: " . mysqli_stmt_error($stmt));
+        }
+
+        return $stmt;
+    }
+
+    private function fetchAssoc($stmt) {
+        $result = mysqli_stmt_get_result($stmt);
+        return mysqli_fetch_assoc($result);
+    }
+
+    private function fetchAllAssoc($stmt) {
+        $result = mysqli_stmt_get_result($stmt);
+        $rows = [];
+        while ($row = mysqli_fetch_assoc($result)) {
+            $rows[] = $row;
+        }
+        return $rows;
+    }
     
     /**
      * Universal login method for all user types
      */
     public function validateUserCredentials($email, $password) {
-        $stmt = $this->db->prepare("
-            SELECT id, name, email, password, role, specialization, course, status, created_at
-            FROM users 
-            WHERE email = ? AND status = 'active'
-        ");
-        $stmt->execute([$email]);
-        $user = $stmt->fetch();
+        try {
+            $stmt = $this->prepareAndExecute("
+                SELECT id, name, email, password, role, specialization, course, status, created_at
+                FROM users 
+                WHERE email = ? AND status = 'active'
+            ", [$email]);
+            $user = $this->fetchAssoc($stmt);
+        } catch (Exception $e) {
+            $this->logActivity(null, 'login_failed_user_not_found', 'Login attempt for non-existent user: ' . $email);
+            return [
+                'success' => false, 
+                'message' => 'Invalid email or password.',
+                'error_code' => 'USER_NOT_FOUND'
+            ];
+        }
         
         if (!$user) {
             $this->logActivity(null, 'login_failed_user_not_found', 'Login attempt for non-existent user: ' . $email);
@@ -136,39 +187,51 @@ class UnifiedAuth {
      * Get all users by role
      */
     public function getUsersByRole($role) {
-        $stmt = $this->db->prepare("
-            SELECT id, name, email, role, specialization, course, status, created_at, updated_at
-            FROM users 
-            WHERE role = ? AND status = 'active'
-            ORDER BY created_at DESC
-        ");
-        $stmt->execute([$role]);
-        return $stmt->fetchAll();
+        try {
+            $stmt = $this->prepareAndExecute("
+                SELECT id, name, email, role, specialization, course, status, created_at, updated_at
+                FROM users
+                WHERE role = ? AND status = 'active'
+                ORDER BY created_at DESC
+            ", [$role]);
+            return $this->fetchAllAssoc($stmt);
+        } catch (Exception $e) {
+            error_log("Database error in getUsersByRole: " . $e->getMessage());
+            return [];
+        }
     }
     
     /**
      * Get all users (for admin purposes)
      */
     public function getAllUsers() {
-        $stmt = $this->db->prepare("
-            SELECT id, name, email, role, specialization, course, status, created_at, updated_at
-            FROM users 
-            ORDER BY created_at DESC
-        ");
-        $stmt->execute();
-        return $stmt->fetchAll();
+        try {
+            $stmt = $this->prepareAndExecute("
+                SELECT id, name, email, role, specialization, course, status, created_at, updated_at
+                FROM users
+                ORDER BY created_at DESC
+            ");
+            return $this->fetchAllAssoc($stmt);
+        } catch (Exception $e) {
+            error_log("Database error in getAllUsers: " . $e->getMessage());
+            return [];
+        }
     }
-    
+
     /**
      * Get user by ID
      */
     public function getUserById($id) {
-        $stmt = $this->db->prepare("
-            SELECT * FROM users 
-            WHERE id = ? AND status = 'active'
-        ");
-        $stmt->execute([$id]);
-        return $stmt->fetch();
+        try {
+            $stmt = $this->prepareAndExecute("
+                SELECT * FROM users
+                WHERE id = ? AND status = 'active'
+            ", [$id]);
+            return $this->fetchAssoc($stmt);
+        } catch (Exception $e) {
+            error_log("Database error in getUserById: " . $e->getMessage());
+            return null;
+        }
     }
     
     /**
@@ -179,10 +242,10 @@ class UnifiedAuth {
     if (empty($data['password'])) {
         $data['password'] = 'pssword123';
     }
-    
+
     // Valid roles based on your database enum
     $validRoles = ['super_admin', 'research_faculty', 'financial_critique', 'research_director', 'adviser', 'critique_english', 'critique_statistician', 'student'];
-    
+
     if (!in_array($data['role'], $validRoles)) {
         return ['success' => false, 'message' => 'Invalid role specified.'];
     }
@@ -193,19 +256,20 @@ class UnifiedAuth {
     }
 
     // Check if email already exists
-    $stmt = $this->db->prepare("SELECT id FROM users WHERE email = ?");
-    $stmt->execute([$data['email']]);
-    if ($stmt->fetch()) {
-        return ['success' => false, 'message' => 'Email already exists.'];
+    try {
+        $stmt = $this->prepareAndExecute("SELECT id FROM users WHERE email = ?", [$data['email']]);
+        if ($this->fetchAssoc($stmt)) {
+            return ['success' => false, 'message' => 'Email already exists.'];
+        }
+    } catch (Exception $e) {
+        return ['success' => false, 'message' => 'Database error occurred.'];
     }
 
     try {
-        $stmt = $this->db->prepare("
-            INSERT INTO users (name, email, password, role, educational_attainment, specialization, course, status, created_at) 
+        $stmt = $this->prepareAndExecute("
+            INSERT INTO users (name, email, password, role, educational_attainment, specialization, course, status, created_at)
             VALUES (?, ?, ?, ?, ?, ?, ?, 'active', NOW())
-        ");
-
-        $success = $stmt->execute([
+        ", [
             trim($data['name']),
             trim($data['email']),
             password_hash($data['password'], PASSWORD_DEFAULT),
@@ -215,22 +279,18 @@ class UnifiedAuth {
             $data['course'] ?? null
         ]);
 
-        if ($success) {
-            $userId = $this->db->lastInsertId();
-            $this->logActivity($userId, 'user_created', 'New user created with role: ' . $data['role']);
-            return ['success' => true, 'user_id' => $userId];
-        }
+        $userId = mysqli_insert_id($this->db);
+        $this->logActivity($userId, 'user_created', 'New user created with role: ' . $data['role']);
+        return ['success' => true, 'user_id' => $userId];
 
-        return ['success' => false, 'message' => 'Failed to create user.'];
-
-    } catch (PDOException $e) {
+    } catch (Exception $e) {
         error_log("Database error in createUser: " . $e->getMessage());
-        
+
         // Check for specific constraint violations
-        if ($e->getCode() == 23000) {
+        if (mysqli_errno($this->db) == 1062) {
             return ['success' => false, 'message' => 'Email already exists or invalid data.'];
         }
-        
+
         return ['success' => false, 'message' => 'Database error occurred.'];
     }
 }
@@ -241,68 +301,65 @@ class UnifiedAuth {
     public function updateUser($id, $data) {
         $fields = [];
         $params = [];
-        
+
         $allowedFields = ['name', 'email', 'role', 'specialization', 'course', 'status'];
-        
+
         foreach ($allowedFields as $field) {
             if (isset($data[$field])) {
                 $fields[] = "$field = ?";
                 $params[] = $data[$field];
             }
         }
-        
+
         if (isset($data['password']) && !empty($data['password'])) {
             $fields[] = "password = ?";
             $params[] = password_hash($data['password'], PASSWORD_DEFAULT);
         }
-        
+
         if (empty($fields)) {
             return ['success' => false, 'message' => 'No fields to update.'];
         }
-        
+
         $params[] = $id;
         $sql = "UPDATE users SET " . implode(', ', $fields) . ", updated_at = NOW() WHERE id = ?";
-        
-        $stmt = $this->db->prepare($sql);
-        $success = $stmt->execute($params);
-        
-        if ($success) {
+
+        try {
+            $this->prepareAndExecute($sql, $params);
             $this->logActivity($id, 'user_updated', 'User profile updated');
             return ['success' => true];
+        } catch (Exception $e) {
+            error_log("Database error in updateUser: " . $e->getMessage());
+            return ['success' => false, 'message' => 'Failed to update user.'];
         }
-        
-        return ['success' => false, 'message' => 'Failed to update user.'];
     }
-    
+
     /**
      * Soft delete user (deactivate)
      */
     public function deleteUser($id) {
-        $stmt = $this->db->prepare("UPDATE users SET status = 'inactive', updated_at = NOW() WHERE id = ?");
-        $success = $stmt->execute([$id]);
-        
-        if ($success) {
+        try {
+            $this->prepareAndExecute("UPDATE users SET status = 'inactive', updated_at = NOW() WHERE id = ?", [$id]);
             $this->logActivity($id, 'user_deactivated', 'User account deactivated');
             return ['success' => true];
+        } catch (Exception $e) {
+            error_log("Database error in deleteUser: " . $e->getMessage());
+            return ['success' => false, 'message' => 'Failed to deactivate user.'];
         }
-        
-        return ['success' => false, 'message' => 'Failed to deactivate user.'];
     }
-    
+
     /**
      * Reset user password
      */
     public function resetPassword($id, $newPassword) {
         $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
-        $stmt = $this->db->prepare("UPDATE users SET password = ?, updated_at = NOW() WHERE id = ?");
-        $success = $stmt->execute([$hashedPassword, $id]);
-        
-        if ($success) {
+        try {
+            $this->prepareAndExecute("UPDATE users SET password = ?, updated_at = NOW() WHERE id = ?", [$hashedPassword, $id]);
             $this->logActivity($id, 'password_reset', 'Password reset by administrator');
             return ['success' => true];
+        } catch (Exception $e) {
+            error_log("Database error in resetPassword: " . $e->getMessage());
+            return ['success' => false, 'message' => 'Failed to reset password.'];
         }
-        
-        return ['success' => false, 'message' => 'Failed to reset password.'];
     }
     
     /**
@@ -326,11 +383,10 @@ class UnifiedAuth {
             $ip_address = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
             $user_agent = $_SERVER['HTTP_USER_AGENT'] ?? 'unknown';
 
-            $stmt = $this->db->prepare("
+            $this->prepareAndExecute("
                 INSERT INTO activity_logs (user_id, action, details, ip_address, user_agent, created_at)
                 VALUES (?, ?, ?, ?, ?, NOW())
-            ");
-            $stmt->execute([
+            ", [
                 $user_id,
                 $action,
                 $details,
@@ -342,20 +398,24 @@ class UnifiedAuth {
             error_log("Failed to log activity: " . $e->getMessage());
         }
     }
-    
+
     /**
      * Get user activity logs
      */
     public function getUserActivityLogs($userId, $limit = 50) {
-        $stmt = $this->db->prepare("
-            SELECT action, details, ip_address, created_at
-            FROM activity_logs 
-            WHERE user_id = ? 
-            ORDER BY created_at DESC 
-            LIMIT ?
-        ");
-        $stmt->execute([$userId, $limit]);
-        return $stmt->fetchAll();
+        try {
+            $stmt = $this->prepareAndExecute("
+                SELECT action, details, ip_address, created_at
+                FROM activity_logs
+                WHERE user_id = ?
+                ORDER BY created_at DESC
+                LIMIT ?
+            ", [$userId, $limit]);
+            return $this->fetchAllAssoc($stmt);
+        } catch (Exception $e) {
+            error_log("Database error in getUserActivityLogs: " . $e->getMessage());
+            return [];
+        }
     }
 }
 ?>

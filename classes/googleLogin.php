@@ -78,22 +78,25 @@ try {
     require_once '../classes/UnifiedAuth.php';
 
     $database = new Database();
-    $pdo = $database->connect();
+    $db = $database->connect();
     $auth = new UnifiedAuth();
 
     session_start();
 
     // Check if user exists
-    $stmt = $pdo->prepare("SELECT id, name, role, course, educational_attainment, specialization FROM users WHERE email = ?");
-    $stmt->execute([$email]);
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    $stmt = mysqli_prepare($db, "SELECT id, name, role, course, educational_attainment, specialization FROM users WHERE email = ?");
+    mysqli_stmt_bind_param($stmt, 's', $email);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    $user = mysqli_fetch_assoc($result);
 
     if (!$user) {
         // New student user
-        $stmt = $pdo->prepare("INSERT INTO users (name, email, role, status) VALUES (?, ?, 'student', 'active')");
-        $stmt->execute([$name, $email]);
+        $stmt = mysqli_prepare($db, "INSERT INTO users (name, email, role, status) VALUES (?, ?, 'student', 'active')");
+        mysqli_stmt_bind_param($stmt, 'ss', $name, $email);
+        mysqli_stmt_execute($stmt);
 
-        $_SESSION['user_id'] = $pdo->lastInsertId();
+        $_SESSION['user_id'] = mysqli_insert_id($db);
         $_SESSION['user_email'] = $email;
         $_SESSION['user_name'] = $name;
         $_SESSION['user_role'] = 'student';

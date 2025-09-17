@@ -15,25 +15,40 @@ if (!in_array($_SESSION['user_role'], ['research_faculty', 'super_admin'])) {
 
 require_once '../config/database.php';
 $db = new Database();
-$pdo = $db->connect();
+$dbConn = $db->connect();
 
 $hour = date('H');
 $greeting = $hour < 12 ? 'Good morning!' : ($hour < 18 ? 'Good afternoon!' : 'Good evening!');
 
 // Query groups from database
 try {
-    $stmt = $pdo->prepare("SELECT g.id, g.name, g.description, g.status, g.created_at, u.name AS adviser_name
+    $stmt = mysqli_prepare($dbConn, "SELECT g.id, g.name, g.description, g.status, g.created_at, u.name AS adviser_name
                            FROM groups g
                            LEFT JOIN users u ON g.adviser_id = u.id
                            ORDER BY g.created_at DESC");
-    $stmt->execute();
-    $groups = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    if ($stmt === false) {
+        throw new Exception("Prepare failed: " . mysqli_error($dbConn));
+    }
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    $groups = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        $groups[] = $row;
+    }
 
     // Get members for each group
     foreach ($groups as &$group) {
-        $stmt2 = $pdo->prepare("SELECT u.name FROM group_members gm JOIN users u ON gm.student_id = u.id WHERE gm.group_id = ?");
-        $stmt2->execute([$group['id']]);
-        $members = $stmt2->fetchAll(PDO::FETCH_COLUMN);
+        $stmt2 = mysqli_prepare($dbConn, "SELECT u.name FROM group_members gm JOIN users u ON gm.student_id = u.id WHERE gm.group_id = ?");
+        if ($stmt2 === false) {
+            throw new Exception("Prepare failed: " . mysqli_error($dbConn));
+        }
+        mysqli_stmt_bind_param($stmt2, 'i', $group['id']);
+        mysqli_stmt_execute($stmt2);
+        $result2 = mysqli_stmt_get_result($stmt2);
+        $members = [];
+        while ($row = mysqli_fetch_assoc($result2)) {
+            $members[] = $row['name'];
+        }
         $group['members'] = $members;
     }
 } catch (Exception $e) {
@@ -44,7 +59,8 @@ try {
 $active_groups = count(array_filter($groups, function($g) { return $g['status'] === 'active'; }));
 $pending_submissions = 3; // This would need a proper query from submissions table
 $approved_papers = 15; // This would need a proper query from submissions table
-$total_students = $pdo->query("SELECT COUNT(*) FROM users WHERE role = 'student' AND status = 'active'")->fetchColumn();
+$result = mysqli_query($dbConn, "SELECT COUNT(*) FROM users WHERE role = 'student' AND status = 'active'");
+$total_students = mysqli_fetch_row($result)[0];
 
 if ($_SESSION['user_role'] === 'research_faculty') {
     $stats = [

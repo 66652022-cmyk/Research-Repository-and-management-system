@@ -11,7 +11,7 @@ if (!$role) {
 }
 
 $db = new Database();
-$pdo = $db->connect();
+$dbConn = $db->connect();
 
 $roles = [$role];
 if ($role === 'adviser') {
@@ -28,9 +28,18 @@ if ($role === 'adviser') {
 
 try {
     $placeholders = str_repeat('?,', count($roles) - 1) . '?';
-    $stmt = $pdo->prepare("SELECT id, name, email FROM users WHERE role IN ($placeholders) AND status = 'active' ORDER BY name");
-    $stmt->execute($roles);
-    $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt = mysqli_prepare($dbConn, "SELECT id, name, email FROM users WHERE role IN ($placeholders) AND status = 'active' ORDER BY name");
+    if ($stmt === false) {
+        throw new Exception("Prepare failed: " . mysqli_error($dbConn));
+    }
+    $types = str_repeat('s', count($roles));
+    mysqli_stmt_bind_param($stmt, $types, ...$roles);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    $users = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        $users[] = $row;
+    }
     echo json_encode($users);
 } catch (Exception $e) {
     http_response_code(500);

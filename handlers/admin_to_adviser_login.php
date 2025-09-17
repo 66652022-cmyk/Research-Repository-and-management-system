@@ -44,19 +44,23 @@ try {
     
     //If have a separate adviser record for the admin
     /*
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ? AND user_type = 'research adviser'");
-    $stmt->execute([$admin_email]);
-    $adviser_record = $stmt->fetch();
-    
+    $database = new Database();
+    $db = $database->connect();
+    $stmt = mysqli_prepare($db, "SELECT * FROM users WHERE email = ? AND role = 'adviser'");
+    mysqli_stmt_bind_param($stmt, 's', $admin_email);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    $adviser_record = mysqli_fetch_assoc($result);
+
     if ($adviser_record) {
         $_SESSION['user_id'] = $adviser_record['id'];
         $_SESSION['user_name'] = $adviser_record['name'];
-        $_SESSION['user_role'] = 'research adviser';
+        $_SESSION['user_role'] = 'adviser';
         $_SESSION['acting_as_adviser'] = true;
         $_SESSION['adviser_login_time'] = time();
     } else {
         // Create temporary adviser session with admin credentials
-        $_SESSION['user_role'] = 'research adviser';
+        $_SESSION['user_role'] = 'adviser';
         $_SESSION['acting_as_adviser'] = true;
         $_SESSION['adviser_login_time'] = time();
     }

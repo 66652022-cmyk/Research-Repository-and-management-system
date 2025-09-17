@@ -27,21 +27,19 @@ try {
     require_once '../classes/UnifiedAuth.php';
 
     $database = new Database();
-    $pdo = $database->connect();
+    $db = $database->connect();
     $auth = new UnifiedAuth();
 
     // Update user profile
-    $stmt = $pdo->prepare("UPDATE users SET gender = ?, year = ?, course = ? WHERE id = ?");
-    $stmt->execute([
-        $data['gender'],
-        $data['year'],
-        $data['course'],
-        $_SESSION['user_id']
-    ]);
+    $stmt = mysqli_prepare($db, "UPDATE users SET gender = ?, year = ?, course = ? WHERE id = ?");
+    mysqli_stmt_bind_param($stmt, 'sisi', $data['gender'], $data['year'], $data['course'], $_SESSION['user_id']);
+    mysqli_stmt_execute($stmt);
 
-    $stmt = $pdo->prepare("SELECT role FROM users WHERE id = ?");
-    $stmt->execute([$_SESSION['user_id']]);
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    $stmt = mysqli_prepare($db, "SELECT role FROM users WHERE id = ?");
+    mysqli_stmt_bind_param($stmt, 'i', $_SESSION['user_id']);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    $user = mysqli_fetch_assoc($result);
     $role = $user['role'] ?? 'student';
 
     // Get dashboard URL

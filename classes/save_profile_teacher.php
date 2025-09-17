@@ -25,15 +25,11 @@ try {
 
     require_once '../config/database.php';
     $database = new Database();
-    $pdo = $database->connect();
+    $db = $database->connect();
 
-    $stmt = $pdo->prepare("UPDATE users SET gender = ?, educational_attainment = ?, course = ? WHERE id = ?");
-    $stmt->execute([
-        $data['gender'],
-        $data['educational_attainment'],
-        $data['course'],
-        $_SESSION['user_id']
-    ]);
+    $stmt = mysqli_prepare($db, "UPDATE users SET gender = ?, educational_attainment = ?, course = ? WHERE id = ?");
+    mysqli_stmt_bind_param($stmt, 'sssi', $data['gender'], $data['educational_attainment'], $data['course'], $_SESSION['user_id']);
+    mysqli_stmt_execute($stmt);
 
     echo json_encode(['success' => true, 'message' => 'Profile updated successfully']);
     

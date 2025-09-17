@@ -6,11 +6,19 @@ if (!isset($_SESSION['user_logged_in']) || $_SESSION['user_logged_in'] !== true 
 }
 require_once '../config/database.php';
 $db = new Database();
-$pdo = $db->connect();
+$dbConn = $db->connect();
 
-$stmt = $pdo->prepare("SELECT id, name, email, role AS type, created_at AS created FROM users WHERE status='active' ORDER BY created_at DESC");
-$stmt->execute();
-$users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$stmt = mysqli_prepare($dbConn, "SELECT id, name, email, role AS type, created_at AS created FROM users WHERE status='active' ORDER BY created_at DESC");
+if ($stmt === false) {
+    echo json_encode(['success' => false, 'message' => 'Database error']);
+    exit();
+}
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
+$users = [];
+while ($row = mysqli_fetch_assoc($result)) {
+    $users[] = $row;
+}
 
 echo json_encode(['success' => true, 'users' => $users]);
 ?>

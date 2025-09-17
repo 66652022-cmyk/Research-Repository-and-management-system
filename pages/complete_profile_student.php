@@ -8,13 +8,15 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $database = new Database();
-$pdo = $database->connect();
+$db = $database->connect();
 $userId = $_SESSION['user_id'];
 
 // Fetch user
-$stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
-$stmt->execute([$userId]);
-$user = $stmt->fetch(PDO::FETCH_ASSOC);
+$stmt = mysqli_prepare($db, "SELECT * FROM users WHERE id = ?");
+mysqli_stmt_bind_param($stmt, 'i', $userId);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
+$user = mysqli_fetch_assoc($result);
 
 // Only for students
 if ($user['role'] !== 'student') {
