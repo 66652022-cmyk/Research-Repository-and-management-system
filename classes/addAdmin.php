@@ -6,10 +6,10 @@ $auth = new UnifiedAuth();
 
 // Define new admin details
 $newAdmin = [
-    'name' => 'Faculty 1',
-    'email' => 'faculty1@example.com',
+    'name' => 'English Critique1',
+    'email' => 'critique1@example.com',
     'password' => 'password123',     
-    'role' => 'research_faculty',
+    'role' => 'critique_english',
     'specialization' => null,
     'course' => null
 ];

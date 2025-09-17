@@ -29,7 +29,7 @@ if (!file_exists('UnifiedAuth.php')) {
     exit();
 }
 
-require_once '/THESIS/config/database.php';
+require_once '../config/database.php';
 require_once 'UnifiedAuth.php';
 
 try {

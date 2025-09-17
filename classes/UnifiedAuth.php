@@ -5,7 +5,7 @@ class UnifiedAuth {
     public $user_roles = [
         'super_admin' => [
             'level' => 5,
-            'dashboard' => 'adminDash.php',
+            'dashboard' => '/THESIS/adminDash.php',
             'name' => 'Super Administrator'
         ],
         'research_director' => [
@@ -126,6 +126,7 @@ class UnifiedAuth {
     
     /**
      * Get user's dashboard URL
+     * bug pag nag back galing s admin as adviser
      */
     public function getDashboardUrl($role) {
         return $this->user_roles[$role]['dashboard'] ?? '/THESIS/default_dash.php';
