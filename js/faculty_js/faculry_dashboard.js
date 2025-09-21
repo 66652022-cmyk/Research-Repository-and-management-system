@@ -102,6 +102,8 @@ function loadStudents() {
                     <td class="px-6 py-4 whitespace-nowrap">${student.id}</td>
                     <td class="px-6 py-4 whitespace-nowrap">${student.name}</td>
                     <td class="px-6 py-4 whitespace-nowrap">${student.email}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">${student.course}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">${student.status}</td>
                     <td class="px-6 py-4 whitespace-nowrap space-x-2 text-sm font-medium">
                         <button class="text-royal-blue hover:text-royal-blue-dark" onclick="editStudent(${student.id})">Edit</button>
                         <button class="text-red-600 hover:text-red-900" onclick="deleteStudent(${student.id})">Delete</button>
@@ -219,7 +221,7 @@ function submitNewGroup(event) {
         return;
     }
 
-    fetch('/THESIS/faculty_api/create_ group.php', {
+    fetch('/THESIS/faculty_api/create_group.php', {
         method: 'POST',
         body: formData
     })

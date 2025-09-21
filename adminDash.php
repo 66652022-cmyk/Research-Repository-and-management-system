@@ -76,12 +76,12 @@ $stats = [
     
     <!-- Main Layout Container -->
      
-    <div id="contentWrapper" class="pt-16 transition-all duration-300">
-        <main class="min-h-screen bg-gray-50 p-6">           
+    <div id="contentWrapper" class="transition-all duration-300 ease-in-out">
+        <main class="min-h-screen bg-gray-50">
             <!-- Main Content -->
-            <main class="flex-1 p-6 overflow-y-auto bg-gray-50">
+            <main class="flex-1 overflow-y-auto bg-gray-50 mt-5 ml-1">
                 <!-- Dashboard Section -->
-                <div id="dashboard-section" class="section hidden">
+                <div id="dashboard-section" class="section pt-25">
                     <h1 class="text-3xl font-bold text-gray-800 mb-6">Dashboard</h1>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                         <div class="bg-white p-6 rounded-lg shadow-md">
@@ -140,7 +140,7 @@ $stats = [
                 </div>
 
                 <!-- User Emails Section -->
-                <div id="emails-section" class="section">
+                <div id="emails-section" class="section pt-25 hidden">
                     <div class="flex justify-between items-center mb-6">
                         <h1 class="text-3xl font-bold text-gray-800">User Email Management</h1>
                         <button onclick="showAddUserModal()" class="bg-royal-blue hover:bg-royal-blue-dark text-white px-4 py-2 rounded-lg font-semibold transition-colors duration-200">
@@ -204,7 +204,7 @@ $stats = [
                 </div>
 
                 <!-- Reset Password Section -->
-                <div id="reset-password-section" class="section hidden">
+                <div id="reset-password-section" class="section pt-25 hidden">
                     <h1 class="text-3xl font-bold text-gray-800 mb-6">Reset User Passwords</h1>
                     <div class="bg-white p-6 rounded-lg shadow-md">
                         <div class="mb-4">
@@ -227,15 +227,36 @@ $stats = [
                     </div>
                 </div>
                 <!-- adviser page -->
-                <div id="adviser-section" class="section hidden">
+                <div id="adviser-section" class="section pt-20 hidden">
                     <iframe src="/THESIS/dashboards/adviser_dash.php" 
                             width="100%" height="100%" 
                             style="border:none; min-height:90vh;">
                     </iframe>
                 </div>
+                <!-- english critique page -->
+                <div id="english-critique-section" class="section pt-20 hidden">
+                    <iframe src="/THESIS/dashboards/english_critique_dash.php" 
+                            width="100%" height="100%" 
+                            style="border:none; min-height:90vh;">
+                    </iframe>
+                </div>
                 <!-- research faculty page -->
-                <div id="faculty-section" class="section hidden">
+                <div id="faculty-section" class="section pt-20 hidden">
                     <iframe src="/THESIS/dashboards/faculty_dash.php" 
+                            width="100%" height="100%" 
+                            style="border:none; min-height:90vh;">
+                    </iframe>
+                </div>
+                <!-- director dashboard -->
+                <div id="research-director-section" class="section pt-20 hidden">
+                    <iframe src="/THESIS/dashboards/research_director_dash.php" 
+                            width="100%" height="100%" 
+                            style="border:none; min-height:90vh;">
+                    </iframe>
+                </div>
+                <!-- student dashboard -->
+                <div id="student-section" class="section pt-20 hidden">
+                    <iframe src="/THESIS/dashboards/student_dash.php" 
                             width="100%" height="100%" 
                             style="border:none; min-height:90vh;">
                     </iframe>

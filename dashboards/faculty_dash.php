@@ -4,12 +4,12 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 if (!isset($_SESSION['user_id'])) {
-    header('Location: /THESIS/login.php');
+    header('Location: /THESIS/pages/Login.php');
     exit;
 }
 
 if (!in_array($_SESSION['user_role'], ['research_faculty', 'super_admin'])) {
-    header('Location: /THESIS/unauthorized.php');
+    header('Location: /THESIS/pages/Login.php');
     exit;
 }
 
@@ -52,7 +52,7 @@ try {
         $group['members'] = $members;
     }
 } catch (Exception $e) {
-    $groups = []; // Fallback to empty array if query fails
+    $groups = [];
 }
 
 // Calculate stats dynamically
@@ -136,7 +136,7 @@ if ($_SESSION['user_role'] === 'research_faculty') {
 
     <!-- Sidebar -->
     <div id="sidebar-overlay" class="fixed inset-0 z-40 bg-opacity-50 hidden"></div>
-    <aside id="sidebar" class="fixed right-0 top-0 h-full w-80 bg-royal-blue-dark transform translate-x-full transition-transform duration-300 ease-in-out z-50 shadow-xl">
+    <aside id="sidebar" class="fixed left-0 top-0 h-full w-80 bg-royal-blue-dark transform -translate-x-full transition-transform duration-300 ease-in-out z-50 shadow-xl">
         <div class="p-6 flex flex-col h-full">
             <div class="flex items-center justify-between mb-8">
                 <h2 class="text-xl font-semibold text-white">Menu</h2>
@@ -153,13 +153,19 @@ if ($_SESSION['user_role'] === 'research_faculty') {
                     </svg>
                     Dashboard
                 </a>
+                <a href="#" onclick="showSection('students')" class="nav-item flex items-center px-4 py-3 text-white rounded-lg hover:bg-royal-blue-light transition-colors duration-200">
+                    <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z" clip-rule="evenodd"></path>
+                    </svg>
+                    Students
+                </a>
                 <a href="#" onclick="showSection('groups')" class="nav-item flex items-center px-4 py-3 text-white rounded-lg hover:bg-royal-blue-light transition-colors duration-200">
                     <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"></path>
                     </svg>
-                    Student Groups
+                    Groups
                 </a>
-                <a href="#" onclick="showSection('submissions')" class="nav-item flex items-center px-4 py-3 text-white rounded-lg hover:bg-royal-blue-light transition-colors duration-200">
+                <a href="#" onclick="showSection('group-details')" class="nav-item flex items-center px-4 py-3 text-white rounded-lg hover:bg-royal-blue-light transition-colors duration-200">
                     <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z" clip-rule="evenodd"></path>
                     </svg>
@@ -300,11 +306,37 @@ if ($_SESSION['user_role'] === 'research_faculty') {
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student ID</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200" id="studentsTableBody">
-                            <!-- Student rows loaded dynamically -->
+                            <?php
+                            try {
+                                $stmt = mysqli_prepare($dbConn, "SELECT id, name, email, course, status FROM users WHERE role = 'student' AND status = 'active' ORDER BY name");
+                                if ($stmt === false) {
+                                    throw new Exception("Prepare failed: " . mysqli_error($dbConn));
+                                }
+                                mysqli_stmt_execute($stmt);
+                                $result = mysqli_stmt_get_result($stmt);
+                                while ($student = mysqli_fetch_assoc($result)) {
+                                    echo '<tr class="hover:bg-gray-50">';
+                                    echo '<td class="px-6 py-4 whitespace-nowrap">' . htmlspecialchars($student['id']) . '</td>';
+                                    echo '<td class="px-6 py-4 whitespace-nowrap">' . htmlspecialchars($student['name']) . '</td>';
+                                    echo '<td class="px-6 py-4 whitespace-nowrap">' . htmlspecialchars($student['email']) . '</td>';
+                                    echo '<td class="px-6 py-4 whitespace-nowrap">' . htmlspecialchars($student['course']) . '</td>';
+                                    echo '<td class="px-6 py-4 whitespace-nowrap">' . htmlspecialchars($student['status']) . '</td>';
+                                    echo '<td class="px-6 py-4 whitespace-nowrap space-x-2 text-sm font-medium">';
+                                    echo '<button class="text-royal-blue hover:text-royal-blue-dark" onclick="editStudent(' . htmlspecialchars($student['id']) . ')">Edit</button>';
+                                    echo '<button class="text-red-600 hover:text-red-900" onclick="deleteStudent(' . htmlspecialchars($student['id']) . ')">Delete</button>';
+                                    echo '</td>';
+                                    echo '</tr>';
+                                }
+                            } catch (Exception $e) {
+                                echo '<tr><td colspan="6" class="text-center text-red-600">Failed to load students: ' . htmlspecialchars($e->getMessage()) . '</td></tr>';
+                            }
+                            ?>
                         </tbody>
                     </table>
                 </div>
@@ -335,14 +367,14 @@ if ($_SESSION['user_role'] === 'research_faculty') {
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200" id="groupsTableBody">
-                            <?php foreach ($groups as $group): ?>
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 whitespace-nowrap">#GRP<?php echo str_pad($group['id'], 3, '0', STR_PAD_LEFT); ?></td>
-                                <td class="px-6 py-4 whitespace-nowrap font-semibold"><?php echo htmlspecialchars($group['name']); ?></td>
-                                <td class="px-6 py-4 whitespace-nowrap"><?php echo htmlspecialchars(implode(', ', $group['members'])); ?></td>
-                                <td class="px-6 py-4 whitespace-nowrap"><?php echo htmlspecialchars($group['description']); ?></td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <?php
+                            <?php
+                            try {
+                                foreach ($groups as $group) {
+                                    echo '<tr class="hover:bg-gray-50">';
+                                    echo '<td class="px-6 py-4 whitespace-nowrap">#GRP' . str_pad($group['id'], 3, '0', STR_PAD_LEFT) . '</td>';
+                                    echo '<td class="px-6 py-4 whitespace-nowrap font-semibold">' . htmlspecialchars($group['name']) . '</td>';
+                                    echo '<td class="px-6 py-4 whitespace-nowrap">' . htmlspecialchars(implode(', ', $group['members'])) . '</td>';
+                                    echo '<td class="px-6 py-4 whitespace-nowrap">' . htmlspecialchars($group['description']) . '</td>';
                                     $statusClass = 'bg-gray-100 text-gray-800';
                                     if ($group['status'] === 'active') {
                                         $statusClass = 'bg-blue-100 text-blue-800';
@@ -351,16 +383,20 @@ if ($_SESSION['user_role'] === 'research_faculty') {
                                     } elseif ($group['status'] === 'completed') {
                                         $statusClass = 'bg-green-100 text-green-800';
                                     }
-                                    ?>
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full <?php echo $statusClass; ?>"><?php echo ucfirst($group['status']); ?></span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap"><?php echo date('Y-m-d', strtotime($group['created_at'])); ?></td>
-                                <td class="px-6 py-4 whitespace-nowrap space-x-2 text-sm font-medium">
-                                    <button class="text-royal-blue hover:text-royal-blue-dark">View</button>
-                                    <button class="text-green-600 hover:text-green-900">Edit</button>
-                                </td>
-                            </tr>
-                            <?php endforeach; ?>
+                                    echo '<td class="px-6 py-4 whitespace-nowrap">';
+                                    echo '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ' . $statusClass . '">' . ucfirst($group['status']) . '</span>';
+                                    echo '</td>';
+                                    echo '<td class="px-6 py-4 whitespace-nowrap">' . date('Y-m-d', strtotime($group['created_at'])) . '</td>';
+                                    echo '<td class="px-6 py-4 whitespace-nowrap space-x-2 text-sm font-medium">';
+                                    echo '<button class="text-royal-blue hover:text-royal-blue-dark">View</button>';
+                                    echo '<button class="text-green-600 hover:text-green-900">Edit</button>';
+                                    echo '</td>';
+                                    echo '</tr>';
+                                }
+                            } catch (Exception $e) {
+                                echo '<tr><td colspan="7" class="text-center text-red-600">Failed to load groups: ' . htmlspecialchars($e->getMessage()) . '</td></tr>';
+                            }
+                            ?>
                         </tbody>
                     </table>
                 </div>
@@ -432,6 +468,13 @@ if ($_SESSION['user_role'] === 'research_faculty') {
                 </div>
             </div>
         </section>
+
+        <div id="group-details-section" class="section hidden">
+            <iframe src="/THESIS/pages/group_details.php"
+                    width="100%" height="100%" 
+                    style="border:none; min-height:90vh;">
+            </iframe>
+        </div>
     </main>
 
     <!-- Add Student Modal -->
@@ -439,10 +482,14 @@ if ($_SESSION['user_role'] === 'research_faculty') {
         <div class="bg-white rounded-lg shadow-lg p-8 w-full max-w-md" onclick="event.stopPropagation()">
             <h3 class="text-xl font-bold mb-6">Add New Student</h3>
             <!-- nasa faculty api yung function nato -->
-            <form id="addStudentForm" onsubmit="submitNewStudent(event)">
+            <form id="addStudentForm" method="post" onsubmit="submitNewStudent(event)">
                 <div class="mb-4">
                     <label for="studentName" class="block font-semibold mb-1">Name</label>
                     <input type="text" id="studentName" name="studentName" required class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div class="mb-4">
+                    <label for="studentCourse" class="block font-semibold mb-1">Course</label>
+                    <input type="text" id="studentCourse" name="studentCourse" required class="w-full border border-gray-300 rounded px-3 py-2" />
                 </div>
                 <div class="mb-4">
                     <label for="studentEmail" class="block font-semibold mb-1">Email</label>
@@ -460,7 +507,7 @@ if ($_SESSION['user_role'] === 'research_faculty') {
     <div id="addGroupModal" class="fixed inset-0 hidden items-center justify-center z-50 bg-opacity-50" onclick="hideAddGroupModal()">
         <div class="bg-white rounded-lg shadow-lg p-8 w-full max-w-2xl" onclick="event.stopPropagation()">
             <h3 class="text-xl font-bold mb-6">Create New Group</h3>
-            <form id="addGroupForm" onsubmit="submitNewGroup(event)">
+            <form id="addGroupForm" method="post" onsubmit="submitNewGroup(event)">
                 <div class="mb-4">
                     <label for="groupName" class="block font-semibold mb-1">Group Name</label>
                     <input type="text" id="groupName" name="groupName" required class="w-full border border-gray-300 rounded px-3 py-2" />

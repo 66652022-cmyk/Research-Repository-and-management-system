@@ -52,7 +52,7 @@ let users = [];
             initializeEventHandlers();
             fetchUsers();
 
-            showSection('emails');
+            showSection('dashboard');
         });
 
         function showSection(section) {
@@ -64,6 +64,7 @@ let users = [];
             }
         
             document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
                 item.classList.remove('bg-royal-blue-light');
             });
             

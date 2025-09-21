@@ -25,7 +25,7 @@ class UnifiedAuth {
         ],
         'critique_english' => [
             'level' => 2,
-            'dashboard' => '/THESIS/dashboards/critique_dash.php',
+            'dashboard' => '/THESIS/dashboards/english_critique_dash.php',
             'name' => 'English Critique'
         ],
         'critique_statistician' => [

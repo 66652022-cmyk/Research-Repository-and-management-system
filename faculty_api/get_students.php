@@ -6,7 +6,7 @@ $db = new Database();
 $dbConn = $db->connect();
 
 try {
-    $stmt = mysqli_prepare($dbConn, "SELECT id, name, email FROM users WHERE role = 'student' AND status = 'active' ORDER BY name");
+    $stmt = mysqli_prepare($dbConn, "SELECT id, name, email, course, status FROM users WHERE role = 'student' AND status = 'active' ORDER BY name");
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
     $students = [];

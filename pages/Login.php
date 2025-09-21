@@ -148,10 +148,6 @@ if ($_POST) {
                 </div>
                 <h1 class="text-2xl font-bold text-gray-800">Welcome!</h1>
                 <p class="text-gray-500 text-sm">Research Management System</p>
-                <div class="mt-4 flex flex-wrap justify-center gap-2 text-xs">
-                    <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full">Students</span>
-                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full">Faculty</span>
-                </div>
             </div>
 
             <!-- Error Messages -->

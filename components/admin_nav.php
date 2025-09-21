@@ -2,7 +2,12 @@
 <div class="fixed inset-0 z-50 flex pointer-events-none">
   <header class="fixed top-0 left-0 right-0 bg-royal-blue py-4 shadow-lg z-20 pointer-events-auto">
     <div class="container mx-auto px-4 flex justify-between items-center">
-      <div>
+      <div class="flex items-center">
+        <button id="burger-menu" class="mr-4 text-white p-2 hover:bg-royal-blue-dark rounded-lg transition-colors duration-200">
+          <svg id="burger-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
         <h1 class="text-white text-xl font-bold">Research Management System</h1>
       </div>
 
@@ -12,20 +17,17 @@
           <strong><?php echo htmlspecialchars($_SESSION['user_name'] ?? ''); ?></strong><br>
           <small><?php echo htmlspecialchars($_SESSION['user_email'] ?? ''); ?></small><br>
         </div>
-
-        <button id="burger-menu" class="ml-2 text-white p-2 hover:bg-royal-blue-dark rounded-lg transition-colors duration-200">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-          </svg>
-        </button>
       </div>
     </div>
   </header>
 
-  <div id="sidebar-overlay" class="fixed inset-0 bg-opacity-50 hidden z-30 pointer-events-auto" onclick="toggleSidebar()"></div>
+  <!-- Sidebar Overlay for mobile -->
+  <div id="sidebar-overlay" class="fixed inset-0 bg-opacity-50 hidden pointer-events-auto lg:hidden" onclick="toggleSidebar()"></div>
 
-  <aside id="sidebar" class="fixed top-0 right-0 w-64 h-full bg-royal-blue-dark text-white shadow-lg transform translate-x-full transition-transform duration-300 ease-in-out z-40 pointer-events-auto">
+  <!-- Sidebar - Initially open on desktop -->
+  <aside id="sidebar" class="fixed top-16 left-0 w-64 bg-royal-blue-dark text-white shadow-lg transform transition-transform duration-300 ease-in-out z-10 pointer-events-auto overflow-y-auto" style="height: calc(100vh - 4rem);">
     <div class="p-4 relative">
+      <!-- Close button - visible on desktop and mobile -->
       <button id="close-sidebar" class="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors duration-200">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -59,7 +61,7 @@
           </svg>
           Adviser
         </a>
-        <a href="/THESIS/dashboards/critique_dash.php" class="nav-item flex items-center p-3 rounded-lg hover:bg-royal-blue-light transition-colors duration-200">
+        <a href="#" onclick="showSection('english-critique')" class="nav-item flex items-center p-3 rounded-lg hover:bg-royal-blue-light transition-colors duration-200">
           <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
             <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z" clip-rule="evenodd"></path>
           </svg>
@@ -78,7 +80,7 @@
           </svg>
           Research Faculty
         </a>
-        <a href="/THESIS/dashboards/research_director_dash.php" class="nav-item flex items-center p-3 rounded-lg hover:bg-royal-blue-light transition-colors duration-200">
+        <a href="#" onclick="showSection('research-director')" class="nav-item flex items-center p-3 rounded-lg hover:bg-royal-blue-light transition-colors duration-200">
           <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
             <path fill-rule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clip-rule="evenodd"></path>
             <path d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z"></path>
@@ -91,7 +93,7 @@
           </svg>
           Statistician
         </a>
-        <a href="/THESIS/dashboards/student_dash.php" class="nav-item flex items-center p-3 rounded-lg hover:bg-royal-blue-light transition-colors duration-200">
+        <a href="#" onclick="showSection('student')" class="nav-item flex items-center p-3 rounded-lg hover:bg-royal-blue-light transition-colors duration-200">
           <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
             <path fill-rule="evenodd" d="M10 2L3 7v3c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-7-5z" clip-rule="evenodd"></path>
           </svg>
@@ -112,34 +114,90 @@
 </div>
 
 <script>
+// Initialize sidebar state - true means open (for desktop), false means closed (for mobile)
 let isSidebarOpen = false;
 
 function toggleSidebar() {
   const sidebar = document.getElementById('sidebar');
   const overlay = document.getElementById('sidebar-overlay');
   const contentWrapper = document.getElementById('contentWrapper');
+  const burgerIcon = document.getElementById('burger-icon');
   
   isSidebarOpen = !isSidebarOpen;
   
   if (isSidebarOpen) {
-    sidebar.classList.remove('translate-x-full');
-    overlay.classList.remove('hidden');
-    if (contentWrapper) {
-      contentWrapper.classList.add('blur-sm');
+    // Open sidebar
+    sidebar.style.transform = 'translateX(0)';
+    
+    // Change burger icon to X
+    if (burgerIcon) {
+      burgerIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>';
     }
-    document.body.style.overflow = 'hidden';
+    
+    // Show overlay on mobile only
+    if (window.innerWidth < 1024) {
+      overlay.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    // Adjust content wrapper
+    if (contentWrapper && window.innerWidth >= 1024) {
+      contentWrapper.style.paddingLeft = '16rem'; // 256px = 16rem
+    }
   } else {
-    sidebar.classList.add('translate-x-full');
-    overlay.classList.add('hidden');
-    if (contentWrapper) {
-      contentWrapper.classList.remove('blur-sm');
-      contentWrapper.classList.remove('lg:pr-64');
+    // Close sidebar
+    sidebar.style.transform = 'translateX(-100%)';
+    
+    // Change burger icon back to hamburger
+    if (burgerIcon) {
+      burgerIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>';
     }
+    
+    // Hide overlay
+    overlay.classList.add('hidden');
     document.body.style.overflow = '';
+    
+    // Reset content wrapper
+    if (contentWrapper) {
+      contentWrapper.style.paddingLeft = '0';
+    }
+  }
+}
+
+function initializeSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const contentWrapper = document.getElementById('contentWrapper');
+  const burgerIcon = document.getElementById('burger-icon');
+  
+  if (window.innerWidth >= 1024) {
+    // Desktop: sidebar open by default
+    isSidebarOpen = true;
+    sidebar.style.transform = 'translateX(0)';
+    if (contentWrapper) {
+      contentWrapper.style.paddingLeft = '16rem';
+    }
+    // Set burger icon to X
+    if (burgerIcon) {
+      burgerIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>';
+    }
+  } else {
+    // Mobile: sidebar closed by default
+    isSidebarOpen = false;
+    sidebar.style.transform = 'translateX(-100%)';
+    if (contentWrapper) {
+      contentWrapper.style.paddingLeft = '0';
+    }
+    // Set burger icon to hamburger
+    if (burgerIcon) {
+      burgerIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>';
+    }
   }
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+  // Initialize sidebar state based on screen size
+  initializeSidebar();
+  
   const burgerMenu = document.getElementById('burger-menu');
   const closeSidebar = document.getElementById('close-sidebar');
   
@@ -160,22 +218,29 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
+// Handle window resize
+window.addEventListener('resize', function() {
+  // Reinitialize sidebar on window resize
+  setTimeout(initializeSidebar, 100);
+});
+
+// ESC key to close sidebar (works on both mobile and desktop)
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape' && isSidebarOpen) {
     toggleSidebar();
   }
 });
 
+// Click outside to close sidebar (works on both mobile and desktop)
 document.addEventListener('click', function(e) {
   if (isSidebarOpen && 
       !e.target.closest('#sidebar') && 
       !e.target.closest('#burger-menu')) {
-    if (!e.target.closest('#sidebar-overlay')) {
-      toggleSidebar();
-    }
+    toggleSidebar();
   }
 });
 
+// Prevent sidebar clicks from bubbling up
 document.addEventListener('click', function(e) {
   if (e.target.closest('#sidebar')) {
     e.stopPropagation();
