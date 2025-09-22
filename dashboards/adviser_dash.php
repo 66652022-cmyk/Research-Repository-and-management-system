@@ -15,23 +15,21 @@ if (!in_array($_SESSION['user_role'], ['adviser', 'super_admin'])) {
 $hour = date('H');
 $greeting = $hour < 12 ? 'Good morning!' : ($hour < 18 ? 'Good afternoon!' : 'Good evening!');
 
-if ($_SESSION['user_role'] === 'adviser') {
-    // Adviser sees only their own assigned data
-    $stats = [
-        'assigned_students' => 12,   // e.g. query: SELECT COUNT(*) FROM students WHERE adviser_id = $_SESSION['user_id']
-        'pending_reviews'   => 8,
-        'approved_proposals'=> 25,
-        'pending_submissions'=> 7
-    ];
-} elseif ($_SESSION['user_role'] === 'super_admin') {
-    // Admin sees ALL advisers' data
-    $stats = [
-        'assigned_students' => 120,  // e.g. query: SELECT COUNT(*) FROM students
-        'pending_reviews'   => 30,
-        'approved_proposals'=> 200,
-        'pending_submissions'=> 50
-    ];
-}
+require_once '../config/database.php';
+
+$db = new Database();
+$dbConn = $db->connect();
+
+include "../queries/get_assigned_groups.php";
+
+$data = getUserGroupsAndStats($dbConn, $_SESSION['user_role'], $_SESSION['user_id']);
+$groups = $data['groups'];
+$stats  = $data['stats'];
+
+$assignedGroups = $data['groups'];
+$stats = $data['stats'];
+
+
 ?>
 
 <!DOCTYPE html>
@@ -105,11 +103,11 @@ if ($_SESSION['user_role'] === 'adviser') {
                         </svg>
                         My Students
                     </a>
-                    <a href="#" onclick="showSection('proposals')" class="nav-item flex items-center p-3 rounded-lg hover:bg-royal-blue-light transition-colors duration-200">
+                    <a href="#" onclick="showSection('editor')" class="nav-item flex items-center p-3 rounded-lg hover:bg-royal-blue-light transition-colors duration-200">
                         <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z" clip-rule="evenodd"></path>
                         </svg>
-                        Research Proposals
+                        Tect editor
                     </a>
                     <a href="#" onclick="showSection('submissions')" class="nav-item flex items-center p-3 rounded-lg hover:bg-royal-blue-light transition-colors duration-200">
                         <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
@@ -139,10 +137,11 @@ if ($_SESSION['user_role'] === 'adviser') {
 
     <!-- Main Content -->
     <div id="contentWrapper" class="pt-16 transition-all duration-300 ease-in-out">
-        <main class="min-h-screen bg-gray-50 p-6">
+        <main class="min-h-screen bg-gray-50 p-6 mt-15">
             <!-- Dashboard Section -->
             <div id="dashboard-section" class="section">
                 <!-- Stats Grid -->
+                 <h2 class="text-2xl font-bold text-gray-900 mb-6">Dashboard</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                     <div class="bg-white overflow-hidden shadow-lg rounded-lg">
                         <div class="p-6">
@@ -178,26 +177,6 @@ if ($_SESSION['user_role'] === 'adviser') {
                                     <dl>
                                         <dt class="text-sm font-medium text-gray-500 truncate">Pending Reviews</dt>
                                         <dd class="text-3xl font-semibold text-gray-900"><?php echo $stats['pending_reviews']; ?></dd>
-                                    </dl>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-white overflow-hidden shadow-lg rounded-lg">
-                        <div class="p-6">
-                            <div class="flex items-center">
-                                <div class="flex-shrink-0">
-                                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                                        <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                                        </svg>
-                                    </div>
-                                </div>
-                                <div class="ml-5 w-0 flex-1">
-                                    <dl>
-                                        <dt class="text-sm font-medium text-gray-500 truncate">Approved Proposals</dt>
-                                        <dd class="text-3xl font-semibold text-gray-900"><?php echo $stats['approved_proposals']; ?></dd>
                                     </dl>
                                 </div>
                             </div>
@@ -287,21 +266,56 @@ if ($_SESSION['user_role'] === 'adviser') {
                 </div>
             </div>
 
-            <!-- Other Sections (Hidden by default) -->
+            <!-- student section -->
             <div id="students-section" class="section hidden">
-                <h2 class="text-2xl font-bold text-gray-900 mb-6">My Students</h2>
-                <div class="bg-white shadow-lg rounded-lg p-6">
-                    <p class="text-gray-600">Student management interface will be implemented here.</p>
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">My Advisee Groups</h2>
+                <div class="bg-white shadow-lg rounded-lg p-6 overflow-x-auto">
+                    <?php if (!empty($assignedGroups)): ?>
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Group Name</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Research Topic</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Created At</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <?php foreach ($assignedGroups as $group): ?>
+                                    <tr>
+                                        <td class="px-6 py-4 text-sm text-gray-900">#GRP<?= str_pad($group['id'], 3, '0', STR_PAD_LEFT) ?></td>
+                                        <td class="px-6 py-4 text-sm text-gray-900"><?= htmlspecialchars($group['name']) ?></td>
+                                        <td class="px-6 py-4 text-sm text-gray-900"><?= htmlspecialchars($group['research_topic'] ?? 'N/A') ?></td>
+                                        <td class="px-6 py-4 text-sm">
+                                            <?php 
+                                                $statusColor = match($group['status']) {
+                                                    'active'     => 'text-green-600',
+                                                    'inactive'   => 'text-gray-600',
+                                                    'completed'  => 'text-blue-600',
+                                                    'on_hold'    => 'text-yellow-600',
+                                                    default      => 'text-gray-600',
+                                                };
+                                            ?>
+                                            <span class="font-medium <?= $statusColor ?>">
+                                                <?= ucfirst($group['status']) ?>
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 text-sm text-gray-500"><?= $group['created_at'] ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    <?php else: ?>
+                        <p class="text-gray-600">No groups assigned to you yet.</p>
+                    <?php endif; ?>
                 </div>
             </div>
-
-            <div id="proposals-section" class="section hidden">
-                <h2 class="text-2xl font-bold text-gray-900 mb-6">Research Proposals</h2>
-                <div class="bg-white shadow-lg rounded-lg p-6">
-                    <p class="text-gray-600">Research proposal management interface will be implemented here.</p>
-                </div>
-            </div>
-
+            <!-- Editor Section -->
+            <!-- <section id="editorSection">
+                <iframe id="editorFrame" src="editor.php" style="width:100%; height:600px; border:none;"></iframe>
+            </section> -->
+            
             <div id="submissions-section" class="section hidden">
                 <iframe src="/THESIS/pages/group_details.php" 
                         width="100%" height="100%" 

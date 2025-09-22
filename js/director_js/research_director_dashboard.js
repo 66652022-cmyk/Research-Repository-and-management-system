@@ -368,17 +368,200 @@ function refreshAssignments() {
 }
 
 function showAssignmentModal(groupId, assignmentType) {
-    alert('Show assignment modal for group ' + groupId + ' and type ' + assignmentType);
-    // Implement assignment modal functionality
+    // Create and show assignment modal
+    createAssignmentModal(groupId, assignmentType);
+}
+
+function createAssignmentModal(groupId, assignmentType) {
+    // Remove existing modal if any
+    const existingModal = document.getElementById('assignmentModal');
+    if (existingModal) {
+        existingModal.remove();
+    }
+
+    const modal = document.createElement('div');
+    modal.id = 'assignmentModal';
+    modal.className = 'fixed inset-0 z-50 overflow-y-auto hidden';
+    modal.innerHTML = `
+        <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+            </div>
+
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mt-3 text-center sm:mt-0 sm:text-left w-full">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Assign ${getAssignmentTypeLabel(assignmentType)}</h3>
+                            <p class="text-sm text-gray-600 mb-4">Select a user to assign to this group:</p>
+
+                            <div id="assignmentUsersList" class="max-h-60 overflow-y-auto border border-gray-300 rounded p-2">
+                                <div class="text-center text-gray-500 py-4">
+                                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-royal-blue mx-auto"></div>
+                                    <p class="mt-2">Loading available users...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button type="button" id="cancelAssignmentBtn"
+                            class="w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    // Load available users
+    loadAvailableUsers(assignmentType);
+
+    // Set up event listeners
+    const cancelBtn = modal.querySelector('#cancelAssignmentBtn');
+    cancelBtn.addEventListener('click', hideAssignmentModal);
+
+    // Show modal
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+
+    // Store assignment data
+    modal.dataset.groupId = groupId;
+    modal.dataset.assignmentType = assignmentType;
+}
+
+function hideAssignmentModal() {
+    const modal = document.getElementById('assignmentModal');
+    if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        modal.remove();
+    }
+}
+
+function loadAvailableUsers(assignmentType) {
+    const usersList = document.getElementById('assignmentUsersList');
+
+    // Map assignment type to API role parameter
+    const roleMap = {
+        'english_critique': 'english_critique',
+        'statistician': 'statistician',
+        'financial_analyst': 'financial_analyst'
+    };
+
+    fetch(`/THESIS/faculty_api/get_users_by_role.php?role=${roleMap[assignmentType]}`)
+        .then(response => response.json())
+        .then(users => {
+            usersList.innerHTML = '';
+
+            if (users.length === 0) {
+                usersList.innerHTML = '<p class="text-gray-500 py-4 text-center">No available users found for this role.</p>';
+                return;
+            }
+
+            users.forEach(user => {
+                const userDiv = document.createElement('div');
+                userDiv.className = 'flex items-center justify-between p-3 border border-gray-200 rounded mb-2 hover:bg-gray-50 cursor-pointer';
+                userDiv.innerHTML = `
+                    <div>
+                        <div class="font-medium text-gray-900">${user.name}</div>
+                        <div class="text-sm text-gray-500">${user.email}</div>
+                    </div>
+                    <button class="bg-royal-blue hover:bg-royal-blue-dark text-white px-3 py-1 rounded text-sm transition-colors duration-200"
+                            onclick="assignUserToGroup(${user.id}, '${assignmentType}')">
+                        Assign
+                    </button>
+                `;
+                usersList.appendChild(userDiv);
+            });
+        })
+        .catch(error => {
+            console.error('Error loading users:', error);
+            usersList.innerHTML = '<p class="text-red-500 py-4 text-center">Error loading users. Please try again.</p>';
+        });
+}
+
+function assignUserToGroup(userId, assignmentType) {
+    const modal = document.getElementById('assignmentModal');
+    const groupId = modal.dataset.groupId;
+
+    // Show loading state
+    const assignButtons = modal.querySelectorAll('button');
+    assignButtons.forEach(btn => {
+        btn.disabled = true;
+        btn.textContent = 'Assigning...';
+    });
+
+    const formData = new FormData();
+    formData.append('group_id', groupId);
+    formData.append('assignment_type', assignmentType);
+    formData.append('user_id', userId);
+
+    fetch('/THESIS/faculty_api/assign_user_to_group.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('User assigned successfully!');
+            hideAssignmentModal();
+            location.reload(); // Refresh to show updated assignments
+        } else {
+            alert('Error: ' + data.error);
+            assignButtons.forEach(btn => {
+                btn.disabled = false;
+                btn.textContent = 'Assign';
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error assigning user:', error);
+        alert('Error assigning user. Please try again.');
+        assignButtons.forEach(btn => {
+            btn.disabled = false;
+            btn.textContent = 'Assign';
+        });
+    });
 }
 
 function unassignGroup(groupId, assignmentType) {
-    if (confirm('Are you sure you want to unassign this group from ' + assignmentType + '?')) {
-        // Implement unassign functionality
-        console.log('Unassigning group:', groupId, 'from:', assignmentType);
-        alert('Group unassigned successfully!');
-        location.reload();
+    if (!confirm(`Are you sure you want to unassign this group from ${getAssignmentTypeLabel(assignmentType)}?`)) {
+        return;
     }
+
+    const formData = new FormData();
+    formData.append('group_id', groupId);
+    formData.append('assignment_type', assignmentType);
+
+    fetch('/THESIS/faculty_api/unassign_user_from_group.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('User unassigned successfully!');
+            location.reload(); // Refresh to show updated assignments
+        } else {
+            alert('Error: ' + data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error unassigning user:', error);
+        alert('Error unassigning user. Please try again.');
+    });
+}
+
+function getAssignmentTypeLabel(assignmentType) {
+    const labels = {
+        'english_critique': 'English Critique',
+        'statistician': 'Statistician',
+        'financial_analyst': 'Financial Analyst'
+    };
+    return labels[assignmentType] || assignmentType;
 }
 
 function viewGroupDetails(groupId) {

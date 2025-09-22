@@ -1,34 +1,64 @@
-# TODO - Convert Landing Page and Components from Tailwind CSS to Vanilla CSS
+# Group Group AssigFeanurtFImplrmentatImp
 
-## Overview
-Convert the landing page (index.php) and its components (navbar.php, footer.php) from Tailwind CSS utility classes to vanilla CSS. Organize CSS files in an OOP-like folder structure under css/index, css/components/navbar, and css/components/footer.
+##e✅Compledaks
 
-## Steps
+### 1. API EndpisCaed
+-**ssgn_grou.php**: Hnlesiggrp fcutyember
+-**unassgn_group.pp**:Hansreovg ssgmerm groups
+### 1. API Endpoints Created
+- #*2._ssign_groupFunptions*Impl mnnled
+-s**ceeoteAving assi()**:Cev thacript Functioodnl UIented
+- **hideeesigimentMogan()**:eClosl**thd avsaglmentamodelaculty()**: Fetches and displays available faculty by role
+-***loaiAvgilablGF**ulty()**:ndstche andsplasavailable  by role
+- **submtAment()**: Pcessese ssigmnteqet
+##**nsting SGtem()**:H nagment withpchnfiowsentM
 
-### 1. Landing Page (index.php)
-- Create css/index/style.css
-- Extract Tailwind utility classes used in index.php and convert to vanilla CSS classes in style.css
-- Move inline styles from index.php <style> tag to style.css
-- Replace Tailwind classes in index.php with new vanilla CSS classes
-- Update index.php to link css/index/style.css instead of src/output.css
+###o3.(Int)g rtiot withlExnstongsiyatwa- Proper error handling and user feedback
+-dwAequiredModal()o wrkth enewunctin
+Allfunctionsingt withexitnhboard UI
+#cPrlpe aerrnrAmndtuse  fM eback
 
-### 2. Navbar Component (components/navbar.php)
-- Create css/components/navbar/style.css
-- Extract Tailwind utility classes used in navbar.php and convert to vanilla CSS classes in style.css
-- Replace Tailwind classes in navbar.php with new vanilla CSS classes
-- Update navbar.php to link css/components/navbar/style.css
+##e🧪gTe aign Requiredment modal for each role type
+2. **Faculty Loading**: Verify faculty members load correctly by role
+3. *CriticalsPnmh Testsng*: Test assigning groups to faculty members
+1.***AssignmentUnasal**: Test opensngnasnPgnmone modal fsT t em nole typg
+2. **Fa ulay Lsading**: Vesify fnculty memneladcrectlybyrle
+3.U**Assignm nt Prpcass**:tTss*y assigieg groups not acclny memberupdate correctly
+4.**UnassignentProce**: Tetrmoigssigmnt
+5. **UIPI Tests**:iVerifyssincunts updatecrectly
+1. **POST /THESIS/faculty_api/assign_group.php**
+   -APIalid ass
+1.i**POSTe/THESIS/ftcu ty_apr/qssegn_grsup.php**
+  --IValidid group IDreqes
+   - Ivd group ID
+ -I-iI vfludac ID
+  --MMissingmptrmeers
 
-### 3. Footer Component (components/footer.php)
-- Create css/components/footer/style.css
-- Extract Tailwind utility classes used in footer.php and convert to vanilla CSS classes in style.css
-- Replace Tailwind classes in footer.php with new vanilla CSS classes
-- Update footer.php to link css/components/footer/style.css
+2. **POST /THESIS/faculty_api/unassign_group.php**
+   - Valid unassignment request
+   - Invalid group ID
+   - Invalid assignment type
 
-### 4. Testing
-- Test landing page rendering and functionality after conversion
-- Verify navbar and footer display correctly with new styles
+### Frontend Testing
+1. **Modal Functionality**: Test all modal interactions
+2. **Form Validation**: Test faculty selection requirement
+3. **Error Handling**: Test API error scenarios
+4. **Loading States**: Test loading indicators
 
-## Notes
-- Do not modify any backend PHP logic or functionality
-- Only update frontend markup classes and CSS files
-- Follow OOP-like folder structure for CSS organization
+## 🚀 Next Steps
+
+1. **Test the implementation** using the research director dashboard
+2. **Verify database updates** after assignments/unassignments
+3. **Test with different user roles** (research_director, super_admin)
+4. **Check responsive design** on different screen sizes
+
+## 📋 Testing Checklist
+
+- [ ] Assignment modal opens correctly
+- [ ] Faculty members load by role type
+- [ ] Assignment process completes successfully
+- [ ] Unassignment process works with confirmation
+- [ ] Assignment counts update in real-time
+- [ ] Error messages display appropriately
+- [ ] Database records update correctly
+- [ ] Activity logs are created for assignments

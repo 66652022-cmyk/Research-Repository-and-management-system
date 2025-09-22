@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 17, 2025 at 05:36 AM
+-- Generation Time: Sep 22, 2025 at 08:27 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -163,7 +163,29 @@ INSERT INTO `activity_logs` (`id`, `user_id`, `action`, `details`, `ip_address`,
 (119, 1, 'login_failed_wrong_password', 'Wrong password for user: admin@example.com', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-17 02:07:20'),
 (120, 1, 'login_success', 'Successful login for role: super_admin', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-17 02:07:30'),
 (121, 1, 'login_success', 'Successful login for role: super_admin', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-17 02:31:13'),
-(122, 11, 'login_success', 'Successful login for role: research_faculty', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-17 03:29:30');
+(122, 11, 'login_success', 'Successful login for role: research_faculty', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-17 03:29:30'),
+(123, 1, 'login_success', 'Successful login for role: super_admin', '::1', 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Mobile Safari/537.36', '2025-09-17 03:42:01'),
+(124, 12, 'user_created', 'New user created with role: critique_english', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-17 03:44:06'),
+(125, 1, 'login_success', 'Successful login for role: super_admin', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-17 06:35:02'),
+(126, 8, 'login_success', 'Successful login for role: adviser', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-17 07:40:18'),
+(127, 1, 'login_success', 'Successful login for role: super_admin', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-17 07:41:04'),
+(128, NULL, 'login_failed_user_not_found', 'Login attempt for non-existent user: 123@gmail.com', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-18 05:38:44'),
+(129, 1, 'login_success', 'Successful login for role: super_admin', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-18 05:39:23'),
+(130, 1, 'login_success', 'Successful login for role: super_admin', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-18 08:41:20'),
+(131, 1, 'login_success', 'Successful login for role: super_admin', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-18 08:43:00'),
+(132, 1, 'login_failed_wrong_password', 'Wrong password for user: admin@example.com', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-19 03:10:28'),
+(133, 1, 'login_success', 'Successful login for role: super_admin', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-19 03:10:37'),
+(134, 1, 'login_success', 'Successful login for role: super_admin', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-20 13:31:48'),
+(135, 1, 'login_success', 'Successful login for role: super_admin', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-21 03:38:22'),
+(136, 1, 'login_success', 'Successful login for role: super_admin', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-21 03:58:33'),
+(137, 1, 'login_success', 'Successful login for role: super_admin', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-21 06:47:40'),
+(138, 1, 'login_success', 'Successful login for role: super_admin', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-21 09:14:40'),
+(139, 1, 'login_success', 'Successful login for role: super_admin', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-21 09:24:42'),
+(140, 1, 'login_success', 'Successful login for role: super_admin', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-21 12:26:12'),
+(141, 12, 'login_success', 'Successful login for role: critique_english', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-21 13:41:58'),
+(142, 12, 'login_success', 'Successful login for role: critique_english', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-21 14:06:03'),
+(143, 1, 'login_success', 'Successful login for role: super_admin', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-21 14:26:13'),
+(144, 1, 'login_success', 'Successful login for role: super_admin', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-22 04:43:23');
 
 -- --------------------------------------------------------
 
@@ -177,6 +199,24 @@ CREATE TABLE `adviser_specializations` (
   `specialization` varchar(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `adviser_specializations`
+--
+
+INSERT INTO `adviser_specializations` (`id`, `adviser_id`, `specialization`, `created_at`) VALUES
+(1, 8, 'Computer Science', '2025-09-21 08:37:22'),
+(2, 8, 'Information Technology', '2025-09-21 08:37:22'),
+(3, 8, 'Software Engineering', '2025-09-21 08:37:22'),
+(4, 8, 'Data Science', '2025-09-21 08:37:22'),
+(5, 8, 'Computer Science', '2025-09-21 08:38:18'),
+(6, 8, 'Information Technology', '2025-09-21 08:38:18'),
+(7, 8, 'Software Engineering', '2025-09-21 08:38:18'),
+(8, 8, 'Data Science', '2025-09-21 08:38:19'),
+(9, 8, 'Computer Science', '2025-09-21 08:39:36'),
+(10, 8, 'Information Technology', '2025-09-21 08:39:36'),
+(11, 8, 'Software Engineering', '2025-09-21 08:39:36'),
+(12, 8, 'Data Science', '2025-09-21 08:39:36');
 
 -- --------------------------------------------------------
 
@@ -198,6 +238,17 @@ CREATE TABLE `comments` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `comments`
+--
+
+INSERT INTO `comments` (`id`, `document_id`, `user_id`, `comment`, `type`, `page_number`, `line_number`, `status`, `parent_id`, `created_at`, `updated_at`) VALUES
+(2, 2, 7, 'Excellent proposal structure. The research objectives are well-defined.', 'approval', NULL, NULL, 'active', NULL, '2025-09-21 08:42:36', '2025-09-21 08:42:36'),
+(3, 2, 9, 'Please include budget breakdown for AI software licenses.', 'suggestion', NULL, NULL, 'active', NULL, '2025-09-21 08:42:36', '2025-09-21 08:42:36'),
+(4, 3, 7, 'Good introduction. Consider adding more recent studies from 2024.', 'suggestion', NULL, NULL, 'active', NULL, '2025-09-21 08:42:36', '2025-09-21 08:42:36'),
+(5, 4, 7, 'The methodology section needs revision. Please clarify the research design.', 'correction', NULL, NULL, 'active', NULL, '2025-09-21 08:42:36', '2025-09-21 08:42:36'),
+(6, 4, 8, 'I agree with the critique. The research methodology needs more detail.', 'general', NULL, NULL, 'active', NULL, '2025-09-21 08:42:36', '2025-09-21 08:42:36');
+
 -- --------------------------------------------------------
 
 --
@@ -218,6 +269,17 @@ CREATE TABLE `documents` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `documents`
+--
+
+INSERT INTO `documents` (`id`, `group_id`, `title`, `type`, `file_path`, `file_size`, `mime_type`, `status`, `submitted_by`, `submitted_at`, `created_at`, `updated_at`) VALUES
+(2, 16, 'AI in Healthcare: A Comprehensive Proposal', 'proposal', NULL, NULL, NULL, 'approved', 2, NULL, '2025-09-21 08:40:54', '2025-09-21 08:40:54'),
+(3, 16, 'Chapter 1: Introduction to AI in Healthcare', 'chapter1', NULL, NULL, NULL, 'under_review', 2, NULL, '2025-09-21 08:40:54', '2025-09-21 08:40:54'),
+(4, 16, 'Chapter 2: Literature Review', 'chapter2', NULL, NULL, NULL, 'revision_needed', 4, NULL, '2025-09-21 08:40:54', '2025-09-21 08:40:54'),
+(5, 17, 'Sustainable Energy Solutions: Research Proposal', 'proposal', NULL, NULL, NULL, 'submitted', 10, NULL, '2025-09-21 08:40:54', '2025-09-21 08:40:54'),
+(6, 18, 'Mobile App Development: Final Report', 'final', NULL, NULL, NULL, 'approved', 4, NULL, '2025-09-21 08:40:54', '2025-09-21 08:40:54');
 
 -- --------------------------------------------------------
 
@@ -246,14 +308,27 @@ CREATE TABLE `groups` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `description` text DEFAULT NULL,
+  `status` enum('active','inactive','completed','on_hold') DEFAULT 'active',
   `adviser_id` int(11) DEFAULT NULL,
   `english_critique_id` int(11) DEFAULT NULL,
   `statistician_id` int(11) DEFAULT NULL,
   `financial_analyst_id` int(11) DEFAULT NULL,
-  `status` enum('active','inactive','completed') DEFAULT 'active',
+  `research_topic` varchar(500) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `groups`
+--
+
+INSERT INTO `groups` (`id`, `name`, `description`, `status`, `adviser_id`, `english_critique_id`, `statistician_id`, `financial_analyst_id`, `research_topic`, `created_at`, `updated_at`) VALUES
+(10, 'AI Research Group Alpha', 'Research group focused on AI applications in healthcare', 'active', 8, 12, 7, 9, 'Artificial Intelligence in Healthcare Systems', '2025-09-16 22:35:33', '2025-09-16 22:35:33'),
+(11, 'Data Science Team Beta', 'Advanced data analytics and machine learning research', 'active', 8, 12, 7, 9, 'Machine Learning for Predictive Analytics', '2025-09-16 23:31:09', '2025-09-16 23:31:09'),
+(12, 'Software Engineering Group Gamma', 'Modern software development methodologies', 'active', 8, NULL, 7, NULL, 'Agile Software Development Practices', '2025-09-16 23:43:22', '2025-09-16 23:43:22'),
+(16, 'AI Research Group 2025', 'Advanced AI research for healthcare applications', 'active', 8, 12, 7, 9, 'AI in Healthcare: A Comprehensive Study', '2025-09-21 00:38:19', '2025-09-21 00:38:19'),
+(17, 'Sustainable Energy Research Team', 'Research on renewable energy solutions', 'active', 8, NULL, 7, 9, 'Sustainable Energy Solutions for Smart Cities', '2025-09-21 00:38:19', '2025-09-21 00:38:19'),
+(18, 'Mobile Development Group', 'Mobile application development research', 'completed', 8, 12, NULL, NULL, 'Cross-Platform Mobile App Development', '2025-09-21 00:38:19', '2025-09-21 00:38:19');
 
 -- --------------------------------------------------------
 
@@ -268,6 +343,31 @@ CREATE TABLE `group_members` (
   `role` enum('leader','member') DEFAULT 'member',
   `joined_at` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `group_members`
+--
+
+INSERT INTO `group_members` (`id`, `group_id`, `student_id`, `role`, `joined_at`) VALUES
+(1, 10, 10, 'leader', '2025-09-17 06:35:33'),
+(2, 10, 5, 'member', '2025-09-17 06:35:33'),
+(3, 10, 2, 'member', '2025-09-17 06:35:33'),
+(4, 10, 4, 'member', '2025-09-17 06:35:33'),
+(5, 11, 10, 'leader', '2025-09-17 07:31:09'),
+(6, 11, 5, 'member', '2025-09-17 07:31:09'),
+(7, 11, 2, 'member', '2025-09-17 07:31:09'),
+(8, 11, 4, 'member', '2025-09-17 07:31:09'),
+(9, 12, 10, 'leader', '2025-09-17 07:43:22'),
+(10, 12, 5, 'member', '2025-09-17 07:43:22'),
+(11, 12, 2, 'member', '2025-09-17 07:43:22'),
+(12, 12, 4, 'member', '2025-09-17 07:43:22'),
+(14, 16, 2, 'leader', '2025-09-21 08:38:19'),
+(15, 16, 4, 'member', '2025-09-21 08:38:19'),
+(16, 16, 5, 'member', '2025-09-21 08:38:19'),
+(17, 17, 10, 'leader', '2025-09-21 08:38:19'),
+(18, 17, 2, 'member', '2025-09-21 08:38:19'),
+(19, 18, 4, 'leader', '2025-09-21 08:38:19'),
+(20, 18, 5, 'member', '2025-09-21 08:38:19');
 
 -- --------------------------------------------------------
 
@@ -286,6 +386,17 @@ CREATE TABLE `notifications` (
   `related_id` int(11) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `notifications`
+--
+
+INSERT INTO `notifications` (`id`, `user_id`, `title`, `message`, `type`, `is_read`, `related_type`, `related_id`, `created_at`) VALUES
+(1, 2, 'Document Approved', 'Your proposal \"AI in Healthcare\" has been approved by the committee.', 'success', 0, 'document', 2, '2025-09-21 08:42:36'),
+(2, 4, 'Revision Required', 'Your Chapter 2 submission requires revision. Please check the comments.', 'warning', 0, 'document', 4, '2025-09-21 08:42:36'),
+(3, 10, 'Document Under Review', 'Your proposal is now under review by the assigned committee members.', 'info', 0, 'document', 5, '2025-09-21 08:42:36'),
+(4, 2, 'New Comment', 'You have received a new comment on your Chapter 1 document.', 'info', 0, 'comment', 3, '2025-09-21 08:42:36'),
+(5, 8, 'Group Assignment', 'You have been assigned as adviser for \"AI Research Group 2025\".', 'info', 0, 'group', 16, '2025-09-21 08:42:36');
 
 -- --------------------------------------------------------
 
@@ -306,6 +417,17 @@ CREATE TABLE `progress_tracking` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `progress_tracking`
+--
+
+INSERT INTO `progress_tracking` (`id`, `group_id`, `milestone`, `description`, `target_date`, `completion_date`, `status`, `created_by`, `created_at`, `updated_at`) VALUES
+(1, 16, 'Proposal Submission', 'Submit research proposal to committee', '2025-01-15', '2025-01-10', 'completed', 2, '2025-09-21 08:42:36', '2025-09-21 08:42:36'),
+(2, 16, 'Chapter 1 Review', 'Complete review of Chapter 1 by committee', '2025-02-01', NULL, 'in_progress', 8, '2025-09-21 08:42:36', '2025-09-21 08:42:36'),
+(3, 16, 'Data Collection', 'Collect research data and preliminary analysis', '2025-03-15', NULL, 'pending', 2, '2025-09-21 08:42:36', '2025-09-21 08:42:36'),
+(4, 17, 'Proposal Submission', 'Submit research proposal for review', '2025-01-20', NULL, 'in_progress', 10, '2025-09-21 08:42:36', '2025-09-21 08:42:36'),
+(5, 18, 'Final Defense', 'Complete final defense presentation', '2025-04-01', '2025-03-28', 'completed', 4, '2025-09-21 08:42:36', '2025-09-21 08:42:36');
+
 -- --------------------------------------------------------
 
 --
@@ -320,6 +442,17 @@ CREATE TABLE `system_settings` (
   `updated_by` int(11) DEFAULT NULL,
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `system_settings`
+--
+
+INSERT INTO `system_settings` (`id`, `setting_key`, `setting_value`, `description`, `updated_by`, `updated_at`) VALUES
+(1, 'max_file_size', '10485760', 'Maximum file upload size in bytes (10MB)', NULL, '2025-09-21 08:42:36'),
+(2, 'allowed_file_types', 'pdf,doc,docx,txt', 'Allowed file types for document uploads', NULL, '2025-09-21 08:42:36'),
+(3, 'review_deadline_days', '14', 'Default number of days for document review', NULL, '2025-09-21 08:42:36'),
+(4, 'system_name', 'Research Management System', 'Name of the research management system', NULL, '2025-09-21 08:42:36'),
+(5, 'support_email', 'support@university.edu', 'Support email address for the system', NULL, '2025-09-21 08:42:36');
 
 -- --------------------------------------------------------
 
@@ -358,7 +491,24 @@ INSERT INTO `users` (`id`, `name`, `email`, `password`, `role`, `educational_att
 (8, 'Adviser 1', 'adviser1@example.com', '$2y$10$K/N1if6SepsZI4f0dr0gYuW36sSOCr4cDfrIWyicNEqPfO5qHFDV2', 'adviser', NULL, NULL, NULL, 'active', '2025-09-08 03:25:55', '2025-09-08 03:25:55', NULL, NULL),
 (9, 'Financial Critique 1', 'financial1@example.com', '$2y$10$FQqHEdkAEXe6JMlEqQWGYuNE9D53HiZx78WGWiYjNA663kWlpY3qK', 'financial_critique', NULL, NULL, NULL, 'active', '2025-09-08 03:33:56', '2025-09-08 03:33:56', NULL, NULL),
 (10, 'Aira Joy MENDOZA', '55372022@holycross.edu.ph', '', 'student', NULL, NULL, 'BSCS', 'active', '2025-09-10 01:09:57', '2025-09-10 01:10:09', 'Female', '4'),
-(11, 'Faculty 1', 'faculty1@example.com', '$2y$10$YcB5E76KvcxCNHe6IGOqjuQuEhXv6DqeA4ZOQNqE1rMQqc./gyU4a', 'research_faculty', NULL, NULL, NULL, 'active', '2025-09-13 06:01:24', '2025-09-13 06:01:24', NULL, NULL);
+(11, 'Faculty 1', 'faculty1@example.com', '$2y$10$YcB5E76KvcxCNHe6IGOqjuQuEhXv6DqeA4ZOQNqE1rMQqc./gyU4a', 'research_faculty', NULL, NULL, NULL, 'active', '2025-09-13 06:01:24', '2025-09-13 06:01:24', NULL, NULL),
+(12, 'English Critique1', 'critique1@example.com', '$2y$10$l0OXYlueVNUaDxJXvEJMnuG/Ufl4tPGnROoiPeLU4NT7oZDQCe5cK', 'critique_english', NULL, NULL, NULL, 'active', '2025-09-17 03:44:06', '2025-09-17 03:44:06', NULL, NULL),
+(13, 'Jerthel Sanglay', 'jerthel@gmail.com', '$2y$10$TyTcYFK8zjd.FSnwMt2FUOz4Ni1mfKVP6w6rG3Le0.Z7qDkl7rqa2', 'student', NULL, NULL, 'BSCS 4-A', 'active', '2025-09-18 08:54:26', '2025-09-18 08:54:26', NULL, NULL),
+(14, 'John Reyes', 'john.reyes@example.com', '482c811da5d5b4bc6d497ffa98491e38', 'student', NULL, NULL, 'BSCS', 'active', '2025-09-21 08:57:10', '2025-09-21 08:57:10', 'Male', '4'),
+(15, 'Maria Santos', 'maria.santos@example.com', '482c811da5d5b4bc6d497ffa98491e38', 'student', NULL, NULL, 'BSIT', 'active', '2025-09-21 08:57:10', '2025-09-21 08:57:10', 'Female', '4'),
+(16, 'Mark Dela Cruz', 'mark.delacruz@example.com', '482c811da5d5b4bc6d497ffa98491e38', 'student', NULL, NULL, 'BSCpE', 'active', '2025-09-21 08:57:10', '2025-09-21 08:57:10', 'Male', '4'),
+(17, 'Angela Bautista', 'angela.bautista@example.com', '482c811da5d5b4bc6d497ffa98491e38', 'student', NULL, NULL, 'BSBA', 'active', '2025-09-21 08:57:10', '2025-09-21 08:57:10', 'Female', '4'),
+(18, 'Paul Lim', 'paul.lim@example.com', '482c811da5d5b4bc6d497ffa98491e38', 'student', NULL, NULL, 'BSA', 'active', '2025-09-21 08:57:10', '2025-09-21 08:57:10', 'Male', '4'),
+(19, 'Samantha Tan', 'samantha.tan@example.com', '482c811da5d5b4bc6d497ffa98491e38', 'student', NULL, NULL, 'BSBio', 'active', '2025-09-21 08:57:10', '2025-09-21 08:57:10', 'Female', '4'),
+(20, 'Joseph Mendoza', 'joseph.mendoza@example.com', '482c811da5d5b4bc6d497ffa98491e38', 'student', NULL, NULL, 'BSEd', 'active', '2025-09-21 08:57:10', '2025-09-21 08:57:10', 'Male', '4'),
+(21, 'Kristine Gomez', 'kristine.gomez@example.com', '482c811da5d5b4bc6d497ffa98491e38', 'student', NULL, NULL, 'BSPsych', 'active', '2025-09-21 08:57:10', '2025-09-21 08:57:10', 'Female', '4'),
+(22, 'Adrian Cruz', 'adrian.cruz@example.com', '482c811da5d5b4bc6d497ffa98491e38', 'student', NULL, NULL, 'BSCE', 'active', '2025-09-21 08:57:10', '2025-09-21 08:57:10', 'Male', '4'),
+(23, 'Catherine Flores', 'catherine.flores@example.com', '482c811da5d5b4bc6d497ffa98491e38', 'student', NULL, NULL, 'BSN', 'active', '2025-09-21 08:57:10', '2025-09-21 08:57:10', 'Female', '4'),
+(24, 'Patrick Ramos', 'patrick.ramos@example.com', '482c811da5d5b4bc6d497ffa98491e38', 'student', NULL, NULL, 'BSME', 'active', '2025-09-21 08:57:10', '2025-09-21 08:57:10', 'Male', '4'),
+(25, 'Michelle Villanueva', 'michelle.villanueva@example.com', '482c811da5d5b4bc6d497ffa98491e38', 'student', NULL, NULL, 'BSHM', 'active', '2025-09-21 08:57:10', '2025-09-21 08:57:10', 'Female', '4'),
+(26, 'James Uy', 'james.uy@example.com', '482c811da5d5b4bc6d497ffa98491e38', 'student', NULL, NULL, 'BSECE', 'active', '2025-09-21 08:57:10', '2025-09-21 08:57:10', 'Male', '4'),
+(27, 'Andrea Chua', 'andrea.chua@example.com', '482c811da5d5b4bc6d497ffa98491e38', 'student', NULL, NULL, 'BSArch', 'active', '2025-09-21 08:57:10', '2025-09-21 08:57:10', 'Female', '4'),
+(28, 'Kevin Torres', 'kevin.torres@example.com', '482c811da5d5b4bc6d497ffa98491e38', 'student', NULL, NULL, 'BSMath', 'active', '2025-09-21 08:57:10', '2025-09-21 08:57:10', 'Male', '4');
 
 --
 -- Indexes for dumped tables
@@ -415,12 +565,7 @@ ALTER TABLE `document_versions`
 -- Indexes for table `groups`
 --
 ALTER TABLE `groups`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `idx_adviser_id` (`adviser_id`),
-  ADD KEY `idx_status` (`status`),
-  ADD KEY `groups_ibfk_2` (`english_critique_id`),
-  ADD KEY `groups_ibfk_3` (`statistician_id`),
-  ADD KEY `groups_ibfk_4` (`financial_analyst_id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `group_members`
@@ -478,25 +623,25 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `activity_logs`
 --
 ALTER TABLE `activity_logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=123;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=145;
 
 --
 -- AUTO_INCREMENT for table `adviser_specializations`
 --
 ALTER TABLE `adviser_specializations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `comments`
 --
 ALTER TABLE `comments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `documents`
 --
 ALTER TABLE `documents`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `document_versions`
@@ -508,37 +653,37 @@ ALTER TABLE `document_versions`
 -- AUTO_INCREMENT for table `groups`
 --
 ALTER TABLE `groups`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `group_members`
 --
 ALTER TABLE `group_members`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `progress_tracking`
 --
 ALTER TABLE `progress_tracking`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `system_settings`
 --
 ALTER TABLE `system_settings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- Constraints for dumped tables
@@ -577,15 +722,6 @@ ALTER TABLE `documents`
 ALTER TABLE `document_versions`
   ADD CONSTRAINT `document_versions_ibfk_1` FOREIGN KEY (`document_id`) REFERENCES `documents` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `document_versions_ibfk_2` FOREIGN KEY (`uploaded_by`) REFERENCES `users` (`id`) ON DELETE SET NULL;
-
---
--- Constraints for table `groups`
---
-ALTER TABLE `groups`
-  ADD CONSTRAINT `groups_ibfk_1` FOREIGN KEY (`adviser_id`) REFERENCES `users` (`id`) ON DELETE SET NULL,
-  ADD CONSTRAINT `groups_ibfk_2` FOREIGN KEY (`english_critique_id`) REFERENCES `users` (`id`) ON DELETE SET NULL,
-  ADD CONSTRAINT `groups_ibfk_3` FOREIGN KEY (`statistician_id`) REFERENCES `users` (`id`) ON DELETE SET NULL,
-  ADD CONSTRAINT `groups_ibfk_4` FOREIGN KEY (`financial_analyst_id`) REFERENCES `users` (`id`) ON DELETE SET NULL;
 
 --
 -- Constraints for table `group_members`

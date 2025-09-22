@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,20 +27,7 @@
                 <h2>Research Groups</h2>
             </div>
             <nav class="groups-list">
-                <a href="#" class="group-item active">
-                    <div class="group-icon">AR</div>
-                    <div>
-                        <div>Alpha Research Team</div>
-                        <div style="font-size: 12px; color: #65676b;">3 members</div>
-                    </div>
-                </a>
-                <a href="#" class="group-item">
-                    <div class="group-icon">BI</div>
-                    <div>
-                        <div>Beta Innovators</div>
-                        <div style="font-size: 12px; color: #65676b;">4 members</div>
-                    </div>
-                </a>
+                <!-- Dynamic groups -->
             </nav>
         </aside>
 
@@ -47,181 +35,13 @@
         <main class="main-content">
             <div class="content-header">
                 <h2>Submitted Documents</h2>
-                <p class="content-subtitle">Review and comment on thesis documents submitted by group members</p>
+                <p class="content-subtitle">
+                    Review and comment on thesis documents submitted by group members
+                </p>
             </div>
 
-            <!-- Document Posts -->
-            <div class="document-post">
-                <div class="post-header">
-                    <div class="post-author">
-                        <div class="author-avatar">JD</div>
-                        <div class="author-info">
-                            <h4>John Doe</h4>
-                            <div class="post-time">2 hours ago</div>
-                        </div>
-                    </div>
-                    <div class="document-info">
-                        <div class="document-icon">
-                            <span class="icon icon-pdf"></span>
-                        </div>
-                        <div class="doc-details">
-                            <h5>Thesis Draft 1.pdf</h5>
-                            <div class="doc-meta">Chapter 1-3 • 2.1 MB • Last modified today</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="post-description">
-                    Here's the first draft of my thesis covering the introduction, literature review, and methodology sections. I've incorporated the feedback from our last meeting and would appreciate any additional comments, especially on the methodology approach.
-                </div>
-                <div class="post-actions">
-                    <button class="action-btn">
-                        <span class="icon icon-download"></span>
-                        Download
-                    </button>
-                    <button class="action-btn">
-                        <span class="icon icon-comment"></span>
-                        Comment
-                    </button>
-                    <button class="action-btn">
-                        <span class="icon icon-share"></span>
-                        Share
-                    </button>
-                </div>
-                <div class="comments-section">
-                    <div class="comment-input">
-                        <div class="comment-avatar">U</div>
-                        <div class="comment-input-container">
-                            <textarea class="comment-textarea" placeholder="Write a comment..." rows="1"></textarea>
-                            <button class="comment-submit">
-                                <span class="icon icon-send"></span>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="existing-comments">
-                        <div class="comment">
-                            <div class="comment-bubble">
-                                <div class="comment-author">Dr. Emily Carter</div>
-                                <div class="comment-text">Great work on the methodology section! Consider adding more details about your sampling strategy.</div>
-                            </div>
-                            <div class="comment-time">1 hour ago</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="document-post">
-                <div class="post-header">
-                    <div class="post-author">
-                        <div class="author-avatar">JS</div>
-                        <div class="author-info">
-                            <h4>Jane Smith</h4>
-                            <div class="post-time">5 hours ago</div>
-                        </div>
-                    </div>
-                    <div class="document-info">
-                        <div class="document-icon">
-                            <span class="icon icon-word"></span>
-                        </div>
-                        <div class="doc-details">
-                            <h5>Literature Review.docx</h5>
-                            <div class="doc-meta">Chapter 2 • 1.8 MB • Last modified yesterday</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="post-description">
-                    Completed literature review focusing on AI applications in healthcare systems. I've reviewed 45 peer-reviewed articles from 2020-2024 and identified key research gaps that our study will address.
-                </div>
-                <div class="post-actions">
-                    <button class="action-btn">
-                        <span class="icon icon-download"></span>
-                        Download
-                    </button>
-                    <button class="action-btn">
-                        <span class="icon icon-comment"></span>
-                        Comment
-                    </button>
-                    <button class="action-btn">
-                        <span class="icon icon-share"></span>
-                        Share
-                    </button>
-                </div>
-                <div class="comments-section">
-                    <div class="comment-input">
-                        <div class="comment-avatar">U</div>
-                        <div class="comment-input-container">
-                            <textarea class="comment-textarea" placeholder="Write a comment..." rows="1"></textarea>
-                            <button class="comment-submit">
-                                <span class="icon icon-send"></span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="document-post">
-                <div class="post-header">
-                    <div class="post-author">
-                        <div class="author-avatar">MJ</div>
-                        <div class="author-info">
-                            <h4>Mike Johnson</h4>
-                            <div class="post-time">1 day ago</div>
-                        </div>
-                    </div>
-                    <div class="document-info">
-                        <div class="document-icon">
-                            <span class="icon icon-excel"></span>
-                        </div>
-                        <div class="doc-details">
-                            <h5>Data Analysis.xlsx</h5>
-                            <div class="doc-meta">Dataset & Analysis • 3.2 MB • Last modified 2 days ago</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="post-description">
-                    Preliminary data analysis results from our healthcare AI survey. The spreadsheet includes raw data, statistical analysis, and visualizations. Key findings show 78% improvement in diagnostic accuracy with AI assistance.
-                </div>
-                <div class="post-actions">
-                    <button class="action-btn">
-                        <span class="icon icon-download"></span>
-                        Download
-                    </button>
-                    <button class="action-btn">
-                        <span class="icon icon-comment"></span>
-                        Comment
-                    </button>
-                    <button class="action-btn">
-                        <span class="icon icon-share"></span>
-                        Share
-                    </button>
-                </div>
-                <div class="comments-section">
-                    <div class="comment-input">
-                        <div class="comment-avatar">U</div>
-                        <div class="comment-input-container">
-                            <textarea class="comment-textarea" placeholder="Write a comment..." rows="1"></textarea>
-                            <button class="comment-submit">
-                                <span class="icon icon-send"></span>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="existing-comments">
-                        <div class="comment">
-                            <div class="comment-bubble">
-                                <div class="comment-author">John Doe</div>
-                                <div class="comment-text">Impressive results! Could you share the methodology for calculating the diagnostic accuracy improvement?</div>
-                            </div>
-                            <div class="comment-time">18 hours ago</div>
-                        </div>
-                        <div class="comment">
-                            <div class="comment-bubble">
-                                <div class="comment-author">Dr. Emily Carter</div>
-                                <div class="comment-text">The statistical significance looks good. Make sure to include confidence intervals in the final analysis.</div>
-                            </div>
-                            <div class="comment-time">12 hours ago</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <!-- Dynamic submissions-->
+            <div id="documents-container" class="space-y-4"></div>
         </main>
 
         <!-- Right Sidebar -->
@@ -402,6 +222,109 @@
                 }
             });
         });
+
+        document.querySelectorAll('.view-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const docId = this.getAttribute('data-document-id');
+            
+            fetch(`queries/get_document.php?id=${docId}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        // I-send sa editor section
+                        const editorFrame = document.getElementById('editorFrame');
+                        editorFrame.contentWindow.postMessage({
+                            type: 'loadDocument',
+                            document: data.document
+                        }, '*');
+                    } else {
+                        alert('Failed to load document');
+                    }
+                });
+        });
+    });
+    // pang render ng groups sa left sidebar
+    async function loadGroups() {
+        const res = await fetch('../queries/get_groups.php');
+        const data = await res.json();
+
+        if (data.success) {
+            const sidebar = document.querySelector('.groups-list');
+            sidebar.innerHTML = ''; // linisin muna
+
+            data.groups.forEach(group => {
+                const el = document.createElement('a');
+                el.href = "#";
+                el.className = "group-item";
+                el.dataset.groupId = group.id;
+                el.innerHTML = `
+                    <div class="group-icon">${group.name.substring(0,2).toUpperCase()}</div>
+                    <div>
+                        <div>${group.name}</div>
+                        <div style="font-size: 12px; color: #65676b;">${group.members} members</div>
+                    </div>
+                `;
+                el.addEventListener('click', () => {
+                    document.querySelectorAll('.group-item').forEach(g => g.classList.remove('active'));
+                    el.classList.add('active');
+                    loadSubmissions(group.id);
+                });
+                sidebar.appendChild(el);
+            });
+
+            // auto load first group
+            if (data.groups.length > 0) {
+                sidebar.querySelector('.group-item').classList.add('active');
+                loadSubmissions(data.groups[0].id);
+            }
+        }
+    }
+
+    // pang render ng main content (submissions per group)
+    async function loadSubmissions(groupId) {
+        const res = await fetch('../queries/get_submissions.php?group_id=' + groupId);
+        const data = await res.json();
+
+        const container = document.getElementById('documents-container');
+        container.innerHTML = '';
+
+        if (data.success && data.documents.length > 0) {
+            data.documents.forEach(doc => {
+                const div = document.createElement('div');
+                div.className = 'document-post';
+                div.innerHTML = `
+                    <div class="post-header">
+                        <div class="post-author">
+                            <div class="author-avatar">${doc.uploader_name ? doc.uploader_name.charAt(0).toUpperCase() : "?"}</div>
+                            <div class="author-info">
+                                <h4>${doc.uploader_name || "Unknown"}</h4>
+                                <div class="post-time">${doc.submitted_at ? new Date(doc.submitted_at).toLocaleString() : "N/A"}</div>
+                            </div>
+                        </div>
+                        <div class="document-info">
+                            <h5>${doc.title} (${doc.type})</h5>
+                            <div class="doc-meta">${doc.mime_type || "Unknown"} • ${(doc.file_size ? (doc.file_size/1024).toFixed(1) : 0)} KB</div>
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <button ${doc.file_path ? `onclick="window.open('${doc.file_path}', '_blank')"` : "disabled"} class="action-btn">Download</button>
+                        <button onclick="viewDocument(${doc.id})" class="action-btn">View</button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        } else {
+            container.innerHTML = `<p>No submissions found for this group.</p>`;
+        }
+    }
+
+    function viewDocument(docId) {
+        alert("Open inline viewer for document ID: " + docId);
+        // dito later ilalagay yung PDF/Text editor inline view
+    }
+
+    loadGroups();
+
     </script>
 </body>
 </html>
