@@ -596,6 +596,7 @@
 
         const container = document.getElementById('progress-container');
         container.innerHTML = '';
+console.log("Progress data:", data);
 
         if (data.success) {
             // Overall progress
@@ -607,7 +608,7 @@
                     <span class="progress-percentage">${data.overall.percentage}%</span>
                 </div>
                 <div class="progress-bar">
-                    <div class="progress-fill" style="width: ${data.overall.percentage}%"></div>
+                    <div class="progress-fill" style="width:${data.overall.percentage}%"></div>
                 </div>
             `;
             container.appendChild(overall);
@@ -627,6 +628,7 @@
                 bar.className = 'progress-bar';
                 bar.innerHTML = `<div class="progress-fill" style="width:${ch.percentage}%"></div>`;
                 div.appendChild(bar);
+
 
                 // Parts container hidden initially
                 const partsContainer = document.createElement('div');

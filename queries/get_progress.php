@@ -123,3 +123,6 @@ echo json_encode([
         "percentage" => $overall_percentage
     ]
 ]);
+error_log(print_r($progress_data, true));
+
+?>
