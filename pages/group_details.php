@@ -6,9 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="../src/style.css">
     <title>Group Details - Alpha Research Team</title>
-
-    
 </head>
+
 <body>
     <!-- Header -->
     <header class="header bg-royal-blue">
