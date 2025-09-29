@@ -35,7 +35,8 @@ while ($row = $result->fetch_assoc()) {
         "mime_type"    => $row["mime_type"],
         "status"       => $row["status"],
         "submitted_by" => $row["submitted_by"],
-        "submitted_at" => $row["submitted_at"]
+        "submitted_at" => $row["submitted_at"],
+        "comments"     => []
     ];
 }
 

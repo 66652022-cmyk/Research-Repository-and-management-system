@@ -5,7 +5,7 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-if (!in_array($_SESSION['user_role'], ['students', 'super_admin'])) {
+if (!in_array($_SESSION['user_role'], ['student', 'super_admin'])) {
     header('Location: /THESIS/pages/Login.php');
     exit;
 }
@@ -136,6 +136,12 @@ $stats = [
                     </svg>
                     Dashboard
                 </a>
+                <a href="#" onclick="showSection('group')" class="flex items-center px-4 py-3 text-white rounded-lg hover:bg-royal-blue-light transition-colors duration-200">
+                    <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                    </svg>
+                    My group
+                </a>
                 <a href="#" onclick="showSection('manuscripts')" class="flex items-center px-4 py-3 text-white rounded-lg hover:bg-royal-blue-light transition-colors duration-200">
                     <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm0 2h12v8H4V6zm2 2h8v2H6V8zm0 3h8v1H6v-1z"></path>
@@ -147,12 +153,6 @@ $stats = [
                         <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z" clip-rule="evenodd"></path>
                     </svg>
                     Submissions
-                </a>
-                <a href="#" onclick="showSection('feedback')" class="flex items-center px-4 py-3 text-white rounded-lg hover:bg-royal-blue-light transition-colors duration-200">
-                    <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
-                    </svg>
-                    Feedback
                 </a>
                 <a href="#" onclick="showSection('deadlines')" class="flex items-center px-4 py-3 text-white rounded-lg hover:bg-royal-blue-light transition-colors duration-200">
                     <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
@@ -362,17 +362,17 @@ $stats = [
 
         <!-- Submissions Section -->
         <div id="submissions-section" class="section hidden">
-            <h2 class="text-2xl font-bold text-gray-900 mb-6">My Submissions</h2>
-            <div class="bg-white shadow-lg rounded-lg p-6">
-                <p class="text-gray-600">Submission tracking interface will be implemented here.</p>
-            </div>
+            <iframe src="/THESIS/pages/per_student_submission.php" 
+                    width="100%" height="100%" 
+                    style="border:none; min-height:90vh;">
+            </iframe>
         </div>
 
-        <!-- Feedback Section -->
-        <div id="feedback-section" class="section hidden">
-            <h2 class="text-2xl font-bold text-gray-900 mb-6">Feedback & Reviews</h2>
-            <div class="bg-white shadow-lg rounded-lg p-6">
-                <p class="text-gray-600">Feedback management interface will be implemented here.</p>
+        <!-- My group_members Section -->
+        <div id="group-section" class="section hidden">
+            <h2>My Research Group</h2>
+            <div id="my-group" class="p-3 bg-gray-100 rounded">
+                Loading group info...
             </div>
         </div>
 
@@ -500,6 +500,48 @@ $stats = [
 
         // Initialize sidebar state on page load
         initializeSidebar();
+
+    // Pang render ng group info at members
+    async function loadMyGroup() {
+        const res = await fetch('../queries/get_my_group.php');
+        const data = await res.json();
+
+        const container = document.getElementById('my-group');
+
+        if (data.success) {
+            let membersHtml = '';
+            if (data.members.length > 0) {
+                membersHtml = '<ul class="list-disc ml-5 mt-2 space-y-1">';
+                data.members.forEach(m => {
+                    membersHtml += `
+                        <li>
+                            <span class="font-medium">${m.name}</span>
+                            <span class="text-gray-500 text-sm">(${m.role})</span><br>
+                            <span class="text-xs text-gray-400">${m.email}</span>
+                        </li>
+                    `;
+                });
+                membersHtml += '</ul>';
+            } else {
+                membersHtml = '<p class="text-sm text-gray-500 mt-2">No members found.</p>';
+            }
+
+            container.innerHTML = `
+                <h3 class="font-semibold text-lg">${data.group.name}</h3>
+                <p class="text-sm text-gray-600">${data.group.description || 'No description provided'}</p>
+                <p class="text-sm text-blue-600 mt-1">Research Topic: ${data.group.research_topic || 'N/A'}</p>
+                <p class="text-sm text-green-600 mt-1">Status: ${data.group.status || 'N/A'}</p>
+                
+                <div class="mt-3">
+                    <h4 class="font-semibold">Members:</h4>
+                    ${membersHtml}
+                </div>
+            `;
+        } else {
+            container.innerHTML = `<p>${data.message}</p>`;
+        }
+    }
+    loadMyGroup();
     </script>
 </body>
 </html>

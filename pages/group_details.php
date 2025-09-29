@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="../src/style.css">
     <title>Group Details - Alpha Research Team</title>
 
+    
 </head>
 <body>
     <!-- Header -->
@@ -14,7 +15,11 @@
         <div class="header-content">
             <h1>Alpha Research Team - Details</h1>
             <div class="user-info">
-                <div class="user-avatar">U</div>
+                <div class="user-avatar" style="width: 40px; height: 40px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#FFFFFF" width="70%" height="70%">
+                        <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+                    </svg>
+                </div>
                 <span>Welcome back, User!</span>
             </div>
         </div>
@@ -73,67 +78,15 @@
             </div>
 
             <!-- Thesis Progress Widget -->
-            <div class="sidebar-widget">
-                <div class="widget-header">
-                    <h3>Thesis Progress</h3>
-                </div>
-                <div class="widget-content">
-                    <div class="progress-item">
-                        <div class="progress-header">
-                            <span class="progress-label">Introduction</span>
-                            <span class="progress-percentage">100%</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 100%;"></div>
-                        </div>
+            <div class="progress-item">
+                <div class="sidebar-widget">
+                    <div class="widget-header">
+                        <h3>Thesis Progress</h3>
                     </div>
-                    <div class="progress-item">
-                        <div class="progress-header">
-                            <span class="progress-label">Literature Review</span>
-                            <span class="progress-percentage">80%</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 80%;"></div>
-                        </div>
-                    </div>
-                    <div class="progress-item">
-                        <div class="progress-header">
-                            <span class="progress-label">Methodology</span>
-                            <span class="progress-percentage">60%</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 60%;"></div>
-                        </div>
-                    </div>
-                    <div class="progress-item">
-                        <div class="progress-header">
-                            <span class="progress-label">Results</span>
-                            <span class="progress-percentage">40%</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 40%;"></div>
-                        </div>
-                    </div>
-                    <div class="progress-item">
-                        <div class="progress-header">
-                            <span class="progress-label">Discussion</span>
-                            <span class="progress-percentage">20%</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 20%;"></div>
-                        </div>
-                    </div>
-                    <div class="progress-item">
-                        <div class="progress-header">
-                            <span class="progress-label">Conclusion</span>
-                            <span class="progress-percentage">10%</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 10%;"></div>
-                        </div>
+                    <div id="progress-container"  class="widget-content">
+                        <!-- Progress bars will be injected here by JS -->
                     </div>
                 </div>
-            </div>
         </div>
     </div>
 
@@ -244,83 +197,252 @@
         });
     });
     // pang render ng groups sa left sidebar
-    async function loadGroups() {
-        const res = await fetch('../queries/get_groups.php');
-        const data = await res.json();
+        async function loadGroups() {
+            const res = await fetch('../queries/get_group_submissions.php');
+            const data = await res.json();
 
-        if (data.success) {
-            const sidebar = document.querySelector('.groups-list');
-            sidebar.innerHTML = ''; // linisin muna
+            if (data.success) {
+                const sidebar = document.querySelector('.groups-list');
+                sidebar.innerHTML = ''; // linisin muna
 
-            data.groups.forEach(group => {
-                const el = document.createElement('a');
-                el.href = "#";
-                el.className = "group-item";
-                el.dataset.groupId = group.id;
-                el.innerHTML = `
-                    <div class="group-icon">${group.name.substring(0,2).toUpperCase()}</div>
-                    <div>
-                        <div>${group.name}</div>
-                        <div style="font-size: 12px; color: #65676b;">${group.members} members</div>
-                    </div>
-                `;
-                el.addEventListener('click', () => {
-                    document.querySelectorAll('.group-item').forEach(g => g.classList.remove('active'));
-                    el.classList.add('active');
-                    loadSubmissions(group.id);
+                data.groups.forEach(group => {
+                    const el = document.createElement('a');
+                    el.href = "#";
+                    el.className = "group-item";
+                    el.dataset.groupId = group.id;
+                    el.innerHTML = `
+                        <div class="group-icon">${group.name.substring(0,2).toUpperCase()}</div>
+                        <div>
+                            <div>${group.name}</div>
+                            <div style="font-size: 12px; color: #65676b;">${group.members} members</div>
+                        </div>
+                    `;
+                    el.addEventListener('click', () => {
+                        document.querySelectorAll('.group-item').forEach(g => g.classList.remove('active'));
+                        el.classList.add('active');
+                        loadSubmissions(group.id);
+                    });
+                    sidebar.appendChild(el);
                 });
-                sidebar.appendChild(el);
-            });
 
-            // auto load first group
-            if (data.groups.length > 0) {
-                sidebar.querySelector('.group-item').classList.add('active');
-                loadSubmissions(data.groups[0].id);
+                // auto load first group
+                if (data.groups.length > 0) {
+                    sidebar.querySelector('.group-item').classList.add('active');
+                    loadSubmissions(data.groups[0].id);
+                }
             }
         }
-    }
 
-    // pang render ng main content (submissions per group)
+        // pang render ng main content (submissions per group)
     async function loadSubmissions(groupId) {
-        const res = await fetch('../queries/get_submissions.php?group_id=' + groupId);
+        const res = await fetch(`../queries/get_submissions.php?group_id=${groupId}`);
         const data = await res.json();
 
         const container = document.getElementById('documents-container');
         container.innerHTML = '';
 
         if (data.success && data.documents.length > 0) {
-            data.documents.forEach(doc => {
+            for (const doc of data.documents) {
                 const div = document.createElement('div');
                 div.className = 'document-post';
+
                 div.innerHTML = `
-                    <div class="post-header">
-                        <div class="post-author">
-                            <div class="author-avatar">${doc.uploader_name ? doc.uploader_name.charAt(0).toUpperCase() : "?"}</div>
-                            <div class="author-info">
-                                <h4>${doc.uploader_name || "Unknown"}</h4>
-                                <div class="post-time">${doc.submitted_at ? new Date(doc.submitted_at).toLocaleString() : "N/A"}</div>
-                            </div>
-                        </div>
-                        <div class="document-info">
-                            <h5>${doc.title} (${doc.type})</h5>
-                            <div class="doc-meta">${doc.mime_type || "Unknown"} • ${(doc.file_size ? (doc.file_size/1024).toFixed(1) : 0)} KB</div>
+                <div class="post-header">
+                    <div class="post-author">
+                        <div class="author-avatar">${doc.submitted_by ? doc.submitted_by.charAt(0).toUpperCase() : "?"}</div>
+                        <div class="author-info">
+                            <h4>${doc.submitted_by || "Unknown"}</h4>
+                            <div class="post-time">${doc.submitted_at ? new Date(doc.submitted_at).toLocaleString() : "N/A"}</div>
                         </div>
                     </div>
-                    <div class="post-actions">
-                        <button ${doc.file_path ? `onclick="window.open('${doc.file_path}', '_blank')"` : "disabled"} class="action-btn">Download</button>
-                        <button onclick="viewDocument(${doc.id})" class="action-btn">View</button>
+                    <div class="document-info">
+                        <h5>${doc.title} (${doc.type})</h5>
+                        <div class="doc-meta">${doc.mime_type || "Unknown"} • ${(doc.file_size ? (doc.file_size/1024).toFixed(1) : 0)} KB</div>
                     </div>
-                `;
+                </div>
+
+                <div class="post-actions">
+                    <button ${doc.file_path ? `onclick="window.open('${doc.file_path}', '_blank')"` : "disabled"} class="action-btn btn-blue">Download</button>
+                    <button onclick="viewDocument(${doc.id})" class="action-btn btn-blue">View</button>
+                    <button class="action-btn btn-blue comment-toggle">Comment</button>
+                </div>
+
+                <div class="comments-preview"><div class="comment-preview">Loading comments...</div></div>
+
+                <div class="comments-section" style="display:none; margin-top: 8px;">
+                    <div class="existing-comments">Loading comments...</div>
+                    <div class="comment-input-container" style="position: relative; display: flex; align-items: flex-end;">
+                        <textarea class="comment-textarea" placeholder="Write a comment..." style="flex:1; padding-right: 40px;"></textarea>
+                        <button class="comment-submit btn-blue" style="position: absolute; right: 4px; bottom: 4px; padding:4px 8px; border-radius:50%; display:flex; align-items:center; justify-content:center;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" viewBox="0 0 24 24">
+                                <path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            `;
                 container.appendChild(div);
-            });
+
+                const commentsSection = div.querySelector('.comments-section');
+                const previewDiv = div.querySelector('.comments-preview');
+                const existingCommentsDiv = div.querySelector('.existing-comments');
+                const textarea = div.querySelector('.comment-textarea');
+                let currentReplyTo = null;
+
+                // Toggle comment section
+                div.querySelector('.comment-toggle').addEventListener('click', () => {
+                    if (commentsSection.style.display === 'none') {
+                        commentsSection.style.display = 'block';
+                        previewDiv.style.display = 'none';
+                    } else {
+                        commentsSection.style.display = 'none';
+                        previewDiv.style.display = 'block';
+                        currentReplyTo = null;
+                        textarea.placeholder = 'Write a comment...';
+                    }
+                });
+
+                // Auto-resize textarea
+                textarea.addEventListener('input', function() {
+                    this.style.height = 'auto';
+                    this.style.height = Math.max(36, this.scrollHeight) + 'px';
+                });
+
+                // Fetch comments
+                const resComments = await fetch(`../queries/get_comments.php?document_id=${doc.id}`);
+                const dataComments = await resComments.json();
+                existingCommentsDiv.innerHTML = '';
+
+                if (dataComments.success && dataComments.comments.length > 0) {
+                    dataComments.comments.forEach(c => renderComment(c, existingCommentsDiv, doc.id));
+                    const firstComment = dataComments.comments[0];
+                    previewDiv.innerHTML = `<div class="comment-preview"><strong>${firstComment.user_name}</strong>: ${firstComment.comment}</div>`;
+                } else {
+                    existingCommentsDiv.innerHTML = '<div>No comments yet</div>';
+                    previewDiv.innerHTML = '<div class="comment-preview">No comments</div>';
+                }
+
+                // Submit comment
+                div.querySelector('.comment-submit').addEventListener('click', async () => {
+                    const text = textarea.value.trim();
+                    if (!text) return;
+
+                    const resPost = await fetch('../queries/post_comments.php', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({document_id: doc.id, comment: text, parent_id: currentReplyTo})
+                    });
+                    const result = await resPost.json();
+                    if (result.success) {
+                        renderComment({id: result.comment_id, user_name: 'You', comment: text, parent_id: currentReplyTo}, existingCommentsDiv, doc.id, currentReplyTo ? 16 : 0);
+                        textarea.value = '';
+                        textarea.style.height = '36px';
+                        currentReplyTo = null;
+                        textarea.placeholder = 'Write a comment...';
+                    } else {
+                        alert('Failed to post comment');
+                    }
+                });
+
+                // Render comment helper
+                function renderComment(c, container, docId, indent = 0) {
+                    const commentDiv = document.createElement('div');
+                    commentDiv.className = 'comment-item';
+                    commentDiv.style.marginLeft = `${indent}px`;
+                    commentDiv.innerHTML = `
+                        <strong>${c.user_name}</strong>: ${c.comment} 
+                        <button class="reply-btn btn-blue" style="font-size:0.8em; margin-left:6px;">Reply</button>
+                    `;
+                    container.appendChild(commentDiv);
+
+                    commentDiv.querySelector('.reply-btn').addEventListener('click', () => {
+                        currentReplyTo = c.id;
+                        textarea.focus();
+                        textarea.placeholder = `Replying to ${c.user_name}...`;
+                    });
+                }
+            }
+
+            // 🔑 After rendering submissions → load progress
+            loadProgress(groupId);
+
         } else {
             container.innerHTML = `<p>No submissions found for this group.</p>`;
+            document.getElementById('progress-container').innerHTML = `<p>No progress available.</p>`;
         }
     }
 
     function viewDocument(docId) {
         alert("Open inline viewer for document ID: " + docId);
-        // dito later ilalagay yung PDF/Text editor inline view
+    }
+
+    //Progress loader with chapters + parts
+    async function loadProgress(groupId) {
+        const res = await fetch(`../queries/get_progress.php?group_id=${groupId}`);
+        const data = await res.json();
+
+        const container = document.getElementById('progress-container');
+        container.innerHTML = '';
+
+        if (data.success) {
+            // Overall progress
+            const overall = document.createElement('div');
+            overall.className = 'progress-item';
+            overall.innerHTML = `
+                <div class="progress-header">
+                    <span class="progress-label">Overall Progress</span>
+                    <span class="progress-percentage">${data.overall.percentage}%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${data.overall.percentage}%"></div>
+                </div>
+            `;
+            container.appendChild(overall);
+
+            // Chapters
+            data.chapters.forEach(ch => {
+                const div = document.createElement('div');
+                div.className = 'progress-item';
+
+                const header = document.createElement('div');
+                header.className = 'progress-header';
+                header.innerHTML = `<span>Chapter ${ch.chapter}: ${ch.title}</span>
+                                    <span>${ch.percentage}%</span>`;
+                div.appendChild(header);
+
+                const bar = document.createElement('div');
+                bar.className = 'progress-bar';
+                bar.innerHTML = `<div class="progress-fill" style="width:${ch.percentage}%"></div>`;
+                div.appendChild(bar);
+
+                // Parts container hidden initially
+                const partsContainer = document.createElement('div');
+                partsContainer.className = 'chapter-parts';
+                partsContainer.style.display = 'none';
+
+                ch.parts.forEach(p => {
+                    const pDiv = document.createElement('div');
+                    pDiv.className = 'part-item';
+                    let statusClass = 'part-status-pending';
+                    if (p.status === 'approved') statusClass = 'part-status-approved';
+                    else if (p.status === 'revision_needed') statusClass = 'part-status-revision';
+
+                    pDiv.innerHTML = `<span>${p.part}</span><span class="${statusClass}">${p.status}</span>`;
+                    partsContainer.appendChild(pDiv);
+                });
+
+                div.appendChild(partsContainer);
+
+                // Toggle parts on header click
+                header.addEventListener('click', () => {
+                    partsContainer.style.display = partsContainer.style.display === 'none' ? 'block' : 'none';
+                });
+
+                container.appendChild(div);
+            });
+        } else {
+            container.innerHTML = `<p>${data.message}</p>`;
+        }
     }
 
     loadGroups();

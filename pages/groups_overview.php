@@ -4,7 +4,6 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 if (!isset($_SESSION['user_id'])) {
-    // Redirect to login without /THESIS prefix for local server
     header('Location: Login.php');
     exit;
 }
