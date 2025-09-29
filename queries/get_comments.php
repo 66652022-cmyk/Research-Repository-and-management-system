@@ -12,7 +12,7 @@ if ($document_id <= 0) {
     exit;
 }
 
-$sql = "SELECT c.id, c.comment, c.type, c.page_number, c.line_number, c.status, c.created_at, u.name AS user_name
+$sql = "SELECT c.id, c.comment, c.type, c.page_number, c.line_number, c.status, c.created_at, c.parent_id, u.name AS user_name
         FROM comments c
         LEFT JOIN users u ON c.user_id = u.id
         WHERE c.document_id = ? AND c.status = 'active'

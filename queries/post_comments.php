@@ -21,9 +21,11 @@ if ($document_id <= 0 || empty($comment)) {
 $db = new Database();
 $conn = $db->connect();
 
-$sql = "INSERT INTO comments (document_id, user_id, comment) VALUES (?, ?, ?)";
+$parent_id = isset($data['parent_id']) ? intval($data['parent_id']) : null;
+
+$sql = "INSERT INTO comments (document_id, user_id, comment, parent_id) VALUES (?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("iis", $document_id, $user_id, $comment);
+$stmt->bind_param("iisi", $document_id, $user_id, $comment, $parent_id);
 if ($stmt->execute()) {
     echo json_encode(["success" => true, "comment_id" => $stmt->insert_id]);
 } else {

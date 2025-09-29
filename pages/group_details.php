@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -240,6 +239,207 @@
         const container = document.getElementById('documents-container');
         container.innerHTML = '';
 
+        // Function to organize comments into a tree structure
+        function organizeComments(comments) {
+            const commentMap = new Map();
+            const rootComments = [];
+
+            // Initialize all comments with an empty replies array
+            comments.forEach(comment => {
+                comment.replies = [];
+                commentMap.set(comment.id, comment);
+            });
+
+            // Build the tree structure
+            comments.forEach(comment => {
+                if (comment.parent_id) {
+                    const parent = commentMap.get(parseInt(comment.parent_id));
+                    if (parent) {
+                        parent.replies.push(comment);
+                    }
+                } else {
+                    rootComments.push(comment);
+                }
+            });
+
+            // Sort all comments by timestamp
+            const sortByTime = (a, b) => new Date(a.created_at) - new Date(b.created_at);
+            rootComments.sort(sortByTime);
+            rootComments.forEach(comment => {
+                if (comment.replies.length > 0) {
+                    comment.replies.sort(sortByTime);
+                }
+            });
+
+            return rootComments;
+        }
+
+        // Function to render a comment and its replies
+        function renderCommentWithReplies(comment, container, textarea, currentReplyTo) {
+            const commentDiv = document.createElement('div');
+            commentDiv.id = `comment-${comment.id}`;
+            commentDiv.className = 'comment-item';
+            
+            // Add reply-to text if this is a reply
+            let replyToText = '';
+            if (comment.parent_id) {
+                const parentComment = commentMap.get(parseInt(comment.parent_id));
+                if (parentComment) {
+                    replyToText = `<span class="reply-to">Replied to ${parentComment.user_name}</span>`;
+                }
+            }
+            
+            commentDiv.innerHTML = `
+                <div class="comment-content">
+                    ${replyToText}
+                    <div class="comment-text">
+                        <strong>${comment.user_name}</strong>: ${comment.comment}
+                        <button class="reply-btn btn-blue" style="font-size:0.8em; margin-left:6px;">Reply</button>
+                    </div>
+                </div>
+            `;
+            
+            commentDiv.querySelector('.reply-btn').addEventListener('click', () => {
+                currentReplyTo.value = comment.id;
+                textarea.focus();
+                textarea.placeholder = `Replying to ${comment.user_name}...`;
+            });
+            
+            container.appendChild(commentDiv);
+            
+            // Render replies if any exist
+            if (comment.replies && comment.replies.length > 0) {
+                const repliesContainer = document.createElement('div');
+                repliesContainer.className = 'comment-thread';
+                commentDiv.appendChild(repliesContainer);
+                
+                comment.replies.forEach(reply => {
+                    renderCommentWithReplies(reply, repliesContainer, textarea, currentReplyTo);
+                });
+            }
+        }
+
+        // Function to organize comments into a tree structure
+        function organizeComments(comments) {
+            const commentMap = new Map();
+            const rootComments = [];
+
+            // Initialize all comments with an empty replies array
+            comments.forEach(comment => {
+                comment.replies = [];
+                commentMap.set(comment.id, comment);
+            });
+
+            // Build the tree structure
+            comments.forEach(comment => {
+                if (comment.parent_id) {
+                    const parent = commentMap.get(parseInt(comment.parent_id));
+                    if (parent) {
+                        parent.replies.push(comment);
+                    }
+                } else {
+                    rootComments.push(comment);
+                }
+            });
+
+            // Sort all comments by timestamp
+            const sortByTime = (a, b) => new Date(a.created_at) - new Date(b.created_at);
+            rootComments.sort(sortByTime);
+            rootComments.forEach(comment => {
+                if (comment.replies.length > 0) {
+                    comment.replies.sort(sortByTime);
+                }
+            });
+
+            return rootComments;
+        }
+
+        // Define renderCommentTree OUTSIDE the loop so it's accessible to all documents
+        function renderCommentTree(comment, container, docId, textarea, currentReplyToVar) {
+            const commentDiv = document.createElement('div');
+            commentDiv.id = `comment-${comment.id}`;
+            commentDiv.className = 'comment-item';
+            
+            commentDiv.innerHTML = `
+                <div class="comment-content">
+                    <div class="comment-text">
+                        <strong>${comment.user_name}</strong>: ${comment.comment}
+                        <button class="reply-btn btn-blue" style="font-size:0.8em; margin-left:6px;">Reply</button>
+                    </div>
+                </div>
+            `;
+            
+            commentDiv.querySelector('.reply-btn').addEventListener('click', () => {
+                currentReplyToVar.value = comment.id;
+                textarea.focus();
+                textarea.placeholder = `Replying to ${comment.user_name}...`;
+            });
+            
+            container.appendChild(commentDiv);
+            
+            // Render replies if any
+            if (comment.replies && comment.replies.length > 0) {
+                const threadContainer = document.createElement('div');
+                threadContainer.className = 'comment-thread';
+                commentDiv.appendChild(threadContainer);
+                
+                // Sort replies by timestamp
+                comment.replies.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+                comment.replies.forEach(reply => {
+                    renderCommentTree(reply, threadContainer, docId, textarea, currentReplyToVar);
+                });
+            }
+        }
+
+        // New function to render comment with replies
+        function renderCommentWithReplies(comment, container, textarea, currentReplyToObj, allComments) {
+            const commentDiv = document.createElement('div');
+            commentDiv.id = `comment-${comment.id}`;
+            commentDiv.className = 'comment-item';
+            
+            // Add reply-to text if this is a reply
+            let replyToText = '';
+            if (comment.parent_id) {
+                const parentComment = allComments.find(c => c.id === parseInt(comment.parent_id));
+                if (parentComment) {
+                    replyToText = `<span class="reply-to">Replied to ${parentComment.user_name}</span>`;
+                }
+            }
+            
+            commentDiv.innerHTML = `
+                <div class="comment-content">
+                    ${replyToText}
+                    <div class="comment-text">
+                        <strong>${comment.user_name}</strong>: ${comment.comment}
+                        <button class="reply-btn btn-blue" style="font-size:0.8em; margin-left:6px;">Reply</button>
+                    </div>
+                </div>
+            `;
+            
+            // Add reply button functionality with proper scope
+            const replyBtn = commentDiv.querySelector('.reply-btn');
+            if (textarea && currentReplyToObj) {
+                replyBtn.addEventListener('click', () => {
+                    currentReplyToObj.value = comment.id;
+                    textarea.focus();
+                    textarea.placeholder = `Replying to ${comment.user_name}...`;
+                });
+            }
+            
+            container.appendChild(commentDiv);
+            
+            // Render replies if any exist
+            if (comment.replies && comment.replies.length > 0) {
+                const repliesContainer = document.createElement('div');
+                repliesContainer.className = 'comment-thread';
+                commentDiv.appendChild(repliesContainer);
+                
+                comment.replies.forEach(reply => {
+                    renderCommentWithReplies(reply, repliesContainer, textarea, currentReplyToObj, allComments);
+                });
+            }
+        }
+
         if (data.success && data.documents.length > 0) {
             for (const doc of data.documents) {
                 const div = document.createElement('div');
@@ -286,7 +486,9 @@
                 const previewDiv = div.querySelector('.comments-preview');
                 const existingCommentsDiv = div.querySelector('.existing-comments');
                 const textarea = div.querySelector('.comment-textarea');
-                let currentReplyTo = null;
+                
+                // Use object to pass by reference
+                let currentReplyToObj = { value: null };
 
                 // Toggle comment section
                 div.querySelector('.comment-toggle').addEventListener('click', () => {
@@ -296,7 +498,7 @@
                     } else {
                         commentsSection.style.display = 'none';
                         previewDiv.style.display = 'block';
-                        currentReplyTo = null;
+                        currentReplyToObj.value = null;
                         textarea.placeholder = 'Write a comment...';
                     }
                 });
@@ -313,9 +515,18 @@
                 existingCommentsDiv.innerHTML = '';
 
                 if (dataComments.success && dataComments.comments.length > 0) {
-                    dataComments.comments.forEach(c => renderComment(c, existingCommentsDiv, doc.id));
-                    const firstComment = dataComments.comments[0];
-                    previewDiv.innerHTML = `<div class="comment-preview"><strong>${firstComment.user_name}</strong>: ${firstComment.comment}</div>`;
+                    // Create comment map for the entire document
+                    const commentMap = new Map(dataComments.comments.map(c => [c.id, c]));
+                    
+                    // Organize and render comments
+                    const rootComments = organizeComments(dataComments.comments);
+                    rootComments.forEach(comment => {
+                        renderCommentWithReplies(comment, existingCommentsDiv, textarea, currentReplyToObj, dataComments.comments);
+                    });
+                    
+                    // Update preview with the most recent comment
+                    const mostRecent = dataComments.comments[dataComments.comments.length - 1];
+                    previewDiv.innerHTML = `<div class="comment-preview"><strong>${mostRecent.user_name}</strong>: ${mostRecent.comment}</div>`;
                 } else {
                     existingCommentsDiv.innerHTML = '<div>No comments yet</div>';
                     previewDiv.innerHTML = '<div class="comment-preview">No comments</div>';
@@ -329,40 +540,43 @@
                     const resPost = await fetch('../queries/post_comments.php', {
                         method: 'POST',
                         headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({document_id: doc.id, comment: text, parent_id: currentReplyTo})
+                        body: JSON.stringify({
+                            document_id: doc.id, 
+                            comment: text, 
+                            parent_id: currentReplyToObj.value
+                        })
                     });
                     const result = await resPost.json();
                     if (result.success) {
-                        renderComment({id: result.comment_id, user_name: 'You', comment: text, parent_id: currentReplyTo}, existingCommentsDiv, doc.id, currentReplyTo ? 16 : 0);
+                        // Refresh comments after posting
+                        const resComments = await fetch(`../queries/get_comments.php?document_id=${doc.id}`);
+                        const dataComments = await resComments.json();
+                        
+                        if (dataComments.success) {
+                            existingCommentsDiv.innerHTML = '';
+                            const commentMap = new Map(dataComments.comments.map(c => [c.id, c]));
+                            
+                            // Re-organize and render all comments
+                            const rootComments = organizeComments(dataComments.comments);
+                            rootComments.forEach(comment => {
+                                renderCommentWithReplies(comment, existingCommentsDiv, textarea, currentReplyToObj, dataComments.comments);
+                            });
+
+                            // Update preview
+                            const lastComment = dataComments.comments[dataComments.comments.length - 1];
+                            previewDiv.innerHTML = `<div class="comment-preview"><strong>${lastComment.user_name}</strong>: ${lastComment.comment}</div>`;
+                        }
+                        
                         textarea.value = '';
                         textarea.style.height = '36px';
-                        currentReplyTo = null;
+                        currentReplyToObj.value = null;
                         textarea.placeholder = 'Write a comment...';
                     } else {
                         alert('Failed to post comment');
                     }
                 });
-
-                // Render comment helper
-                function renderComment(c, container, docId, indent = 0) {
-                    const commentDiv = document.createElement('div');
-                    commentDiv.className = 'comment-item';
-                    commentDiv.style.marginLeft = `${indent}px`;
-                    commentDiv.innerHTML = `
-                        <strong>${c.user_name}</strong>: ${c.comment} 
-                        <button class="reply-btn btn-blue" style="font-size:0.8em; margin-left:6px;">Reply</button>
-                    `;
-                    container.appendChild(commentDiv);
-
-                    commentDiv.querySelector('.reply-btn').addEventListener('click', () => {
-                        currentReplyTo = c.id;
-                        textarea.focus();
-                        textarea.placeholder = `Replying to ${c.user_name}...`;
-                    });
-                }
             }
-
-            // 🔑 After rendering submissions → load progress
+            
             loadProgress(groupId);
 
         } else {
