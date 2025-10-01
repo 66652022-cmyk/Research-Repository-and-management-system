@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="../src/style.css">
-    <title>Group Details - Alpha Research Team</title>
+    <title>Group Details</title>
 </head>
 
 <body>
@@ -596,7 +596,7 @@
 
         const container = document.getElementById('progress-container');
         container.innerHTML = '';
-console.log("Progress data:", data);
+// console.log("Progress data:", data);
 
         if (data.success) {
             // Overall progress

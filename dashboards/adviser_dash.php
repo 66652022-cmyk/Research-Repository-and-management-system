@@ -312,8 +312,8 @@ $stats = $data['stats'];
                 </div>
             </div>
             <!-- Editor Section -->
-            <!-- <section id="editorSection">
-                <iframe id="editorFrame" src="editor.php" style="width:100%; height:600px; border:none;"></iframe>
+            <!-- <section id="editorSection" class="section hidden">
+                <iframe id="editorFrame" src="../pages/editor.php" style="width:100%; height:600px; border:none;"></iframe>
             </section> -->
             
             <div id="submissions-section" class="section hidden">

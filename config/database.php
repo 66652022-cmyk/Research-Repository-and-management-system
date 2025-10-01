@@ -4,6 +4,7 @@ class Database {
     private $db_name = 'research_management_system';
     private $username = 'root';
     private $password = '';
+
     private $conn;
 
     public function connect() {

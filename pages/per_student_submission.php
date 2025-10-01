@@ -1,38 +1,16 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="../src/style.css">
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
     <title>Group Details</title>
-    <style>
-    .btn-blue {
-    background-color: #1e40af;
-    color: #fff;
-    border: none;
-    padding: 6px 12px;
-    margin: 2px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: background-color 0.2s;
-}
-
-.btn-blue:hover {
-    background-color: #2563eb;
-}
-
-.comment-textarea {
-    width: 100%;
-    min-height: 36px;
-    padding: 6px;
-    margin-top: 4px;
-    border-radius: 5px;
-    border: 1px solid #cbd5e1;
-    resize: none;
-}
-</style>
 </head>
 <body>
     <!-- Header -->
@@ -50,15 +28,14 @@
         </div>
     </header>
 
-
     <div class="main-layout">
-        <!-- Left Sidebar: Groups List -->
+        <!-- Left Sidebar: Group Members -->
         <aside class="left-sidebar">
             <div class="sidebar-header">
-                <h2>Research Groups</h2>
+                <h2>Group Members</h2>
             </div>
             <nav class="groups-list">
-                <!-- Dynamic groups -->
+                <!-- Dynamic members -->
             </nav>
         </aside>
 
@@ -69,7 +46,23 @@
                 <p class="content-subtitle">
                     Review and comment on thesis documents submitted by group members
                 </p>
+                <button id="uploadDocBtn" style="
+                    position: fixed;
+                    bottom: 20px;
+                    right: 20px;
+                    padding: 12px 20px;
+                    background-color: #3b82f6;
+                    color: white;
+                    border: none;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+                    z-index: 1000;
+                ">
+                    Upload Document
+                </button>
             </div>
+            
 
             <!-- Dynamic submissions-->
             <div id="documents-container" class="space-y-4"></div>
@@ -104,81 +97,71 @@
             </div>
 
             <!-- Thesis Progress Widget -->
-            <div class="sidebar-widget">
-                <div class="widget-header">
-                    <h3>Thesis Progress</h3>
-                </div>
-                <div class="widget-content">
-                    <div class="progress-item">
-                        <div class="progress-header">
-                            <span class="progress-label">Introduction</span>
-                            <span class="progress-percentage">100%</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 100%;"></div>
-                        </div>
+            <div class="progress-item">
+                <div class="sidebar-widget">
+                    <div class="widget-header">
+                        <h3>Thesis Progress</h3>
                     </div>
-                    <div class="progress-item">
-                        <div class="progress-header">
-                            <span class="progress-label">Literature Review</span>
-                            <span class="progress-percentage">80%</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 80%;"></div>
-                        </div>
-                    </div>
-                    <div class="progress-item">
-                        <div class="progress-header">
-                            <span class="progress-label">Methodology</span>
-                            <span class="progress-percentage">60%</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 60%;"></div>
-                        </div>
-                    </div>
-                    <div class="progress-item">
-                        <div class="progress-header">
-                            <span class="progress-label">Results</span>
-                            <span class="progress-percentage">40%</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 40%;"></div>
-                        </div>
-                    </div>
-                    <div class="progress-item">
-                        <div class="progress-header">
-                            <span class="progress-label">Discussion</span>
-                            <span class="progress-percentage">20%</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 20%;"></div>
-                        </div>
-                    </div>
-                    <div class="progress-item">
-                        <div class="progress-header">
-                            <span class="progress-label">Conclusion</span>
-                            <span class="progress-percentage">10%</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 10%;"></div>
-                        </div>
+                    <div id="progress-container" class="widget-content">
+                        <!-- Progress bars will be injected here by JS -->
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <!-- upload form -->
+    <!-- <div class="document-post">
+    <div class="post-header">
+        <h3>Submit New Document</h3>
+    </div>
+    <div class="post-description">
+        <form id="uploadDocumentForm" enctype="multipart/form-data">
+            <div style="margin-bottom:12px;">
+                <label for="docTitle">Title:</label><br>
+                <input type="text" id="docTitle" name="title" required
+                    class="comment-textarea-custom" placeholder="Document Title">
+            </div>
 
-    <script>
-        //para sa header
+            <div style="margin-bottom:12px;">
+                <label for="docType">Type:</label><br>
+                <select id="docType" name="type" class="comment-textarea-custom" required>
+                    <option value="proposal">Proposal</option>
+                    <option value="chapter1">Chapter 1</option>
+                    <option value="chapter2">Chapter 2</option>
+                    <option value="chapter3">Chapter 3</option>
+                    <option value="chapter4">Chapter 4</option>
+                    <option value="chapter5">Chapter 5</option>
+                    <option value="final">Final</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <div style="margin-bottom:12px;">
+                <label for="documentFile">Choose File:</label><br>
+                <input type="file" id="documentFile" name="document" class="comment-textarea-custom" required>
+            </div>
+
+            <button type="submit" class="btn-blue">Submit</button>
+        </form>
+        <div id="uploadStatus" style="margin-top:10px;"></div>
+    </div>
+</div> -->
+
+</body>
+
+<script>
+        let currentGroupId = null;
+
+        // Load group header
         async function loadGroupHeader() {
             try {
                 const res = await fetch('../queries/get_my_group.php');
                 const data = await res.json();
 
                 if (data.success) {
-                    // Dynamic title
-                    document.getElementById('group-title').textContent =
-                        `${data.group.research_topic} - Details`;
+                    document.getElementById('group-title').textContent = `${data.group.research_topic} - Details`;
+                    currentGroupId = data.group.id;
+                    loadProgress(currentGroupId);
                 } else {
                     document.getElementById('group-title').textContent = 'No group assigned';
                 }
@@ -187,32 +170,11 @@
             }
         }
 
-        loadGroupHeader();
-
-        // Auto-resize textareas
-        document.querySelectorAll('.comment-textarea').forEach(textarea => {
-            textarea.addEventListener('input', function() {
-                this.style.height = 'auto';
-                this.style.height = Math.max(36, this.scrollHeight) + 'px';
-            });
-
-            textarea.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    // Handle comment submission here
-                    console.log('Comment submitted:', this.value);
-                    this.value = '';
-                    this.style.height = '36px';
-                }
-            });
-        });
-
-        // Mini calendar functionality
+        // Calendar functionality
         const monthYear = document.getElementById('monthYear');
         const calendarDates = document.getElementById('calendarDates');
         const prevMonthBtn = document.getElementById('prevMonth');
         const nextMonthBtn = document.getElementById('nextMonth');
-
         let currentDate = new Date();
 
         function renderCalendar(date) {
@@ -227,24 +189,20 @@
             const startDay = firstDay.getDay();
             const totalDays = lastDay.getDate();
 
-            // Fill empty slots before first day
             for (let i = 0; i < startDay; i++) {
                 const emptyCell = document.createElement('div');
                 calendarDates.appendChild(emptyCell);
             }
 
-            // Fill days
             for (let day = 1; day <= totalDays; day++) {
                 const dayCell = document.createElement('div');
                 dayCell.textContent = day;
                 dayCell.classList.add('calendar-date');
 
-                // Highlight today
                 const today = new Date();
                 if (day === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
                     dayCell.classList.add('today');
                 }
-
                 calendarDates.appendChild(dayCell);
             }
         }
@@ -261,141 +219,170 @@
 
         renderCalendar(currentDate);
 
-        // Comment submission functionality
-        document.querySelectorAll('.comment-submit').forEach(button => {
-            button.addEventListener('click', function() {
-                const textarea = this.parentElement.querySelector('.comment-textarea');
-                if (textarea.value.trim()) {
-                    // Handle comment submission here
-                    console.log('Comment submitted:', textarea.value);
-                    textarea.value = '';
-                    textarea.style.height = '36px';
+        // Organize comments into tree structure
+        function organizeComments(comments) {
+            const commentMap = new Map();
+            const rootComments = [];
+
+            comments.forEach(comment => {
+                comment.replies = [];
+                commentMap.set(comment.id, comment);
+            });
+
+            comments.forEach(comment => {
+                if (comment.parent_id) {
+                    const parent = commentMap.get(parseInt(comment.parent_id));
+                    if (parent) {
+                        parent.replies.push(comment);
+                    }
+                } else {
+                    rootComments.push(comment);
                 }
             });
-        });
 
-        document.querySelectorAll('.view-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            const docId = this.getAttribute('data-document-id');
+            const sortByTime = (a, b) => new Date(a.created_at) - new Date(b.created_at);
+            rootComments.sort(sortByTime);
+            rootComments.forEach(comment => {
+                if (comment.replies.length > 0) {
+                    comment.replies.sort(sortByTime);
+                }
+            });
+
+            return rootComments;
+        }
+
+        // Render comment with replies
+        function renderCommentWithReplies(comment, container, textarea, currentReplyToObj, allComments) {
+            const commentDiv = document.createElement('div');
+            commentDiv.id = `comment-${comment.id}`;
+            commentDiv.className = 'comment-item';
             
-            fetch(`../queries/get_document.php?id=${docId}`)
-                .then(res => res.json())
-                .then(data => {
-                    if (data.success) {
-                        // I-send sa editor section
-                        const editorFrame = document.getElementById('editorFrame');
-                        editorFrame.contentWindow.postMessage({
-                            type: 'loadDocument',
-                            document: data.document
-                        }, '*');
-                    } else {
-                        alert('Failed to load document');
+            let replyToText = '';
+            if (comment.parent_id) {
+                const parentComment = allComments.find(c => c.id === parseInt(comment.parent_id));
+                if (parentComment) {
+                    replyToText = `<span class="reply-to">Replied to ${parentComment.user_name}</span>`;
+                }
+            }
+            
+            commentDiv.innerHTML = `
+                <div class="comment-content">
+                    ${replyToText}
+                    <div class="comment-text">
+                        <strong>${comment.user_name}</strong>: ${comment.comment}
+                        <button class="reply-btn btn-blue" style="font-size:0.8em; margin-left:6px;">Reply</button>
+                    </div>
+                </div>
+            `;
+            
+            const replyBtn = commentDiv.querySelector('.reply-btn');
+            if (textarea && currentReplyToObj) {
+                replyBtn.addEventListener('click', () => {
+                    currentReplyToObj.value = comment.id;
+                    textarea.focus();
+                    textarea.placeholder = `Replying to ${comment.user_name}...`;
+                });
+            }
+            
+            container.appendChild(commentDiv);
+            
+            if (comment.replies && comment.replies.length > 0) {
+                const repliesContainer = document.createElement('div');
+                repliesContainer.className = 'comment-thread';
+                commentDiv.appendChild(repliesContainer);
+                
+                comment.replies.forEach(reply => {
+                    renderCommentWithReplies(reply, repliesContainer, textarea, currentReplyToObj, allComments);
+                });
+            }
+        }
+
+        // Load group members and their submissions
+        async function loadGroupData() {
+            const res = await fetch('../queries/get_group_data.php');
+            const data = await res.json();
+
+            const sidebar = document.querySelector('.groups-list');
+            const container = document.getElementById('documents-container');
+
+            sidebar.innerHTML = '';
+            container.innerHTML = '<p style="color: #6b7280; font-style: italic;">Select a member to view submissions.</p>';
+
+            if (data.success && data.members.length > 0) {
+                data.members.forEach((member, index) => {
+                    const memberDiv = document.createElement('div');
+                    memberDiv.className = 'group-item';
+                    memberDiv.innerHTML = `
+                        <div class="group-icon">${member.name.charAt(0).toUpperCase()}</div>
+                        <div>
+                            <div>${member.name}</div>
+                            <div style="font-size: 12px; color: #65676b;">${member.submissions.length} submissions</div>
+                        </div>
+                    `;
+
+                    memberDiv.addEventListener('click', () => {
+                        document.querySelectorAll('.group-item').forEach(el => el.classList.remove('active'));
+                        memberDiv.classList.add('active');
+                        renderMemberSubmissions(member);
+                    });
+
+                    sidebar.appendChild(memberDiv);
+
+                    if (index === 0) {
+                        memberDiv.classList.add('active');
+                        renderMemberSubmissions(member);
                     }
                 });
-        });
-    });
-    // Load group members
-    async function loadGroupData() {
-        const res = await fetch(`../queries/get_group_data.php`);
-        const data = await res.json();
-
-        const sidebar = document.querySelector('.groups-list');
-        const container = document.getElementById('documents-container');
-
-        sidebar.innerHTML = '';
-        container.innerHTML = '<p class="text-gray-500 italic">Select a member to view submissions.</p>';
-
-        if (data.success && data.members.length > 0) {
-            data.members.forEach((member, index) => {
-                // Sidebar item
-                const memberDiv = document.createElement('div');
-                memberDiv.className = `
-                    flex items-center gap-3 p-2 rounded-lg cursor-pointer
-                    hover:bg-blue-100 transition-colors duration-200
-                `;
-                memberDiv.innerHTML = `
-                    <div class="author-avatar bg-royal-blue text-white font-bold rounded-full 
-                                w-9 h-9 flex items-center justify-center">
-                        ${member.name.charAt(0).toUpperCase()}
-                    </div>
-                    <span class="font-medium">${member.name}</span>
-                `;
-
-                memberDiv.addEventListener('click', () => {
-                    document.querySelectorAll('.groups-list div').forEach(el => {
-                        el.classList.remove('bg-blue-200');
-                    });
-                    memberDiv.classList.add('bg-blue-200');
-                    renderMemberSubmissions(member);
-                });
-
-                sidebar.appendChild(memberDiv);
-
-                if (index === 0) {
-                    memberDiv.classList.add('bg-blue-200');
-                    renderMemberSubmissions(member);
-                }
-            });
-        } else {
-            sidebar.innerHTML = '<p class="text-gray-500 italic">No members found in this group.</p>';
+            } else {
+                sidebar.innerHTML = '<p style="padding: 16px; color: #6b7280; font-style: italic;">No members found.</p>';
+            }
         }
-    }
 
-    // Render submissions for one member (new design)
-    function renderMemberSubmissions(member) {
-        const container = document.getElementById('documents-container');
-        container.innerHTML = `
-            <h3 class="font-semibold text-xl mb-4 text-gray-800 border-b pb-2">
-                ${member.name}'s Submissions
-            </h3>
-        `;
+        // Render member submissions
+        async function renderMemberSubmissions(member) {
+            const container = document.getElementById('documents-container');
+            container.innerHTML = '';
 
-        if (member.submissions.length > 0) {
-            member.submissions.forEach(doc => {
+            if (member.submissions.length === 0) {
+                container.innerHTML = `<p style="color: #6b7280; font-style: italic;">No submissions from ${member.name}.</p>`;
+                return;
+            }
+
+            for (const doc of member.submissions) {
                 const div = document.createElement('div');
-                div.className = 'document-post mb-4 p-4 border rounded-lg bg-white shadow-md';
+                div.className = 'document-post';
 
                 div.innerHTML = `
-                    <div class="post-header flex justify-between items-start">
-                        <div class="post-author flex items-center gap-3">
-                            <div class="author-avatar bg-royal-blue text-white font-bold rounded-full 
-                                        w-9 h-9 flex items-center justify-center">
-                                ${member.name.charAt(0).toUpperCase()}
-                            </div>
+                    <div class="post-header">
+                        <div class="post-author">
+                            <div class="author-avatar">${member.name.charAt(0).toUpperCase()}</div>
                             <div class="author-info">
-                                <h4 class="font-semibold">${member.name}</h4>
-                                <div class="post-time text-sm text-gray-500">
-                                    ${doc.submitted_at ? new Date(doc.submitted_at).toLocaleString() : "N/A"}
-                                </div>
+                                <h4>${member.name}</h4>
+                                <div class="post-time">${doc.submitted_at ? new Date(doc.submitted_at).toLocaleString() : "N/A"}</div>
                             </div>
                         </div>
-                        <div class="document-info text-right">
-                            <h5 class="font-medium">${doc.title} <span class="text-sm text-gray-500">(${doc.type})</span></h5>
-                            <div class="doc-meta text-sm text-gray-600">
-                                ${doc.mime_type || "Unknown"} • ${(doc.file_size ? (doc.file_size/1024).toFixed(1) : 0)} KB
-                            </div>
+                        <div class="document-info">
+                        // dapat chapter ang hanapin hindi type
+                            <h5>${doc.title} (${doc.type})</h5>
+                            <div class="doc-meta">${doc.mime_type || "Unknown"} • ${(doc.file_size ? (doc.file_size/1024).toFixed(1) : 0)} KB</div>
                         </div>
                     </div>
 
-                    <div class="post-actions mt-3 flex gap-2">
-                        <button ${doc.file_path ? `onclick="window.open('${doc.file_path}', '_blank')"` : "disabled"} 
-                            class="action-btn btn-blue">Download</button>
+                    <div class="post-actions">
+                        <button ${doc.file_path ? `onclick="window.open('${doc.file_path}', '_blank')"` : "disabled"} class="action-btn btn-blue">Download</button>
                         <button onclick="viewDocument(${doc.id})" class="action-btn btn-blue">View</button>
                         <button class="action-btn btn-blue comment-toggle">Comment</button>
                     </div>
 
-                    <div class="comments-preview mt-2 text-sm text-gray-500">
-                        <div class="comment-preview">Loading comments...</div>
-                    </div>
+                    <div class="comments-preview"><div class="comment-preview">Loading comments...</div></div>
 
-                    <div class="comments-section mt-2 hidden">
-                        <div class="existing-comments text-sm mb-2">Loading comments...</div>
-                        <div class="comment-input-container relative flex items-end">
-                            <textarea class="comment-textarea flex-1 resize-none border rounded-md p-2 text-sm" 
-                                    placeholder="Write a comment..." style="min-height:36px; padding-right:40px;"></textarea>
-                            <button class="comment-submit btn-blue absolute right-2 bottom-2 p-2 rounded-full flex items-center justify-center">
+                    <div class="comments-section" style="display:none; margin-top: 8px;">
+                        <div class="existing-comments">Loading comments...</div>
+                        <div class="comment-input-container" style="position: relative; display: flex; align-items: flex-end;">
+                            <textarea class="comment-textarea" placeholder="Write a comment..." style="flex:1; padding-right: 40px;"></textarea>
+                            <button class="comment-submit btn-blue" style="position: absolute; right: 4px; bottom: 4px; padding:4px 8px; border-radius:50%; display:flex; align-items:center; justify-content:center;">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" viewBox="0 0 24 24">
-                                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                                    <path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/>
                                 </svg>
                             </button>
                         </div>
@@ -404,22 +391,21 @@
 
                 container.appendChild(div);
 
-                // --- Comment system setup ---
                 const commentsSection = div.querySelector('.comments-section');
                 const previewDiv = div.querySelector('.comments-preview');
                 const existingCommentsDiv = div.querySelector('.existing-comments');
                 const textarea = div.querySelector('.comment-textarea');
-                let currentReplyTo = null;
+                let currentReplyToObj = { value: null };
 
-                // Toggle comment section
+                // Toggle comments
                 div.querySelector('.comment-toggle').addEventListener('click', () => {
-                    if (commentsSection.classList.contains('hidden')) {
-                        commentsSection.classList.remove('hidden');
-                        previewDiv.classList.add('hidden');
+                    if (commentsSection.style.display === 'none') {
+                        commentsSection.style.display = 'block';
+                        previewDiv.style.display = 'none';
                     } else {
-                        commentsSection.classList.add('hidden');
-                        previewDiv.classList.remove('hidden');
-                        currentReplyTo = null;
+                        commentsSection.style.display = 'none';
+                        previewDiv.style.display = 'block';
+                        currentReplyToObj.value = null;
                         textarea.placeholder = 'Write a comment...';
                     }
                 });
@@ -430,20 +416,23 @@
                     this.style.height = Math.max(36, this.scrollHeight) + 'px';
                 });
 
-                // Fetch comments
-                fetch(`../queries/get_comments.php?document_id=${doc.id}`)
-                    .then(r => r.json())
-                    .then(dataComments => {
-                        existingCommentsDiv.innerHTML = '';
-                        if (dataComments.success && dataComments.comments.length > 0) {
-                            dataComments.comments.forEach(c => renderComment(c, existingCommentsDiv, doc.id));
-                            const first = dataComments.comments[0];
-                            previewDiv.innerHTML = `<div class="comment-preview"><strong>${first.user_name}</strong>: ${first.comment}</div>`;
-                        } else {
-                            existingCommentsDiv.innerHTML = '<div>No comments yet</div>';
-                            previewDiv.innerHTML = '<div class="comment-preview">No comments</div>';
-                        }
+                // Fetch and render comments
+                const resComments = await fetch(`../queries/get_comments.php?document_id=${doc.id}`);
+                const dataComments = await resComments.json();
+                existingCommentsDiv.innerHTML = '';
+
+                if (dataComments.success && dataComments.comments.length > 0) {
+                    const rootComments = organizeComments(dataComments.comments);
+                    rootComments.forEach(comment => {
+                        renderCommentWithReplies(comment, existingCommentsDiv, textarea, currentReplyToObj, dataComments.comments);
                     });
+                    
+                    const mostRecent = dataComments.comments[dataComments.comments.length - 1];
+                    previewDiv.innerHTML = `<div class="comment-preview"><strong>${mostRecent.user_name}</strong>: ${mostRecent.comment}</div>`;
+                } else {
+                    existingCommentsDiv.innerHTML = '<div>No comments yet</div>';
+                    previewDiv.innerHTML = '<div class="comment-preview">No comments</div>';
+                }
 
                 // Submit comment
                 div.querySelector('.comment-submit').addEventListener('click', async () => {
@@ -453,45 +442,218 @@
                     const resPost = await fetch('../queries/post_comments.php', {
                         method: 'POST',
                         headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({document_id: doc.id, comment: text, parent_id: currentReplyTo})
+                        body: JSON.stringify({
+                            document_id: doc.id, 
+                            comment: text, 
+                            parent_id: currentReplyToObj.value
+                        })
                     });
                     const result = await resPost.json();
+                    
                     if (result.success) {
-                        renderComment({id: result.comment_id, user_name: 'You', comment: text, parent_id: currentReplyTo}, existingCommentsDiv, doc.id, currentReplyTo ? 16 : 0);
+                        const resComments = await fetch(`../queries/get_comments.php?document_id=${doc.id}`);
+                        const dataComments = await resComments.json();
+                        
+                        if (dataComments.success) {
+                            existingCommentsDiv.innerHTML = '';
+                            const rootComments = organizeComments(dataComments.comments);
+                            rootComments.forEach(comment => {
+                                renderCommentWithReplies(comment, existingCommentsDiv, textarea, currentReplyToObj, dataComments.comments);
+                            });
+
+                            const lastComment = dataComments.comments[dataComments.comments.length - 1];
+                            previewDiv.innerHTML = `<div class="comment-preview"><strong>${lastComment.user_name}</strong>: ${lastComment.comment}</div>`;
+                        }
+                        
                         textarea.value = '';
                         textarea.style.height = '36px';
-                        currentReplyTo = null;
+                        currentReplyToObj.value = null;
                         textarea.placeholder = 'Write a comment...';
                     } else {
                         alert('Failed to post comment');
                     }
                 });
-
-                // Helper
-                function renderComment(c, container, docId, indent = 0) {
-                    const commentDiv = document.createElement('div');
-                    commentDiv.className = 'comment-item text-sm my-1';
-                    commentDiv.style.marginLeft = `${indent}px`;
-                    commentDiv.innerHTML = `
-                        <strong>${c.user_name}</strong>: ${c.comment} 
-                        <button class="reply-btn text-blue-600 text-xs ml-2">Reply</button>
-                    `;
-                    container.appendChild(commentDiv);
-
-                    commentDiv.querySelector('.reply-btn').addEventListener('click', () => {
-                        currentReplyTo = c.id;
-                        textarea.focus();
-                        textarea.placeholder = `Replying to ${c.user_name}...`;
-                    });
-                }
-            });
-        } else {
-            container.innerHTML += `<p class="text-gray-500 italic">No submissions from this member.</p>`;
+            }
         }
-    }
 
-    loadGroupData();
+        // Progress loader with chapters + parts
+        async function loadProgress(groupId) {
+            const res = await fetch(`../queries/get_progress.php?group_id=${groupId}`);
+            const data = await res.json();
+
+            const container = document.getElementById('progress-container');
+            container.innerHTML = '';
+
+            if (data.success) {
+                // Overall progress
+                const overall = document.createElement('div');
+                overall.className = 'progress-item';
+                overall.innerHTML = `
+                    <div class="progress-header">
+                        <span class="progress-label">Overall Progress</span>
+                        <span class="progress-percentage">${data.overall.percentage}%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width:${data.overall.percentage}%"></div>
+                    </div>
+                `;
+                container.appendChild(overall);
+
+                // Chapters
+                data.chapters.forEach(ch => {
+                    const div = document.createElement('div');
+                    div.className = 'progress-item';
+
+                    const header = document.createElement('div');
+                    header.className = 'progress-header';
+                    header.style.cursor = 'pointer';
+                    header.innerHTML = `<span>Chapter ${ch.chapter}: ${ch.title}</span><span>${ch.percentage}%</span>`;
+                    div.appendChild(header);
+
+                    const bar = document.createElement('div');
+                    bar.className = 'progress-bar';
+                    bar.innerHTML = `<div class="progress-fill" style="width:${ch.percentage}%"></div>`;
+                    div.appendChild(bar);
+
+                    const partsContainer = document.createElement('div');
+                    partsContainer.className = 'chapter-parts';
+                    partsContainer.style.display = 'none';
+
+                    ch.parts.forEach(p => {
+                        const pDiv = document.createElement('div');
+                        pDiv.className = 'part-item';
+                        let statusClass = 'part-status-pending';
+                        if (p.status === 'approved') statusClass = 'part-status-approved';
+                        else if (p.status === 'revision_needed') statusClass = 'part-status-revision';
+
+                        pDiv.innerHTML = `<span>${p.part}</span><span class="${statusClass}">${p.status}</span>`;
+                        partsContainer.appendChild(pDiv);
+                    });
+
+                    div.appendChild(partsContainer);
+
+                    header.addEventListener('click', () => {
+                        partsContainer.style.display = partsContainer.style.display === 'none' ? 'block' : 'none';
+                    });
+
+                    container.appendChild(div);
+                });
+            } else {
+                container.innerHTML = `<p>${data.message || 'No progress data available'}</p>`;
+            }
+        }
+
+        function viewDocument(docId) {
+            alert("Open inline viewer for document ID: " + docId);
+        }
+
+        // Initialize
+        loadGroupHeader();
+        loadGroupData();
+
+        // Handle document upload
+        // Fetch current group info
+        document.getElementById('uploadDocBtn').addEventListener('click', () => {
+            openUploadDocumentModal();
+        });
+
+async function fetchMyGroup() {
+    const res = await fetch('../queries/get_my_group.php');
+    const data = await res.json();
+    if(data.success) return data.group;
+    else return null;
+}
+
+async function openUploadDocumentModal() {
+    const group = await fetchMyGroup();
+    if(!group) return Swal.fire('Error', 'No group assigned', 'error');
+
+    const chapters = {
+        1: ["Introduction", "Review of Related Literature", "Theoretical Framework and/or Conceptual frameworks", "Statement of the Problem, Hypotheses (if applicable)", "Scope and Delimitation of the study", "Significance of the study", "Definition of terms"],
+        2: ["Research Design", "Research Locale", "Sample and sampling Procedure", "Sample and Sampling Criteria", "Data Gathering Procedure", "Data Gathering Instrument", "Data Analysis Techniques", "Ethical Considerations"],
+        3: ["Planning phase","Simulation","Presentation of Results","Analysis and Interpretation of Results"],
+        4: ["Summary of Findings","Conclusion","Limitation of the Study","Recommendations"]
+    };
+
+    let chapterOptions = Object.keys(chapters).map(ch => `<option value="${ch}">Chapter ${ch}</option>`).join('');
+    Swal.fire({
+        title: 'Upload Document',
+        html: `
+            <div>
+                <label>Chapter</label>
+                <select id="swal-chapter" class="comment-textarea-custom">${chapterOptions}</select>
+            </div>
+            <div style="margin-top:10px;">
+                <label>Part</label>
+                <select id="swal-part" class="comment-textarea-custom"></select>
+            </div>
+            <div style="margin-top:10px;">
+                <label>Caption</label>
+                <input id="swal-title" type="text" class="comment-textarea-custom" placeholder="Document caption"/>
+            </div>
+            <div style="margin-top:10px;">
+                <input id="swal-file" type="file"/>
+            </div>
+        `,
+        showCancelButton: true,
+        confirmButtonText: 'Upload',
+        preConfirm: () => {
+            const chapter = document.getElementById('swal-chapter').value;
+            const part = document.getElementById('swal-part').value;
+            const title = document.getElementById('swal-title').value;
+            const file = document.getElementById('swal-file').files[0];
+            if(!chapter || !part || !file) Swal.showValidationMessage('All fields are required');
+            return {chapter, part, title, file};
+        },
+        didOpen: () => {
+            const chapterSelect = document.getElementById('swal-chapter');
+            const partSelect = document.getElementById('swal-part');
+
+            function updateParts() {
+                const ch = chapterSelect.value;
+                partSelect.innerHTML = chapters[ch].map(p => `<option value="${p}">${p}</option>`).join('');
+            }
+            updateParts();
+            chapterSelect.addEventListener('change', updateParts);
+        }
+    }).then(result => {
+        if(result.isConfirmed){
+            const formData = new FormData();
+            formData.append('group_id', group.id);
+            formData.append('chapter', result.value.chapter);
+            formData.append('part', result.value.part);
+            formData.append('title', result.value.title);
+            formData.append('file', result.value.file);
+
+            fetch('../queries/upload_handler/upload_document.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.success){
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'Document uploaded successfully!',
+                        timer: 2000
+                    });
+
+                    // Refresh progress and document list
+                    if(currentGroupId) loadProgress(currentGroupId);
+                    loadGroupData();
+                }else{
+                    Swal.fire('Error', data.message, 'error');
+                }
+            })
+            .catch(err => {
+                Swal.fire('Error', 'Upload failed. Try again.', 'error');
+                console.error(err);
+            });
+        }
+    })
+}
+
 
     </script>
-</body>
 </html>

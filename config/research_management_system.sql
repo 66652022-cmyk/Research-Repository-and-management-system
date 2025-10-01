@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 22, 2025 at 08:27 AM
+-- Generation Time: Oct 01, 2025 at 06:57 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -185,7 +185,36 @@ INSERT INTO `activity_logs` (`id`, `user_id`, `action`, `details`, `ip_address`,
 (141, 12, 'login_success', 'Successful login for role: critique_english', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-21 13:41:58'),
 (142, 12, 'login_success', 'Successful login for role: critique_english', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-21 14:06:03'),
 (143, 1, 'login_success', 'Successful login for role: super_admin', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-21 14:26:13'),
-(144, 1, 'login_success', 'Successful login for role: super_admin', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-22 04:43:23');
+(144, 1, 'login_success', 'Successful login for role: super_admin', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-22 04:43:23'),
+(145, 1, 'login_success', 'Successful login for role: super_admin', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-22 11:23:21'),
+(146, NULL, 'login_failed_user_not_found', 'Login attempt for non-existent user: advicer1@example.com', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-22 12:50:30'),
+(147, NULL, 'login_failed_user_not_found', 'Login attempt for non-existent user: advicer1@example.com', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-22 12:50:39'),
+(148, NULL, 'login_failed_user_not_found', 'Login attempt for non-existent user: advicer@example.com', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-22 12:50:52'),
+(149, 8, 'login_success', 'Successful login for role: adviser', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-22 12:51:03'),
+(150, 8, 'login_success', 'Successful login for role: adviser', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-22 12:51:44'),
+(151, 1, 'login_success', 'Successful login for role: super_admin', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-23 06:34:19'),
+(152, 8, 'login_success', 'Successful login for role: adviser', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-23 06:42:50'),
+(153, 8, 'login_success', 'Successful login for role: adviser', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-23 06:51:09'),
+(154, 1, 'login_success', 'Successful login for role: super_admin', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-23 07:23:37'),
+(155, 1, 'login_failed_wrong_password', 'Wrong password for user: admin@example.com', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-25 10:45:52'),
+(156, 1, 'login_success', 'Successful login for role: super_admin', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-25 10:48:11'),
+(157, 1, 'login_success', 'Successful login for role: super_admin', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-25 11:54:31'),
+(158, 1, 'login_success', 'Successful login for role: super_admin', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-26 11:47:44'),
+(159, 1, 'login_success', 'Successful login for role: super_admin', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-26 12:17:34'),
+(160, 1, 'login_success', 'Successful login for role: super_admin', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-28 03:40:26'),
+(161, 2, 'login_failed_wrong_password', 'Wrong password for user: 66652022@holycross.edu.ph', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-28 04:20:55'),
+(162, 1, 'login_success', 'Successful login for role: super_admin', '::1', 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Mobile Safari/537.36', '2025-09-28 04:25:11'),
+(163, 13, 'login_success', 'Successful login for role: student', '::1', 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Mobile Safari/537.36', '2025-09-28 04:28:10'),
+(164, 13, 'login_success', 'Successful login for role: student', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-28 06:07:11'),
+(165, 1, 'login_failed_wrong_password', 'Wrong password for user: admin@example.com', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-28 06:08:38'),
+(166, 13, 'login_success', 'Successful login for role: student', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-28 06:09:05'),
+(167, 13, 'login_success', 'Successful login for role: student', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-28 06:10:06'),
+(168, 13, 'login_success', 'Successful login for role: student', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-28 06:41:26'),
+(169, 1, 'login_success', 'Successful login for role: super_admin', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-28 08:15:28'),
+(170, 1, 'login_success', 'Successful login for role: super_admin', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-29 03:26:13'),
+(171, 8, 'login_success', 'Successful login for role: adviser', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-29 09:24:45'),
+(172, 1, 'login_success', 'Successful login for role: super_admin', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-30 16:11:40'),
+(173, 13, 'login_success', 'Successful login for role: student', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-10-01 01:25:51');
 
 -- --------------------------------------------------------
 
@@ -247,7 +276,54 @@ INSERT INTO `comments` (`id`, `document_id`, `user_id`, `comment`, `type`, `page
 (3, 2, 9, 'Please include budget breakdown for AI software licenses.', 'suggestion', NULL, NULL, 'active', NULL, '2025-09-21 08:42:36', '2025-09-21 08:42:36'),
 (4, 3, 7, 'Good introduction. Consider adding more recent studies from 2024.', 'suggestion', NULL, NULL, 'active', NULL, '2025-09-21 08:42:36', '2025-09-21 08:42:36'),
 (5, 4, 7, 'The methodology section needs revision. Please clarify the research design.', 'correction', NULL, NULL, 'active', NULL, '2025-09-21 08:42:36', '2025-09-21 08:42:36'),
-(6, 4, 8, 'I agree with the critique. The research methodology needs more detail.', 'general', NULL, NULL, 'active', NULL, '2025-09-21 08:42:36', '2025-09-21 08:42:36');
+(6, 4, 8, 'I agree with the critique. The research methodology needs more detail.', 'general', NULL, NULL, 'active', NULL, '2025-09-21 08:42:36', '2025-09-21 08:42:36'),
+(7, 6, 1, 'hi', 'general', NULL, NULL, 'active', NULL, '2025-09-23 10:12:37', '2025-09-23 10:12:37'),
+(8, 6, 1, 'hi', 'general', NULL, NULL, 'active', NULL, '2025-09-23 10:12:59', '2025-09-23 10:12:59'),
+(9, 2, 1, 'dfdffer', 'general', NULL, NULL, 'active', NULL, '2025-09-26 11:48:11', '2025-09-26 11:48:11'),
+(10, 2, 1, 'frtrt', 'general', NULL, NULL, 'active', NULL, '2025-09-26 11:48:16', '2025-09-26 11:48:16'),
+(11, 2, 1, 'vfdgf', 'general', NULL, NULL, 'active', NULL, '2025-09-26 11:48:22', '2025-09-26 11:48:22'),
+(12, 7, 13, 'hi', 'general', NULL, NULL, 'active', NULL, '2025-09-28 07:08:47', '2025-09-28 07:08:47'),
+(13, 7, 13, 'heelo', 'general', NULL, NULL, 'active', NULL, '2025-09-28 07:08:56', '2025-09-28 07:08:56'),
+(14, 2, 1, 'hi', 'general', NULL, NULL, 'active', NULL, '2025-09-29 07:27:50', '2025-09-29 07:27:50'),
+(15, 2, 1, 'hi', 'general', NULL, NULL, 'active', NULL, '2025-09-29 07:28:06', '2025-09-29 07:28:06'),
+(16, 3, 1, 'hiii', 'general', NULL, NULL, 'active', NULL, '2025-09-29 07:28:14', '2025-09-29 07:28:14'),
+(17, 2, 1, 'helloo', 'general', NULL, NULL, 'active', NULL, '2025-09-29 07:31:43', '2025-09-29 07:31:43'),
+(18, 2, 1, 'hi', 'general', NULL, NULL, 'active', NULL, '2025-09-29 07:31:49', '2025-09-29 07:31:49'),
+(19, 2, 1, 'hiiii', 'general', NULL, NULL, 'active', NULL, '2025-09-29 07:31:55', '2025-09-29 07:31:55'),
+(20, 2, 1, 'hi', 'general', NULL, NULL, 'active', NULL, '2025-09-29 07:32:04', '2025-09-29 07:32:04'),
+(21, 2, 1, 'hi', 'general', NULL, NULL, 'active', NULL, '2025-09-29 07:46:21', '2025-09-29 07:46:21'),
+(22, 2, 1, 'mmm', 'general', NULL, NULL, 'active', NULL, '2025-09-29 07:50:55', '2025-09-29 07:50:55'),
+(23, 3, 1, 'hello', 'general', NULL, NULL, 'active', NULL, '2025-09-29 07:51:19', '2025-09-29 07:51:19'),
+(24, 2, 1, 'hi', 'general', NULL, NULL, 'active', NULL, '2025-09-29 08:06:35', '2025-09-29 08:06:35'),
+(25, 4, 1, 'ok', 'general', NULL, NULL, 'active', NULL, '2025-09-29 08:07:01', '2025-09-29 08:07:01'),
+(26, 4, 1, 'ok', 'general', NULL, NULL, 'active', NULL, '2025-09-29 08:07:17', '2025-09-29 08:07:17'),
+(27, 4, 1, 'ok', 'general', NULL, NULL, 'active', NULL, '2025-09-29 08:10:07', '2025-09-29 08:10:07'),
+(28, 4, 1, 'ok', 'general', NULL, NULL, 'active', 5, '2025-09-29 08:28:47', '2025-09-29 08:28:47'),
+(29, 4, 1, 'ok', 'general', NULL, NULL, 'active', 5, '2025-09-29 08:29:04', '2025-09-29 08:29:04'),
+(30, 4, 1, 'ok', 'general', NULL, NULL, 'active', 25, '2025-09-29 08:31:10', '2025-09-29 08:31:10'),
+(31, 4, 1, 'ok ok', 'general', NULL, NULL, 'active', 30, '2025-09-29 08:31:28', '2025-09-29 08:31:28'),
+(32, 5, 1, 'hi', 'general', NULL, NULL, 'active', NULL, '2025-09-29 08:35:04', '2025-09-29 08:35:04'),
+(33, 5, 1, 'hello', 'general', NULL, NULL, 'active', 32, '2025-09-29 08:35:10', '2025-09-29 08:35:10'),
+(34, 5, 1, 'hi', 'general', NULL, NULL, 'active', 32, '2025-09-29 08:35:17', '2025-09-29 08:35:17'),
+(35, 3, 1, 'hi', 'general', NULL, NULL, 'active', 23, '2025-09-29 08:38:56', '2025-09-29 08:38:56'),
+(36, 3, 1, 'hello', 'general', NULL, NULL, 'active', 35, '2025-09-29 08:39:32', '2025-09-29 08:39:32'),
+(37, 3, 1, 'hi', 'general', NULL, NULL, 'active', 23, '2025-09-29 08:39:57', '2025-09-29 08:39:57'),
+(38, 3, 1, 'hi', 'general', NULL, NULL, 'active', 4, '2025-09-29 08:52:33', '2025-09-29 08:52:33'),
+(39, 3, 1, 'ok', 'general', NULL, NULL, 'active', 23, '2025-09-29 08:52:40', '2025-09-29 08:52:40'),
+(40, 3, 1, 'ok', 'general', NULL, NULL, 'active', 37, '2025-09-29 08:52:44', '2025-09-29 08:52:44'),
+(41, 3, 1, 'ok', 'general', NULL, NULL, 'active', 37, '2025-09-29 08:52:48', '2025-09-29 08:52:48'),
+(42, 6, 8, 'hello', 'general', NULL, NULL, 'active', 7, '2025-09-29 13:07:47', '2025-09-29 13:07:47'),
+(43, 6, 8, 'ok', 'general', NULL, NULL, 'active', 42, '2025-09-29 13:07:59', '2025-09-29 13:07:59'),
+(44, 6, 8, 'ayoko naa', 'general', NULL, NULL, 'active', 8, '2025-09-29 13:08:12', '2025-09-29 13:08:12'),
+(45, 6, 8, 'pisti', 'general', NULL, NULL, 'active', 43, '2025-09-29 13:10:43', '2025-09-29 13:10:43'),
+(46, 6, 8, 'hi', 'general', NULL, NULL, 'active', 42, '2025-09-29 13:10:48', '2025-09-29 13:10:48'),
+(47, 6, 8, 'hi', 'general', NULL, NULL, 'active', 43, '2025-09-29 13:15:44', '2025-09-29 13:15:44'),
+(48, 17, 13, 'ji==', 'general', NULL, NULL, 'active', NULL, '2025-10-01 02:02:27', '2025-10-01 02:02:27'),
+(49, 17, 13, 'jo', 'general', NULL, NULL, 'active', 48, '2025-10-01 02:56:33', '2025-10-01 02:56:33'),
+(50, 17, 13, 'gg', 'general', NULL, NULL, 'active', 48, '2025-10-01 03:14:24', '2025-10-01 03:14:24'),
+(51, 17, 13, 'gg', 'general', NULL, NULL, 'active', 49, '2025-10-01 03:14:26', '2025-10-01 03:14:26'),
+(52, 17, 13, 'hi', 'general', NULL, NULL, 'active', 50, '2025-10-01 03:14:33', '2025-10-01 03:14:33'),
+(53, 17, 13, 'ok', 'general', NULL, NULL, 'active', 48, '2025-10-01 03:14:43', '2025-10-01 03:14:43');
 
 -- --------------------------------------------------------
 
@@ -267,19 +343,65 @@ CREATE TABLE `documents` (
   `submitted_by` int(11) DEFAULT NULL,
   `submitted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `chapter` int(11) NOT NULL,
+  `part` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `documents`
 --
 
-INSERT INTO `documents` (`id`, `group_id`, `title`, `type`, `file_path`, `file_size`, `mime_type`, `status`, `submitted_by`, `submitted_at`, `created_at`, `updated_at`) VALUES
-(2, 16, 'AI in Healthcare: A Comprehensive Proposal', 'proposal', NULL, NULL, NULL, 'approved', 2, NULL, '2025-09-21 08:40:54', '2025-09-21 08:40:54'),
-(3, 16, 'Chapter 1: Introduction to AI in Healthcare', 'chapter1', NULL, NULL, NULL, 'under_review', 2, NULL, '2025-09-21 08:40:54', '2025-09-21 08:40:54'),
-(4, 16, 'Chapter 2: Literature Review', 'chapter2', NULL, NULL, NULL, 'revision_needed', 4, NULL, '2025-09-21 08:40:54', '2025-09-21 08:40:54'),
-(5, 17, 'Sustainable Energy Solutions: Research Proposal', 'proposal', NULL, NULL, NULL, 'submitted', 10, NULL, '2025-09-21 08:40:54', '2025-09-21 08:40:54'),
-(6, 18, 'Mobile App Development: Final Report', 'final', NULL, NULL, NULL, 'approved', 4, NULL, '2025-09-21 08:40:54', '2025-09-21 08:40:54');
+INSERT INTO `documents` (`id`, `group_id`, `title`, `type`, `file_path`, `file_size`, `mime_type`, `status`, `submitted_by`, `submitted_at`, `created_at`, `updated_at`, `chapter`, `part`) VALUES
+(2, 16, 'AI in Healthcare: A Comprehensive Proposal', 'proposal', NULL, NULL, NULL, 'submitted', 2, NULL, '2025-09-21 08:40:54', '2025-09-29 09:04:20', 0, ''),
+(3, 16, 'Chapter 1: Introduction to AI in Healthcare', 'chapter1', NULL, NULL, NULL, 'approved', 2, NULL, '2025-09-21 08:40:54', '2025-09-29 09:04:20', 0, ''),
+(4, 16, 'Chapter 2: Literature Review', 'chapter2', NULL, NULL, NULL, 'submitted', 4, NULL, '2025-09-21 08:40:54', '2025-09-29 09:04:20', 0, ''),
+(5, 17, 'Sustainable Energy Solutions: Research Proposal', 'chapter1', NULL, NULL, NULL, 'approved', 10, NULL, '2025-09-21 08:40:54', '2025-09-29 09:08:12', 0, ''),
+(6, 18, 'Mobile App Development: Final Report', 'final', NULL, NULL, NULL, 'approved', 4, NULL, '2025-09-21 08:40:54', '2025-09-21 08:40:54', 0, ''),
+(7, 10, 'Proposal Draft', 'proposal', '/uploads/proposal_terrence.pdf', 204800, 'application/pdf', 'submitted', 4, '2025-09-28 07:04:44', '2025-09-28 07:04:44', '2025-09-28 07:04:44', 0, ''),
+(8, 10, 'Chapter 1 Draft', 'chapter1', '/uploads/ch1_terrence.docx', 102400, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'submitted', 4, '2025-09-28 07:04:44', '2025-09-28 07:04:44', '2025-09-28 07:04:44', 0, ''),
+(9, 10, 'Chapter 2 Notes', 'chapter2', '/uploads/ch2_christian.pdf', 51200, 'application/pdf', 'submitted', 5, '2025-09-28 07:04:44', '2025-09-28 07:04:44', '2025-09-28 07:04:44', 0, ''),
+(10, 10, 'Chapter 3 Draft', 'chapter3', '/uploads/ch3_christian.docx', 150000, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'submitted', 5, '2025-09-28 07:04:44', '2025-09-28 07:04:44', '2025-09-28 07:04:44', 0, ''),
+(11, 10, 'Research Proposal', 'proposal', '/uploads/proposal_aira.pdf', 220000, 'application/pdf', 'submitted', 10, '2025-09-28 07:04:44', '2025-09-28 07:04:44', '2025-09-28 07:04:44', 0, ''),
+(12, 10, 'Final Paper Draft', 'final', '/uploads/final_aira.pdf', 300000, 'application/pdf', 'submitted', 10, '2025-09-28 07:04:44', '2025-09-28 07:04:44', '2025-09-28 07:04:44', 0, ''),
+(13, 10, 'Chapter 4 Analysis', 'chapter4', '/uploads/ch4_jerthel.pdf', 180000, 'application/pdf', 'submitted', 13, '2025-09-28 07:04:44', '2025-09-28 07:04:44', '2025-09-28 07:04:44', 0, ''),
+(14, 10, 'Chapter 5 Conclusion', 'chapter5', '/uploads/ch5_jerthel.docx', 120000, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'submitted', 13, '2025-09-28 07:04:44', '2025-09-28 07:04:44', '2025-09-28 07:04:44', 0, ''),
+(15, 10, 'Introduction', 'chapter1', '/uploads/ch1_intro.pdf', 120000, 'application/pdf', 'approved', 2, '2025-09-29 09:01:11', '2025-09-29 09:01:11', '2025-09-29 09:01:11', 1, 'Introduction'),
+(16, 10, 'Review of Related Literature', 'chapter1', '/uploads/ch1_rrl.pdf', 220000, 'application/pdf', 'revision_needed', 3, '2025-09-29 09:01:11', '2025-09-29 09:01:11', '2025-09-29 09:01:11', 1, 'Review of Related Literature'),
+(17, 10, 'Theoretical Framework', 'chapter1', '/uploads/ch1_framework.pdf', 180000, 'application/pdf', '', 4, '2025-09-29 09:01:11', '2025-09-29 09:01:11', '2025-09-29 09:40:28', 1, 'Theoretical Framework and/or Conceptual frameworks'),
+(18, 10, 'Research Design', 'chapter2', '/uploads/ch2_design.pdf', 150000, 'application/pdf', 'approved', 2, '2025-09-29 09:01:11', '2025-09-29 09:01:11', '2025-09-29 09:40:28', 2, 'Sample and sampling Procedure'),
+(19, 10, 'Research Locale', 'chapter2', '/uploads/ch2_locale.pdf', 175000, 'application/pdf', 'under_review', 3, '2025-09-29 09:01:11', '2025-09-29 09:01:11', '2025-09-29 09:40:28', 2, 'Sample and Sampling Criteria'),
+(20, 10, 'Data Gathering Procedure', 'chapter2', '/uploads/ch2_dgp.pdf', 200000, 'application/pdf', '', 4, '2025-09-29 09:01:11', '2025-09-29 09:01:11', '2025-09-29 09:01:11', 2, 'Data Gathering Procedure'),
+(21, 10, 'Simulation', 'chapter3', '/uploads/ch3_simulation.pdf', 190000, 'application/pdf', 'approved', 2, '2025-09-29 09:01:11', '2025-09-29 09:01:11', '2025-09-29 09:40:28', 3, 'Planning phase'),
+(22, 10, 'Analysis and Interpretation of Results', 'chapter3', '/uploads/ch3_analysis.pdf', 210000, 'application/pdf', 'revision_needed', 3, '2025-09-29 09:01:11', '2025-09-29 09:01:11', '2025-09-29 09:01:11', 3, 'Analysis and Interpretation of Results'),
+(23, 10, 'Conclusion', 'chapter4', '/uploads/ch4_conclusion.pdf', 130000, 'application/pdf', 'approved', 4, '2025-09-29 09:01:11', '2025-09-29 09:01:11', '2025-09-29 09:40:28', 4, 'Summary of Findings'),
+(24, 10, 'Recommendations', 'chapter4', '/uploads/ch4_recommendations.pdf', 125000, 'application/pdf', '', 2, '2025-09-29 09:01:11', '2025-09-29 09:01:11', '2025-09-29 09:40:28', 4, 'Limitation of the Study'),
+(25, 17, 'The problem and its setting', 'chapter1', NULL, NULL, NULL, 'approved', 2, '2025-09-29 13:04:21', '2025-09-29 13:04:21', '2025-09-29 13:04:21', 1, 'Introduction'),
+(26, 17, 'The problem and its setting', 'chapter1', NULL, NULL, NULL, 'approved', 2, '2025-09-29 13:04:21', '2025-09-29 13:04:21', '2025-09-29 13:04:21', 1, 'Review of Related Literature'),
+(27, 17, 'The problem and its setting', 'chapter1', NULL, NULL, NULL, 'revision_needed', 2, '2025-09-29 13:04:21', '2025-09-29 13:04:21', '2025-09-29 13:04:21', 1, 'Theoretical Framework and/or Conceptual frameworks'),
+(28, 17, 'The problem and its setting', 'chapter1', NULL, NULL, NULL, 'submitted', 2, '2025-09-29 13:04:21', '2025-09-29 13:04:21', '2025-09-29 13:04:21', 1, 'Statement of the Problem, Hypotheses (if applicable)'),
+(29, 17, 'The problem and its setting', 'chapter1', NULL, NULL, NULL, '', 2, '2025-09-29 13:04:21', '2025-09-29 13:04:21', '2025-09-29 13:04:21', 1, 'Scope and Delimitation of the study'),
+(30, 17, 'The problem and its setting', 'chapter1', NULL, NULL, NULL, 'under_review', 2, '2025-09-29 13:04:21', '2025-09-29 13:04:21', '2025-09-29 13:04:21', 1, 'Significance of the study'),
+(31, 17, 'The problem and its setting', 'chapter1', NULL, NULL, NULL, 'approved', 2, '2025-09-29 13:04:21', '2025-09-29 13:04:21', '2025-09-29 13:04:21', 1, 'Definition of terms'),
+(32, 17, 'Research Methodology', 'chapter2', NULL, NULL, NULL, 'approved', 2, '2025-09-29 13:04:21', '2025-09-29 13:04:21', '2025-09-29 13:04:21', 2, 'Research Design'),
+(33, 17, 'Research Methodology', 'chapter2', NULL, NULL, NULL, 'submitted', 2, '2025-09-29 13:04:21', '2025-09-29 13:04:21', '2025-09-29 13:04:21', 2, 'Research Locale'),
+(34, 17, 'Research Methodology', 'chapter2', NULL, NULL, NULL, '', 2, '2025-09-29 13:04:21', '2025-09-29 13:04:21', '2025-09-29 13:04:21', 2, 'Sample and sampling Procedure'),
+(35, 17, 'Research Methodology', 'chapter2', NULL, NULL, NULL, 'revision_needed', 2, '2025-09-29 13:04:21', '2025-09-29 13:04:21', '2025-09-29 13:04:21', 2, 'Sample and Sampling Criteria'),
+(36, 17, 'Research Methodology', 'chapter2', NULL, NULL, NULL, 'under_review', 2, '2025-09-29 13:04:21', '2025-09-29 13:04:21', '2025-09-29 13:04:21', 2, 'Data Gathering Procedure'),
+(37, 17, 'Research Methodology', 'chapter2', NULL, NULL, NULL, 'approved', 2, '2025-09-29 13:04:21', '2025-09-29 13:04:21', '2025-09-29 13:04:21', 2, 'Data Gathering Instrument'),
+(38, 17, 'Research Methodology', 'chapter2', NULL, NULL, NULL, 'approved', 2, '2025-09-29 13:04:21', '2025-09-29 13:04:21', '2025-09-29 13:04:21', 2, 'Data Analysis Techniques'),
+(39, 17, 'Research Methodology', 'chapter2', NULL, NULL, NULL, 'submitted', 2, '2025-09-29 13:04:21', '2025-09-29 13:04:21', '2025-09-29 13:04:21', 2, 'Ethical Considerations'),
+(40, 17, 'Planning and Results', 'chapter3', NULL, NULL, NULL, 'approved', 2, '2025-09-29 13:04:21', '2025-09-29 13:04:21', '2025-09-29 13:04:21', 3, 'Planning phase'),
+(41, 17, 'Planning and Results', 'chapter3', NULL, NULL, NULL, 'submitted', 2, '2025-09-29 13:04:21', '2025-09-29 13:04:21', '2025-09-29 13:04:21', 3, 'Simulation'),
+(42, 17, 'Planning and Results', 'chapter3', NULL, NULL, NULL, 'revision_needed', 2, '2025-09-29 13:04:21', '2025-09-29 13:04:21', '2025-09-29 13:04:21', 3, 'Presentation of Results'),
+(43, 17, 'Planning and Results', 'chapter3', NULL, NULL, NULL, '', 2, '2025-09-29 13:04:21', '2025-09-29 13:04:21', '2025-09-29 13:04:21', 3, 'Analysis and Interpretation of Results'),
+(44, 17, 'Summary and Conclusion', 'chapter4', NULL, NULL, NULL, 'approved', 2, '2025-09-29 13:04:21', '2025-09-29 13:04:21', '2025-09-29 13:04:21', 4, 'Summary of Findings'),
+(45, 17, 'Summary and Conclusion', 'chapter4', NULL, NULL, NULL, 'approved', 2, '2025-09-29 13:04:21', '2025-09-29 13:04:21', '2025-09-29 13:04:21', 4, 'Conclusion'),
+(46, 17, 'Summary and Conclusion', 'chapter4', NULL, NULL, NULL, 'submitted', 2, '2025-09-29 13:04:21', '2025-09-29 13:04:21', '2025-09-29 13:04:21', 4, 'Limitation of the Study'),
+(47, 17, 'Summary and Conclusion', 'chapter4', NULL, NULL, NULL, '', 2, '2025-09-29 13:04:21', '2025-09-29 13:04:21', '2025-09-29 13:04:21', 4, 'Recommendations'),
+(48, 10, '', 'proposal', '../../uploads/68dca61c755ee_test.docx', NULL, NULL, 'submitted', 13, NULL, '2025-10-01 03:55:08', '2025-10-01 03:55:08', 1, 'Introduction'),
+(49, 10, '', 'proposal', '../../uploads/68dca6897f8f1_test.docx', NULL, NULL, 'submitted', 13, NULL, '2025-10-01 03:56:57', '2025-10-01 03:56:57', 1, 'Introduction'),
+(50, 10, '', 'proposal', '../../uploads/68dca6e22d634_test.docx', NULL, NULL, 'submitted', 13, NULL, '2025-10-01 03:58:26', '2025-10-01 03:58:26', 1, 'Introduction');
 
 -- --------------------------------------------------------
 
@@ -326,9 +448,9 @@ INSERT INTO `groups` (`id`, `name`, `description`, `status`, `adviser_id`, `engl
 (10, 'AI Research Group Alpha', 'Research group focused on AI applications in healthcare', 'active', 8, 12, 7, 9, 'Artificial Intelligence in Healthcare Systems', '2025-09-16 22:35:33', '2025-09-16 22:35:33'),
 (11, 'Data Science Team Beta', 'Advanced data analytics and machine learning research', 'active', 8, 12, 7, 9, 'Machine Learning for Predictive Analytics', '2025-09-16 23:31:09', '2025-09-16 23:31:09'),
 (12, 'Software Engineering Group Gamma', 'Modern software development methodologies', 'active', 8, NULL, 7, NULL, 'Agile Software Development Practices', '2025-09-16 23:43:22', '2025-09-16 23:43:22'),
-(16, 'AI Research Group 2025', 'Advanced AI research for healthcare applications', 'active', 8, 12, 7, 9, 'AI in Healthcare: A Comprehensive Study', '2025-09-21 00:38:19', '2025-09-21 00:38:19'),
-(17, 'Sustainable Energy Research Team', 'Research on renewable energy solutions', 'active', 8, NULL, 7, 9, 'Sustainable Energy Solutions for Smart Cities', '2025-09-21 00:38:19', '2025-09-21 00:38:19'),
-(18, 'Mobile Development Group', 'Mobile application development research', 'completed', 8, 12, NULL, NULL, 'Cross-Platform Mobile App Development', '2025-09-21 00:38:19', '2025-09-21 00:38:19');
+(16, 'AI Research Group 2025', 'Advanced AI research for healthcare applications', 'active', 8, 46, 49, 9, 'AI in Healthcare: A Comprehensive Study', '2025-09-21 00:38:19', '2025-09-26 12:25:24'),
+(17, 'Sustainable Energy Research Team', 'Research on renewable energy solutions', 'active', 8, 46, 48, 9, 'Sustainable Energy Solutions for Smart Cities', '2025-09-21 00:38:19', '2025-09-26 12:18:13'),
+(18, 'Mobile Development Group', 'Mobile application development research', 'completed', 8, 12, 7, 9, 'Cross-Platform Mobile App Development', '2025-09-21 00:38:19', '2025-09-22 08:54:41');
 
 -- --------------------------------------------------------
 
@@ -351,7 +473,7 @@ CREATE TABLE `group_members` (
 INSERT INTO `group_members` (`id`, `group_id`, `student_id`, `role`, `joined_at`) VALUES
 (1, 10, 10, 'leader', '2025-09-17 06:35:33'),
 (2, 10, 5, 'member', '2025-09-17 06:35:33'),
-(3, 10, 2, 'member', '2025-09-17 06:35:33'),
+(3, 10, 13, 'member', '2025-09-17 06:35:33'),
 (4, 10, 4, 'member', '2025-09-17 06:35:33'),
 (5, 11, 10, 'leader', '2025-09-17 07:31:09'),
 (6, 11, 5, 'member', '2025-09-17 07:31:09'),
@@ -508,7 +630,19 @@ INSERT INTO `users` (`id`, `name`, `email`, `password`, `role`, `educational_att
 (25, 'Michelle Villanueva', 'michelle.villanueva@example.com', '482c811da5d5b4bc6d497ffa98491e38', 'student', NULL, NULL, 'BSHM', 'active', '2025-09-21 08:57:10', '2025-09-21 08:57:10', 'Female', '4'),
 (26, 'James Uy', 'james.uy@example.com', '482c811da5d5b4bc6d497ffa98491e38', 'student', NULL, NULL, 'BSECE', 'active', '2025-09-21 08:57:10', '2025-09-21 08:57:10', 'Male', '4'),
 (27, 'Andrea Chua', 'andrea.chua@example.com', '482c811da5d5b4bc6d497ffa98491e38', 'student', NULL, NULL, 'BSArch', 'active', '2025-09-21 08:57:10', '2025-09-21 08:57:10', 'Female', '4'),
-(28, 'Kevin Torres', 'kevin.torres@example.com', '482c811da5d5b4bc6d497ffa98491e38', 'student', NULL, NULL, 'BSMath', 'active', '2025-09-21 08:57:10', '2025-09-21 08:57:10', 'Male', '4');
+(28, 'Kevin Torres', 'kevin.torres@example.com', '482c811da5d5b4bc6d497ffa98491e38', 'student', NULL, NULL, 'BSMath', 'active', '2025-09-21 08:57:10', '2025-09-21 08:57:10', 'Male', '4'),
+(42, 'Research Director 2', 'research_director2@example.com', 'password123', 'research_director', NULL, NULL, NULL, 'active', '2025-09-23 07:34:22', '2025-09-23 07:34:22', 'Male', NULL),
+(43, 'Research Director 3', 'research_director3@example.com', 'password123', 'research_director', NULL, NULL, NULL, 'active', '2025-09-23 07:34:22', '2025-09-23 07:34:22', 'Female', NULL),
+(44, 'Adviser 2', 'adviser2@example.com', 'password123', 'adviser', NULL, NULL, NULL, 'active', '2025-09-23 07:34:22', '2025-09-23 07:34:22', 'Male', NULL),
+(45, 'Adviser 3', 'adviser3@example.com', 'password123', 'adviser', NULL, NULL, NULL, 'active', '2025-09-23 07:34:22', '2025-09-23 07:34:22', 'Female', NULL),
+(46, 'English Critique 2', 'critique_english2@example.com', 'password123', 'critique_english', NULL, NULL, NULL, 'active', '2025-09-23 07:34:22', '2025-09-23 07:34:22', 'Male', NULL),
+(47, 'English Critique 3', 'critique_english3@example.com', 'password123', 'critique_english', NULL, NULL, NULL, 'active', '2025-09-23 07:34:22', '2025-09-23 07:34:22', 'Female', NULL),
+(48, 'Statistician Critique 2', 'critique_statistician2@example.com', 'password123', 'critique_statistician', NULL, NULL, NULL, 'active', '2025-09-23 07:34:22', '2025-09-23 07:34:22', 'Male', NULL),
+(49, 'Statistician Critique 3', 'critique_statistician3@example.com', 'password123', 'critique_statistician', NULL, NULL, NULL, 'active', '2025-09-23 07:34:22', '2025-09-23 07:34:22', 'Female', NULL),
+(50, 'Financial Critique 2', 'financial_critique2@example.com', 'password123', 'financial_critique', NULL, NULL, NULL, 'active', '2025-09-23 07:34:22', '2025-09-23 07:34:22', 'Male', NULL),
+(51, 'Financial Critique 3', 'financial_critique3@example.com', 'password123', 'financial_critique', NULL, NULL, NULL, 'active', '2025-09-23 07:34:22', '2025-09-23 07:34:22', 'Female', NULL),
+(52, 'Research Faculty 2', 'research_faculty2@example.com', 'password123', 'research_faculty', NULL, NULL, NULL, 'active', '2025-09-23 07:34:22', '2025-09-23 07:34:22', 'Male', NULL),
+(53, 'Research Faculty 3', 'research_faculty3@example.com', 'password123', 'research_faculty', NULL, NULL, NULL, 'active', '2025-09-23 07:34:22', '2025-09-23 07:34:22', 'Female', NULL);
 
 --
 -- Indexes for dumped tables
@@ -623,7 +757,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `activity_logs`
 --
 ALTER TABLE `activity_logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=145;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=174;
 
 --
 -- AUTO_INCREMENT for table `adviser_specializations`
@@ -635,13 +769,13 @@ ALTER TABLE `adviser_specializations`
 -- AUTO_INCREMENT for table `comments`
 --
 ALTER TABLE `comments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT for table `documents`
 --
 ALTER TABLE `documents`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT for table `document_versions`
@@ -683,7 +817,7 @@ ALTER TABLE `system_settings`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- Constraints for dumped tables
