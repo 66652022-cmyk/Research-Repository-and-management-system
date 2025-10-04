@@ -361,26 +361,39 @@
                                 <div class="post-time">${doc.submitted_at ? new Date(doc.submitted_at).toLocaleString() : "N/A"}</div>
                             </div>
                         </div>
-                        <div class="document-info">
-                        // dapat chapter ang hanapin hindi type
-                            <h5>${doc.title} (${doc.type})</h5>
-                            <div class="doc-meta">${doc.mime_type || "Unknown"} • ${(doc.file_size ? (doc.file_size/1024).toFixed(1) : 0)} KB</div>
-                        </div>
                     </div>
 
+                    <!-- Caption -->
+                    <div class="post-caption">${doc.title || "(No caption)"}</div>
+
+                    <!-- Chapter & Part -->
+                    <div class="doc-details">
+                        <strong>Chapter:</strong> ${doc.chapter || "N/A"} 
+                        <span class="dot">•</span> 
+                        <strong>Part:</strong> ${doc.part || "N/A"}
+                    </div>
+
+                    <!-- File info -->
+                    <div class="doc-meta">
+                        ${doc.mime_type || "Unknown"} 
+                        <span class="dot">•</span> 
+                        ${(doc.file_size ? (doc.file_size/1024).toFixed(1) : 0)} KB
+                    </div>
+
+                    <!-- Actions -->
                     <div class="post-actions">
                         <button ${doc.file_path ? `onclick="window.open('${doc.file_path}', '_blank')"` : "disabled"} class="action-btn btn-blue">Download</button>
                         <button onclick="viewDocument(${doc.id})" class="action-btn btn-blue">View</button>
                         <button class="action-btn btn-blue comment-toggle">Comment</button>
                     </div>
 
+                    <!-- Comments -->
                     <div class="comments-preview"><div class="comment-preview">Loading comments...</div></div>
-
                     <div class="comments-section" style="display:none; margin-top: 8px;">
                         <div class="existing-comments">Loading comments...</div>
-                        <div class="comment-input-container" style="position: relative; display: flex; align-items: flex-end;">
-                            <textarea class="comment-textarea" placeholder="Write a comment..." style="flex:1; padding-right: 40px;"></textarea>
-                            <button class="comment-submit btn-blue" style="position: absolute; right: 4px; bottom: 4px; padding:4px 8px; border-radius:50%; display:flex; align-items:center; justify-content:center;">
+                        <div class="comment-input-container">
+                            <textarea class="comment-textarea" placeholder="Write a comment..."></textarea>
+                            <button class="comment-submit btn-blue">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" viewBox="0 0 24 24">
                                     <path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/>
                                 </svg>
@@ -557,103 +570,101 @@
             openUploadDocumentModal();
         });
 
-async function fetchMyGroup() {
-    const res = await fetch('../queries/get_my_group.php');
-    const data = await res.json();
-    if(data.success) return data.group;
-    else return null;
-}
-
-async function openUploadDocumentModal() {
-    const group = await fetchMyGroup();
-    if(!group) return Swal.fire('Error', 'No group assigned', 'error');
-
-    const chapters = {
-        1: ["Introduction", "Review of Related Literature", "Theoretical Framework and/or Conceptual frameworks", "Statement of the Problem, Hypotheses (if applicable)", "Scope and Delimitation of the study", "Significance of the study", "Definition of terms"],
-        2: ["Research Design", "Research Locale", "Sample and sampling Procedure", "Sample and Sampling Criteria", "Data Gathering Procedure", "Data Gathering Instrument", "Data Analysis Techniques", "Ethical Considerations"],
-        3: ["Planning phase","Simulation","Presentation of Results","Analysis and Interpretation of Results"],
-        4: ["Summary of Findings","Conclusion","Limitation of the Study","Recommendations"]
-    };
-
-    let chapterOptions = Object.keys(chapters).map(ch => `<option value="${ch}">Chapter ${ch}</option>`).join('');
-    Swal.fire({
-        title: 'Upload Document',
-        html: `
-            <div>
-                <label>Chapter</label>
-                <select id="swal-chapter" class="comment-textarea-custom">${chapterOptions}</select>
-            </div>
-            <div style="margin-top:10px;">
-                <label>Part</label>
-                <select id="swal-part" class="comment-textarea-custom"></select>
-            </div>
-            <div style="margin-top:10px;">
-                <label>Caption</label>
-                <input id="swal-title" type="text" class="comment-textarea-custom" placeholder="Document caption"/>
-            </div>
-            <div style="margin-top:10px;">
-                <input id="swal-file" type="file"/>
-            </div>
-        `,
-        showCancelButton: true,
-        confirmButtonText: 'Upload',
-        preConfirm: () => {
-            const chapter = document.getElementById('swal-chapter').value;
-            const part = document.getElementById('swal-part').value;
-            const title = document.getElementById('swal-title').value;
-            const file = document.getElementById('swal-file').files[0];
-            if(!chapter || !part || !file) Swal.showValidationMessage('All fields are required');
-            return {chapter, part, title, file};
-        },
-        didOpen: () => {
-            const chapterSelect = document.getElementById('swal-chapter');
-            const partSelect = document.getElementById('swal-part');
-
-            function updateParts() {
-                const ch = chapterSelect.value;
-                partSelect.innerHTML = chapters[ch].map(p => `<option value="${p}">${p}</option>`).join('');
-            }
-            updateParts();
-            chapterSelect.addEventListener('change', updateParts);
+        async function fetchMyGroup() {
+            const res = await fetch('../queries/get_my_group.php');
+            const data = await res.json();
+            if(data.success) return data.group;
+            else return null;
         }
-    }).then(result => {
-        if(result.isConfirmed){
-            const formData = new FormData();
-            formData.append('group_id', group.id);
-            formData.append('chapter', result.value.chapter);
-            formData.append('part', result.value.part);
-            formData.append('title', result.value.title);
-            formData.append('file', result.value.file);
 
-            fetch('../queries/upload_handler/upload_document.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(res => res.json())
-            .then(data => {
-                if(data.success){
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: 'Document uploaded successfully!',
-                        timer: 2000
+        async function openUploadDocumentModal() {
+            const group = await fetchMyGroup();
+            if(!group) return Swal.fire('Error', 'No group assigned', 'error');
+
+            const chapters = {
+                1: ["Introduction", "Review of Related Literature", "Theoretical Framework and/or Conceptual frameworks", "Statement of the Problem, Hypotheses (if applicable)", "Scope and Delimitation of the study", "Significance of the study", "Definition of terms"],
+                2: ["Research Design", "Research Locale", "Sample and sampling Procedure", "Sample and Sampling Criteria", "Data Gathering Procedure", "Data Gathering Instrument", "Data Analysis Techniques", "Ethical Considerations"],
+                3: ["Planning phase","Simulation","Presentation of Results","Analysis and Interpretation of Results"],
+                4: ["Summary of Findings","Conclusion","Limitation of the Study","Recommendations"]
+            };
+
+            let chapterOptions = Object.keys(chapters).map(ch => `<option value="${ch}">Chapter ${ch}</option>`).join('');
+            Swal.fire({
+                title: 'Upload Document',
+                html: `
+                    <div>
+                        <label>Chapter</label>
+                        <select id="swal-chapter" class="comment-textarea-custom">${chapterOptions}</select>
+                    </div>
+                    <div style="margin-top:10px;">
+                        <label>Part</label>
+                        <select id="swal-part" class="comment-textarea-custom"></select>
+                    </div>
+                    <div style="margin-top:10px;">
+                        <label>Caption</label>
+                        <input id="swal-title" type="text" class="comment-textarea-custom" placeholder="Document caption"/>
+                    </div>
+                    <div style="margin-top:10px;">
+                        <input id="swal-file" type="file"/>
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'Upload',
+                preConfirm: () => {
+                    const chapter = document.getElementById('swal-chapter').value;
+                    const part = document.getElementById('swal-part').value;
+                    const title = document.getElementById('swal-title').value;
+                    const file = document.getElementById('swal-file').files[0];
+                    if(!chapter || !part || !file) Swal.showValidationMessage('All fields are required');
+                    return {chapter, part, title, file};
+                },
+                didOpen: () => {
+                    const chapterSelect = document.getElementById('swal-chapter');
+                    const partSelect = document.getElementById('swal-part');
+
+                    function updateParts() {
+                        const ch = chapterSelect.value;
+                        partSelect.innerHTML = chapters[ch].map(p => `<option value="${p}">${p}</option>`).join('');
+                    }
+                    updateParts();
+                    chapterSelect.addEventListener('change', updateParts);
+                }
+            }).then(result => {
+                if(result.isConfirmed){
+                    const formData = new FormData();
+                    formData.append('group_id', group.id);
+                    formData.append('chapter', result.value.chapter);
+                    formData.append('part', result.value.part);
+                    formData.append('title', result.value.title);
+                    formData.append('file', result.value.file);
+
+                    fetch('../queries/upload_handler/upload_document.php', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if(data.success){
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: 'Document uploaded successfully!',
+                                timer: 2000
+                            });
+
+                            // Refresh progress and document list
+                            if(currentGroupId) loadProgress(currentGroupId);
+                            loadGroupData();
+                        }else{
+                            Swal.fire('Error', data.message, 'error');
+                        }
+                    })
+                    .catch(err => {
+                        Swal.fire('Error', 'Upload failed. Try again.', 'error');
+                        console.error(err);
                     });
-
-                    // Refresh progress and document list
-                    if(currentGroupId) loadProgress(currentGroupId);
-                    loadGroupData();
-                }else{
-                    Swal.fire('Error', data.message, 'error');
                 }
             })
-            .catch(err => {
-                Swal.fire('Error', 'Upload failed. Try again.', 'error');
-                console.error(err);
-            });
         }
-    })
-}
-
-
     </script>
 </html>

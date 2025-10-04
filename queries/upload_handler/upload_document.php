@@ -26,13 +26,13 @@ $file = $_FILES['file'];
 
 // File validation
 $allowedTypes = [
-    'application/pdf',                  // PDF
-    'image/jpeg',                       // JPG
-    'image/png',                        // PNG
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // DOCX
-    'application/msword',               // DOC
-    'application/vnd.ms-excel',         // XLS
-    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' // XLSX
+    'application/pdf',                  
+    'image/jpeg',                       
+    'image/png',                        
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 
+    'application/msword',               
+    'application/vnd.ms-excel',         
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' 
 ];
 $maxSize = 10*1024*1024; // 10MB
 
@@ -53,9 +53,27 @@ if(!move_uploaded_file($file['tmp_name'], $filePath)) {
     exit(json_encode(["success"=>false,"message"=>"File upload failed"]));
 }
 
+// Kunin file details
+$fileSize = $file['size']; // raw bytes
+$fileExtension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION)); 
+$researchPart = "chapter".$chapter;
+
 // Insert sa DB
-$stmt = $conn->prepare("INSERT INTO documents (group_id, chapter, part, title, file_path, status, submitted_by, created_at, updated_at) VALUES (?,?,?,?,?, 'submitted', ?, NOW(), NOW())");
-$stmt->bind_param("iisssi", $group_id, $chapter, $part, $title, $filePath, $user_id);
+$stmt = $conn->prepare("INSERT INTO documents 
+    (group_id, chapter, part, title, file_path, file_size, mime_type, type, status, submitted_by, submitted_at, created_at, updated_at) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'submitted', ?, NOW(), NOW(), NOW())");
+
+$stmt->bind_param("iisssissi", 
+    $group_id,      
+    $chapter,       
+    $part,          
+    $title,         
+    $filePath,      
+    $fileSize,      
+    $fileExtension, 
+    $researchPart,  
+    $user_id        
+);
 
 if($stmt->execute()){
     echo json_encode(["success"=>true]);

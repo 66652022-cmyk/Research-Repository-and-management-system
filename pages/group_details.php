@@ -446,40 +446,44 @@
                 div.className = 'document-post';
 
                 div.innerHTML = `
-                <div class="post-header">
-                    <div class="post-author">
-                        <div class="author-avatar">${doc.submitted_by ? doc.submitted_by.charAt(0).toUpperCase() : "?"}</div>
-                        <div class="author-info">
-                            <h4>${doc.submitted_by || "Unknown"}</h4>
-                            <div class="post-time">${doc.submitted_at ? new Date(doc.submitted_at).toLocaleString() : "N/A"}</div>
+                    <div class="post-header">
+                        <div class="post-author">
+                            <div class="author-avatar">${doc.submitted_by ? doc.submitted_by.charAt(0).toUpperCase() : "?"}</div>
+                            <div class="author-info">
+                                <h4>${doc.submitted_by || "Unknown"}</h4>
+                                <div class="post-time">${doc.submitted_at ? new Date(doc.submitted_at).toLocaleString() : "N/A"}</div>
+                            </div>
+                        </div>
+                        <div class="document-info">
+                            <h5>${doc.title} (${doc.type})</h5>
+                            <div class="doc-meta">
+                                <p><strong>Chapter:</strong> ${doc.chapter || "N/A"}</p>
+                                <p><strong>Part:</strong> ${doc.part || "N/A"}</p>
+                                <p><strong>File Type:</strong> ${doc.mime_type || "Unknown"}</p>
+                                <p><strong>File Size:</strong> ${(doc.file_size ? (doc.file_size/1024).toFixed(1) : 0)} KB</p>
+                            </div>
                         </div>
                     </div>
-                    <div class="document-info">
-                        <h5>${doc.title} (${doc.type})</h5>
-                        <div class="doc-meta">${doc.mime_type || "Unknown"} • ${(doc.file_size ? (doc.file_size/1024).toFixed(1) : 0)} KB</div>
+
+                    <div class="post-actions">
+                        <button ${doc.file_path ? `onclick="window.open('${doc.file_path}', '_blank')"` : "disabled"} class="action-btn btn-blue">Download</button>
+                        <button onclick="viewDocument(${doc.id})" class="action-btn btn-blue">View</button>
+                        <button class="action-btn btn-blue comment-toggle">Comment</button>
                     </div>
-                </div>
 
-                <div class="post-actions">
-                    <button ${doc.file_path ? `onclick="window.open('${doc.file_path}', '_blank')"` : "disabled"} class="action-btn btn-blue">Download</button>
-                    <button onclick="viewDocument(${doc.id})" class="action-btn btn-blue">View</button>
-                    <button class="action-btn btn-blue comment-toggle">Comment</button>
-                </div>
-
-                <div class="comments-preview"><div class="comment-preview">Loading comments...</div></div>
-
-                <div class="comments-section" style="display:none; margin-top: 8px;">
-                    <div class="existing-comments">Loading comments...</div>
-                    <div class="comment-input-container" style="position: relative; display: flex; align-items: flex-end;">
-                        <textarea class="comment-textarea" placeholder="Write a comment..." style="flex:1; padding-right: 40px;"></textarea>
-                        <button class="comment-submit btn-blue" style="position: absolute; right: 4px; bottom: 4px; padding:4px 8px; border-radius:50%; display:flex; align-items:center; justify-content:center;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" viewBox="0 0 24 24">
-                                <path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/>
-                            </svg>
-                        </button>
+                    <div class="comments-preview"><div class="comment-preview">Loading comments...</div></div>
+                    <div class="comments-section" style="display:none; margin-top: 8px;">
+                        <div class="existing-comments">Loading comments...</div>
+                        <div class="comment-input-container" style="position: relative; display: flex; align-items: flex-end;">
+                            <textarea class="comment-textarea" placeholder="Write a comment..." style="flex:1; padding-right: 40px;"></textarea>
+                            <button class="comment-submit btn-blue" style="position: absolute; right: 4px; bottom: 4px; padding:4px 8px; border-radius:50%; display:flex; align-items:center; justify-content:center;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" viewBox="0 0 24 24">
+                                    <path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/>
+                                </svg>
+                            </button>
+                        </div>
                     </div>
-                </div>
-            `;
+                `;
                 container.appendChild(div);
 
                 const commentsSection = div.querySelector('.comments-section');

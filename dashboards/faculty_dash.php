@@ -86,6 +86,9 @@ if ($_SESSION['user_role'] === 'research_faculty') {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Research Faculty Dashboard</title>
     <link href="/THESIS/src/output.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+
     <style>
         /* Royal Blue Theme */
         .bg-royal-blue { background-color: #4169E1; }
@@ -117,32 +120,39 @@ if ($_SESSION['user_role'] === 'research_faculty') {
     <header class="bg-white shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center py-6">
-                <h1 class="text-3xl font-bold text-gray-900">Research Faculty Dashboard</h1>
+                <button id="menu-button" class="p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-royal-blue mr-4">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+                <h1 class="text-3xl font-bold text-gray-900 flex-1">Research Faculty Dashboard</h1>
                 <div class="flex items-center space-x-4">
                     <div class="text-right">
                         <p class="text-sm text-gray-600"><?php echo $greeting; ?></p>
                         <p class="font-semibold text-gray-900"><?php echo htmlspecialchars($_SESSION['user_name']); ?></p>
                         <p class="text-sm text-royal-blue">Research Faculty</p>
                     </div>
-                    <button id="menu-button" class="p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-royal-blue">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                        </svg>
-                    </button>
                 </div>
+
             </div>
         </div>
     </header>
 
+
     <!-- Sidebar -->
     <div id="sidebar-overlay" class="fixed inset-0 z-40 bg-opacity-50 hidden"></div>
-    <aside id="sidebar" class="fixed left-0 top-0 h-full w-80 bg-royal-blue-dark transform -translate-x-full transition-transform duration-300 ease-in-out z-50 shadow-xl">
+
+    <aside id="sidebar" 
+        class="fixed left-0 top-0 h-full w-80 bg-royal-blue-dark 
+                transform -translate-x-full transition-transform duration-300 ease-in-out 
+                z-50 shadow-xl">
         <div class="p-6 flex flex-col h-full">
             <div class="flex items-center justify-between mb-8">
                 <h2 class="text-xl font-semibold text-white">Menu</h2>
                 <button id="close-sidebar" class="text-white hover:text-gray-300">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                            d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                 </button>
             </div>
@@ -165,7 +175,7 @@ if ($_SESSION['user_role'] === 'research_faculty') {
                     </svg>
                     Groups
                 </a>
-                <a href="#" onclick="showSection('group-details')" class="nav-item flex items-center px-4 py-3 text-white rounded-lg hover:bg-royal-blue-light transition-colors duration-200">
+                <a href="#" onclick="showSection('submission')" class="nav-item flex items-center px-4 py-3 text-white rounded-lg hover:bg-royal-blue-light transition-colors duration-200">
                     <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z" clip-rule="evenodd"></path>
                     </svg>
@@ -404,40 +414,11 @@ if ($_SESSION['user_role'] === 'research_faculty') {
         </section>
 
         <!-- Thesis Submissions Section -->
-        <section id="submissions-section" class="section hidden">
-            <h2 class="text-2xl font-bold text-gray-900 mb-6">Thesis Submissions</h2>
-            <div class="bg-white shadow-lg rounded-lg p-6">
-                <p class="text-gray-600 mb-4">Review and manage thesis submissions.</p>
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Submission ID</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Group Name</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Thesis Title</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Submitted Date</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 whitespace-nowrap">#SUB001</td>
-                                <td class="px-6 py-4 whitespace-nowrap font-semibold">Alpha Team</td>
-                                <td class="px-6 py-4 whitespace-nowrap">AI in Healthcare Systems</td>
-                                <td class="px-6 py-4 whitespace-nowrap">2024-01-20</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap space-x-2 text-sm font-medium">
-                                    <button class="text-royal-blue hover:text-royal-blue-dark">Review</button>
-                                    <button class="text-green-600 hover:text-green-900">Download</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+        <section id="submission-section" class="section hidden">
+            <iframe src="/THESIS/pages/group_details.php"
+                    width="100%" height="100%" 
+                    style="border:none; min-height:90vh;">
+            </iframe>
         </section>
 
         <!-- Reviews & Feedback Section -->
@@ -469,12 +450,7 @@ if ($_SESSION['user_role'] === 'research_faculty') {
             </div>
         </section>
 
-        <div id="group-details-section" class="section hidden">
-            <iframe src="/THESIS/pages/group_details.php"
-                    width="100%" height="100%" 
-                    style="border:none; min-height:90vh;">
-            </iframe>
-        </div>
+    
     </main>
 
     <!-- Add Student Modal -->
@@ -504,56 +480,63 @@ if ($_SESSION['user_role'] === 'research_faculty') {
     </div>
 
     <!-- Add Group Modal -->
-    <div id="addGroupModal" class="fixed inset-0 hidden items-center justify-center z-50 bg-opacity-50" onclick="hideAddGroupModal()">
-        <div class="bg-white rounded-lg shadow-lg p-8 w-full max-w-2xl" onclick="event.stopPropagation()">
-            <h3 class="text-xl font-bold mb-6">Create New Group</h3>
-            <form id="addGroupForm" method="post" onsubmit="submitNewGroup(event)">
-                <div class="mb-4">
-                    <label for="groupName" class="block font-semibold mb-1">Group Name</label>
-                    <input type="text" id="groupName" name="groupName" required class="w-full border border-gray-300 rounded px-3 py-2" />
+    <div id="addGroupModal" 
+        class="fixed inset-0 hidden items-center justify-center z-50 bg-opacity-50" 
+        onclick="hideAddGroupModal()">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-3xl p-6 relative" 
+            onclick="event.stopPropagation()">
+
+            <!-- Header -->
+            <div class="flex justify-between items-center border-b pb-3 mb-6">
+            <h3 class="text-2xl font-bold text-gray-800">Create New Group</h3>
+            <button onclick="hideAddGroupModal()" class="text-gray-500 hover:text-gray-700">&times;</button>
+            </div>
+
+            <!-- Form -->
+            <form id="addGroupForm" method="post" onsubmit="submitNewGroup(event)" class="space-y-6">
+
+            <!-- Group Info -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                <label for="groupName" class="block font-semibold mb-1">Group Name</label>
+                <input type="text" id="groupName" name="groupName" required
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500" />
                 </div>
-                <div class="mb-4">
-                    <label for="thesisTitle" class="block font-semibold mb-1">Thesis Title</label>
-                    <input type="text" id="thesisTitle" name="thesisTitle" required class="w-full border border-gray-300 rounded px-3 py-2" />
+
+                <div>
+                <label for="thesisTitle" class="block font-semibold mb-1">Thesis Title</label>
+                <input type="text" id="thesisTitle" name="thesisTitle" required
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500" />
                 </div>
-                <div class="mb-4">
-                    <label for="adviser_id" class="block font-semibold mb-1">Adviser</label>
-                    <select id="adviser_id" name="adviser_id" required class="w-full border border-gray-300 rounded px-3 py-2">
-                        <option value="">Select Adviser</option>
-                    </select>
+                <!-- Research Topic -->
+                <div>
+                    <label for="researchTopic" class="block font-semibold mb-1">Research Topic</label>
+                    <input type="text" id="researchTopic" name="researchTopic" required
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500" />
                 </div>
-                <div class="mb-4">
-                    <label for="english_critique_id" class="block font-semibold mb-1">English Critique</label>
-                    <select id="english_critique_id" name="english_critique_id" class="w-full border border-gray-300 rounded px-3 py-2">
-                        <option value="">Select English Critique</option>
-                    </select>
-                </div>
-                <div class="mb-4">
-                    <label for="statistician_id" class="block font-semibold mb-1">Statistician</label>
-                    <select id="statistician_id" name="statistician_id" class="w-full border border-gray-300 rounded px-3 py-2">
-                        <option value="">Select Statistician</option>
-                    </select>
-                </div>
-                <div class="mb-4">
-                    <label for="financial_analyst_id" class="block font-semibold mb-1">Financial Analyst</label>
-                    <select id="financial_analyst_id" name="financial_analyst_id" class="w-full border border-gray-300 rounded px-3 py-2">
-                        <option value="">Select Financial Analyst</option>
-                    </select>
-                </div>
-                <div class="mb-4">
-                    <label for="groupMembers" class="block font-semibold mb-1">Select Members</label>
-                    <select id="groupMembers" name="groupMembers[]" multiple required class="w-full border border-gray-300 rounded px-3 py-2 h-32">
-                    </select>
-                    <p class="text-sm text-gray-500 mt-1">Hold Ctrl (Cmd on Mac) to select multiple students.</p>
-                </div>
-                <div class="flex justify-end space-x-4">
-                    <button type="button" onclick="hideAddGroupModal()" class="px-4 py-2 border rounded hover:bg-gray-100">Cancel</button>
-                    <button type="submit" class="bg-royal-blue text-white px-4 py-2 rounded hover:bg-royal-blue-dark">Create Group</button>
-                </div>
+            </div>
+
+            <!-- Members -->
+            <div class="mb-4">
+                <label for="groupMembers" class="block font-semibold mb-1">Select Members</label>
+                <select id="groupMembers" name="groupMembers[]" multiple required class="w-full border border-gray-300 rounded px-3 py-2">
+                </select>
+                <p class="text-sm text-gray-500 mt-1">You can search and select multiple students.</p>
+            </div>
+            <!-- Footer -->
+            <div class="flex justify-end space-x-3 border-t pt-4">
+                <button type="button" onclick="hideAddGroupModal()" 
+                        class="px-4 py-2 rounded-lg border hover:bg-gray-100">Cancel</button>
+                <button type="submit" 
+                        class="px-5 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700">
+                Create Group
+                </button>
+            </div>
             </form>
         </div>
-    </div>
+        </div>
 
-    <script src="/THESIS/js/faculty_js/faculry_dashboard.js"></script>
+
+    <script src="/THESIS/js/faculty_js/faculty_dashboard.js"></script>
 </body>
 </html>

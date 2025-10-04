@@ -23,22 +23,32 @@ $sql = "SELECT g.id, g.name, COUNT(m.id) AS members
 // Role-based filtering
 $params = [];
 $types = "";
+
 if ($role === 'adviser') {
     $sql .= "WHERE g.adviser_id = ?";
     $params[] = $userId;
     $types .= "i";
+
 } elseif ($role === 'critique_english') {
     $sql .= "WHERE g.english_critique_id = ?";
     $params[] = $userId;
     $types .= "i";
+
 } elseif ($role === 'critique_statistician') {
     $sql .= "WHERE g.statistician_id = ?";
     $params[] = $userId;
     $types .= "i";
+
 } elseif ($role === 'financial_critique') {
     $sql .= "WHERE g.financial_analyst_id = ?";
     $params[] = $userId;
     $types .= "i";
+
+} elseif ($role === 'research_faculty') {
+    $sql .= "WHERE g.faculty_id = ?";
+    $params[] = $userId;
+    $types .= "i";
+
 } elseif ($role === 'super_admin') {
     // walang filter = makikita lahat
 }
@@ -62,3 +72,6 @@ while ($row = $result->fetch_assoc()) {
 }
 
 echo json_encode(["success" => true, "groups" => $groups]);
+$stmt->close();
+$dbConn->close();
+?>

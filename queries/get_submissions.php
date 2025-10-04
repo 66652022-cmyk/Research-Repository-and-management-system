@@ -12,8 +12,9 @@ if ($groupId <= 0) {
     exit;
 }
 
-$sql = "SELECT d.id, d.title, d.type, d.file_path, d.file_size, d.mime_type,
-               d.status, d.submitted_at, u.name AS submitted_by
+$sql = "SELECT d.id, d.title, d.type, d.chapter, d.part, d.file_path, 
+               d.file_size, d.mime_type, d.status, d.submitted_at, 
+               u.name AS submitted_by
         FROM documents d
         LEFT JOIN users u ON d.submitted_by = u.id
         WHERE d.group_id = ?
@@ -30,6 +31,8 @@ while ($row = $result->fetch_assoc()) {
         "id"           => $row["id"],
         "title"        => $row["title"],
         "type"         => $row["type"],
+        "chapter"      => $row["chapter"],
+        "part"         => $row["part"],
         "file_path"    => $row["file_path"],
         "file_size"    => $row["file_size"],
         "mime_type"    => $row["mime_type"],
