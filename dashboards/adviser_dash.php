@@ -312,27 +312,28 @@ $stats = $data['stats'];
                 </div>
             </div>
             <!-- Editor Section -->
-            <!-- <section id="editorSection" class="section hidden">
-                <iframe id="editorFrame" src="../pages/editor.php" style="width:100%; height:600px; border:none;"></iframe>
-            </section> -->
+            <section id="editor-section" class="section hidden">
+                <iframe id="editorFrame" src="../pages/editor.php" style="width:100%; height:800px; border:none;"></iframe>
+            </section>
             
-            <div id="submissions-section" class="section hidden">
+            <section id="submissions-section" class="section hidden">
                 <iframe src="/THESIS/pages/group_details.php" 
                         width="100%" height="100%" 
                         style="border:none; min-height:90vh;">
                 </iframe>
-            </div>
+            </section>
 
-            <div id="reports-section" class="section hidden">
+            <section id="reports-section" class="section hidden">
                 <h2 class="text-2xl font-bold text-gray-900 mb-6">Reports</h2>
                 <div class="bg-white shadow-lg rounded-lg p-6">
                     <p class="text-gray-600">Reports interface will be implemented here.</p>
                 </div>
-            </div>
+            </section>
         </main>
     </div>
 
     <script>
+        
         // Initialize sidebar state - true means open (for desktop), false means closed (for mobile)
         let isSidebarOpen = false;
 
@@ -488,6 +489,22 @@ $stats = $data['stats'];
             if (window.innerWidth < 1024 && isSidebarOpen) {
                 toggleSidebar();
             }
+        }
+//para sa editor galing sa group details
+        function showEditorWithDoc(docId, type) {
+            const editorFrame = document.getElementById('editorFrame');
+            const editorSection = document.getElementById('editor-section');
+
+            const url = type === 'text' 
+                ? `../pages/editor.php?id=${docId}` 
+                : `../pages/spreadsheet.php?id=${docId}`;
+
+            editorFrame.src = url;
+
+            document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
+            editorSection.classList.remove('hidden');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function confirmLogout() {

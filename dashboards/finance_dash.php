@@ -39,12 +39,12 @@
             <h2 class="sidebar-title">Navigation</h2>
             <nav>
                 <a class="nav-item active" onclick="showSection('dashboard')">Dashboard</a>
-                <a class="nav-item" onclick="showSection('budget')">Budget Analysis</a>
+                <a class="nav-item" onclick="showSection('editor')">Text Editor</a>
                 <a class="nav-item" onclick="showSection('financial')">Financial Reports</a>
                 <a class="nav-item" onclick="showSection('forecasting')">Forecasting</a>
                 <a class="nav-item" onclick="showSection('audit')">Audit Management</a>
                 <a class="nav-item" onclick="showSection('expense')">Expense Tracking</a>
-                <a class="nav-item">Submissions</a>
+                <a class="nav-item" onclick="showSection('submissions')">Submissions</a>
                 <a class="nav-item logout" onclick="confirmLogout()">Logout</a>
             </nav>
         </div>
@@ -75,25 +75,6 @@
                     <div class="stat-card">
                         <h3 class="stat-label">Audits Pending</h3>
                         <p class="stat-value">5</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Budget Analysis Section -->
-            <div id="budget-section" class="section">
-                <h2 class="page-title">Budget Analysis</h2>
-                <div class="card-grid">
-                    <div class="card">
-                        <h3>Budget Variance Analysis</h3>
-                        <p>Compare actual vs. budgeted expenses and revenues.</p>
-                    </div>
-                    <div class="card">
-                        <h3>Cost Center Review</h3>
-                        <p>Analyze departmental spending and allocations.</p>
-                    </div>
-                    <div class="card">
-                        <h3>Budget Forecasting</h3>
-                        <p>Project future budget requirements and trends.</p>
                     </div>
                 </div>
             </div>
@@ -163,6 +144,17 @@
                     </ul>
                 </div>
             </div>
+            <!-- Editor Section -->
+            <section id="editor-section" class="section hidden">
+                <iframe id="editorFrame" src="../pages/editor.php" style="width:100%; height:800px; border:none;"></iframe>
+            </section>
+            <!-- submissions page -->
+            <section id="submissions-section" class="section hidden">
+                <iframe src="../pages/group_details.php" 
+                        width="100%" height="100%" 
+                        style="border:none; min-height:90vh;">
+                </iframe>
+            </section>
         </main>
     </div>
 
@@ -279,6 +271,22 @@
             if (window.innerWidth < 1024 && isSidebarOpen) {
                 toggleSidebar();
             }
+        }
+        //para sa editor galing sa group details
+        function showEditorWithDoc(docId, type) {
+            const editorFrame = document.getElementById('editorFrame');
+            const editorSection = document.getElementById('editor-section');
+
+            const url = type === 'text' 
+                ? `../pages/editor.php?id=${docId}` 
+                : `../pages/spreadsheet.php?id=${docId}`;
+
+            editorFrame.src = url;
+
+            document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
+            editorSection.classList.remove('hidden');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function confirmLogout() {

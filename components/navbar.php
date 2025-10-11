@@ -23,7 +23,7 @@
                 <a href="#" class="hover:text-blue-200">About</a>
             </div>
             <div class="hidden md:flex items-center space-x-4">
-                <a href="/THESIS/pages/login.php" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg">Log-In</a>
+                <a href="/THESIS/pages/login.php" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg">Log In</a>
             </div>
             <button id="burger-btn" class="md:hidden">
                     <i class="fas fa-bars text-xl"></i>
@@ -38,7 +38,7 @@
             <a href="#" class="hover:text-blue-200">Archives</a>
             <a href="/THESIS/landing_search.php" class="hover:text-blue-200">Search</a>
             <a href="#" class="hover:text-blue-200">About</a>
-            <a href="/THESIS/pages/Login.php" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg">Log-in</a>
+            <a href="/THESIS/pages/Login.php" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg">Log In</a>
         </div>
     </div>
     <script src="/THESIS/js/index_sidebar.js"></script>

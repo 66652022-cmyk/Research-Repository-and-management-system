@@ -73,7 +73,7 @@ $stats = [
                 <nav class="space-y-2">
                     <a href="#" onclick="showSection('dashboard')" class="nav-item block p-3 rounded-lg hover:bg-royal-blue-light active-nav">Dashboard</a>
                     <a href="#" onclick="showSection('review')" class="nav-item block p-3 rounded-lg hover:bg-royal-blue-light">Document Review</a>
-                    <a href="#" onclick="showSection('annotation')" class="nav-item block p-3 rounded-lg hover:bg-royal-blue-light">Annotation System</a>
+                    <a href="#" onclick="showSection('editor')" class="nav-item block p-3 rounded-lg hover:bg-royal-blue-light">Text Editor</a>
                     <a href="#" onclick="showSection('workflow')" class="nav-item block p-3 rounded-lg hover:bg-royal-blue-light">Approval Workflow</a>
                     <a href="#" onclick="showSection('management')" class="nav-item block p-3 rounded-lg hover:bg-royal-blue-light">Document Management</a>
                     <a href="#" onclick="showSection('submissions')" class="nav-item block p-3 rounded-lg hover:bg-royal-blue-light">Submissions</a>
@@ -130,17 +130,10 @@ $stats = [
       </div>
     </div>
 
-    <!-- Annotation Section (full page, no cards) -->
-    <div id="annotation-section" class="section hidden">
-      <h2 class="text-2xl font-bold mb-6">Annotation System</h2>
-      <div class="bg-white shadow-lg rounded-lg p-6">
-        <ul class="list-disc ml-6 text-gray-700">
-          <li>✏️ Direct document annotation</li>
-          <li>💬 Comment system</li>
-          <li>🔖 Markup tools</li>
-        </ul>
-      </div>
-    </div>
+    <!-- Annotation Section -->
+    <section id="editor-section" class="section hidden">
+      <iframe id="editorFrame" src="../pages/editor.php" style="width:100%; height:800px; border:none;"></iframe>
+    </section>
 
     <!-- Workflow Section -->
     <div id="workflow-section" class="section hidden">
@@ -346,6 +339,22 @@ $stats = [
             if (window.innerWidth < 1024 && isSidebarOpen) {
                 toggleSidebar();
             }
+        }
+//para sa editor galing sa group details
+        function showEditorWithDoc(docId, type) {
+            const editorFrame = document.getElementById('editorFrame');
+            const editorSection = document.getElementById('editor-section');
+
+            const url = type === 'text' 
+                ? `../pages/editor.php?id=${docId}` 
+                : `../pages/spreadsheet.php?id=${docId}`;
+
+            editorFrame.src = url;
+
+            document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
+            editorSection.classList.remove('hidden');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function confirmLogout() {

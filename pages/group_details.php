@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="../src/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Group Details</title>
 </head>
 
@@ -22,7 +23,14 @@
             </div>
         </div>
     </header>
-
+<!-- text editor Container -->
+        <div id="editorContainer" style="display:none; margin-top:20px;">
+            <button onclick="closeEditor()" 
+            style="position:absolute; top:5px; right:5px; background:red; color:#fff; border:none; padding:4px 8px; border-radius:4px;">
+                ✖
+            </button>
+            <iframe id="editorFrame" src="/THESIS/pages/editor.php" style="width:100%; height:600px; border:1px solid #ccc; border-radius:6px;"></iframe>
+        </div>
     <div class="main-layout">
         <!-- Left Sidebar: Groups List -->
         <aside class="left-sidebar">
@@ -42,8 +50,6 @@
                     Review and comment on thesis documents submitted by group members
                 </p>
             </div>
-
-            <!-- Dynamic submissions-->
             <div id="documents-container" class="space-y-4"></div>
         </main>
 
@@ -82,7 +88,7 @@
                         <h3>Thesis Progress</h3>
                     </div>
                     <div id="progress-container"  class="widget-content">
-                        <!-- Progress bars will be injected here by JS -->
+                       
                     </div>
                 </div>
         </div>
@@ -175,25 +181,12 @@
         });
 
         document.querySelectorAll('.view-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            const docId = this.getAttribute('data-document-id');
-            
-            fetch(`queries/get_document.php?id=${docId}`)
-                .then(res => res.json())
-                .then(data => {
-                    if (data.success) {
-                        // I-send sa editor section
-                        const editorFrame = document.getElementById('editorFrame');
-                        editorFrame.contentWindow.postMessage({
-                            type: 'loadDocument',
-                            document: data.document
-                        }, '*');
-                    } else {
-                        alert('Failed to load document');
-                    }
-                });
+            button.addEventListener('click', function() {
+                const docId = this.getAttribute('data-document-id');
+                viewDocument(docId); 
+            });
         });
-    });
+
     // pang render ng groups sa left sidebar
         async function loadGroups() {
             const res = await fetch('../queries/get_group_submissions.php');
@@ -588,12 +581,127 @@
             document.getElementById('progress-container').innerHTML = `<p>No progress available.</p>`;
         }
     }
+// view text editor
+   let editorWindow = null;
 
     function viewDocument(docId) {
-        alert("Open inline viewer for document ID: " + docId);
+    Swal.fire({
+        title: 'Open with',
+        html: `
+        <div style="display:flex; flex-direction:column; gap:10px; align-items:center;">
+            <button id="btnTextEditor" style="
+            width: 250px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            background: #f8f8f8;
+            cursor: pointer;
+            transition: 0.2s;">
+            <img src="https://img.icons8.com/fluency/24/document--v1.png" alt="Text" />
+            <span style="font-size: 15px;">Text Editor</span>
+            </button>
+            <button id="btnSpreadsheet" style="
+            width: 250px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            background: #f8f8f8;
+            cursor: pointer;
+            transition: 0.2s;">
+            <img src="https://img.icons8.com/fluency/24/ms-excel.png" alt="Sheet" />
+            <span style="font-size: 15px;">Spreadsheet</span>
+            </button>
+        </div>
+        `,
+        showConfirmButton: false,
+        showCancelButton: true,
+        cancelButtonText: 'Cancel',
+        width: 320,
+        didOpen: () => {
+        document.querySelectorAll('#btnTextEditor, #btnSpreadsheet').forEach(btn => {
+            btn.addEventListener('mouseenter', () => btn.style.background = '#e5f1fb');
+            btn.addEventListener('mouseleave', () => btn.style.background = '#f8f8f8');
+        });
+
+        document.getElementById('btnTextEditor').addEventListener('click', () => {
+            if (typeof window.parent.showEditorWithDoc === 'function') {
+                window.parent.showEditorWithDoc(docId, 'text');
+                Swal.close();
+            } else {
+                alert('Editor not available in this dashboard.');
+            }
+        });
+
+        document.getElementById('btnSpreadsheet').addEventListener('click', () => {
+            if (typeof window.parent.showEditorWithDoc === 'function') {
+                window.parent.showEditorWithDoc(docId, 'spreadsheet');
+                Swal.close();
+            } else {
+                alert('spreadsheet not available in this dashboard.');
+            }
+        });
+        }
+    });
     }
 
-    //Progress loader with chapters + parts
+    // function openEditor(docId, type) {
+    //     console.log('Fetching:', `../queries/get_documents.php?id=${docId}`);
+        
+    //     // Show loading state
+    //     const editorContainer = document.getElementById('editorContainer');
+    //     editorContainer.style.display = 'block';
+        
+    //     fetch(`../queries/get_documents.php?id=${docId}`)
+    //         .then(res => res.json())
+    //         .then(data => {
+    //             if (!data.success) {
+    //                 Swal.fire('Error', data.message || 'Failed to load document.', 'error');
+    //                 return;
+    //             }
+
+    //             let url = type === 'text' ? `editor.php?id=${docId}` : `spreadsheet.php?id=${docId}`;
+
+    //             const editorFrame = document.getElementById('editorFrame');
+    //             const editorContainer = document.getElementById('editorContainer');
+
+    //             editorFrame.src = url;
+    //             editorContainer.style.display = 'block';
+
+    //             editorFrame.onload = () => {
+    //                 editorFrame.contentWindow.postMessage({
+    //                     type: 'loadDocument',
+    //                     document: data.document.html // HTML content ng docx
+    //                 }, '*');
+    //             };
+    //         })
+    //         .catch(err => {
+    //             console.error('FETCH ERROR:', err);
+    //             Swal.fire('Error', err.message || 'Something went wrong.', 'error');
+    //         });
+    // }
+
+    window.addEventListener('message', (event) => {
+    if (event.data.type === 'saveDocument') {
+        const updatedContent = event.data.content;
+        console.log('Received from editor:', updatedContent);
+    }
+    });
+    // close editor
+    function closeEditor() {
+        const editorContainer = document.getElementById('editorContainer');
+        const editorFrame = document.getElementById('editorFrame');
+        editorContainer.style.display = 'none';
+        editorFrame.src = '';
+    }
+
+
+    //Progress loader chapters
     async function loadProgress(groupId) {
         const res = await fetch(`../queries/get_progress.php?group_id=${groupId}`);
         const data = await res.json();

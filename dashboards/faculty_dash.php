@@ -175,11 +175,17 @@ if ($_SESSION['user_role'] === 'research_faculty') {
                     </svg>
                     Groups
                 </a>
+                <a href="#" onclick="showSection('editor')" class="nav-item flex items-center px-4 py-3 text-white rounded-lg hover:bg-royal-blue-light transition-colors duration-200">
+                    <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z" clip-rule="evenodd"></path>
+                    </svg>
+                    Text Editor
+                </a>
                 <a href="#" onclick="showSection('submission')" class="nav-item flex items-center px-4 py-3 text-white rounded-lg hover:bg-royal-blue-light transition-colors duration-200">
                     <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z" clip-rule="evenodd"></path>
                     </svg>
-                    Thesis Submissions
+                    Submissions
                 </a>
                 <a href="#" onclick="showSection('reviews')" class="nav-item flex items-center px-4 py-3 text-white rounded-lg hover:bg-royal-blue-light transition-colors duration-200">
                     <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
@@ -449,8 +455,10 @@ if ($_SESSION['user_role'] === 'research_faculty') {
                 </div>
             </div>
         </section>
-
-    
+        <!-- Text Editor Section -->
+        <section id="editor-section" class="section hidden">
+            <iframe id="editorFrame" src="../pages/editor.php" style="width:100%; height:800px; border:none;"></iframe>
+        </section>
     </main>
 
     <!-- Add Student Modal -->
@@ -538,5 +546,23 @@ if ($_SESSION['user_role'] === 'research_faculty') {
 
 
     <script src="/THESIS/js/faculty_js/faculty_dashboard.js"></script>
+    <script>
+        //para sa editor galing sa group details
+        function showEditorWithDoc(docId, type) {
+            const editorFrame = document.getElementById('editorFrame');
+            const editorSection = document.getElementById('editor-section');
+
+            const url = type === 'text' 
+                ? `../pages/editor.php?id=${docId}` 
+                : `../pages/spreadsheet.php?id=${docId}`;
+
+            editorFrame.src = url;
+
+            document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
+            editorSection.classList.remove('hidden');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
 </body>
 </html>
