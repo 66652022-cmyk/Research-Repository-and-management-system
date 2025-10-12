@@ -334,7 +334,6 @@ $stats = $data['stats'];
 
     <script>
         
-        // Initialize sidebar state - true means open (for desktop), false means closed (for mobile)
         let isSidebarOpen = false;
 
         function toggleSidebar() {
@@ -490,7 +489,7 @@ $stats = $data['stats'];
                 toggleSidebar();
             }
         }
-//para sa editor galing sa group details
+        //para sa editor galing sa group details
         function showEditorWithDoc(docId, type) {
             const editorFrame = document.getElementById('editorFrame');
             const editorSection = document.getElementById('editor-section');

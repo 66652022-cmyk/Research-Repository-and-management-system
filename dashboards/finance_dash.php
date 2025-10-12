@@ -38,7 +38,7 @@
         <div class="sidebar-content">
             <h2 class="sidebar-title">Navigation</h2>
             <nav>
-                <a class="nav-item active" onclick="showSection('dashboard')">Dashboard</a>
+                <a class="nav-item" onclick="showSection('dashboard')">Dashboard</a>
                 <a class="nav-item" onclick="showSection('editor')">Text Editor</a>
                 <a class="nav-item" onclick="showSection('financial')">Financial Reports</a>
                 <a class="nav-item" onclick="showSection('forecasting')">Forecasting</a>
@@ -57,7 +57,7 @@
     <div id="contentWrapper" class="content-wrapper">
         <main class="main-content">
             <!-- Dashboard Section -->
-            <div id="dashboard-section" class="section active">
+            <div id="dashboard-section" class="section">
                 <h1 class="page-title">Dashboard</h1>
                 <div class="stats-grid">
                     <div class="stat-card">
@@ -80,7 +80,7 @@
             </div>
 
             <!-- Financial Reports Section -->
-            <div id="financial-section" class="section">
+            <div id="financial-section" class="section hidden">
                 <h2 class="page-title">Financial Reports</h2>
                 <div class="list-card">
                     <ul>
@@ -94,7 +94,7 @@
             </div>
 
             <!-- Forecasting Section -->
-            <div id="forecasting-section" class="section">
+            <div id="forecasting-section" class="section hidden">
                 <h2 class="page-title">Forecasting</h2>
                 <div class="card-grid">
                     <div class="card">
@@ -113,7 +113,7 @@
             </div>
 
             <!-- Audit Management Section -->
-            <div id="audit-section" class="section">
+            <div id="audit-section" class="section hidden">
                 <h2 class="page-title">Audit Management</h2>
                 <div class="card-grid">
                     <div class="card">
@@ -132,7 +132,7 @@
             </div>
 
             <!-- Expense Tracking Section -->
-            <div id="expense-section" class="section">
+            <div id="expense-section" class="section hidden">
                 <h2 class="page-title">Expense Tracking</h2>
                 <div class="list-card">
                     <ul>
@@ -144,9 +144,9 @@
                     </ul>
                 </div>
             </div>
-            <!-- Editor Section -->
+            <!-- Text Editor Section -->
             <section id="editor-section" class="section hidden">
-                <iframe id="editorFrame" src="../pages/editor.php" style="width:100%; height:800px; border:none;"></iframe>
+                <iframe id="editorFrame" src="" style="width:100%; height:90vh; border:none;"></iframe>
             </section>
             <!-- submissions page -->
             <section id="submissions-section" class="section hidden">
@@ -253,20 +253,26 @@
         });
 
         function showSection(sectionName) {
+            // Hide all sections first
             document.querySelectorAll('.section').forEach(section => {
                 section.classList.remove('active');
+                section.classList.add('hidden');
             });
             
             const targetSection = document.getElementById(sectionName + '-section');
             if (targetSection) {
                 targetSection.classList.add('active');
+                targetSection.classList.remove('hidden');
             }
             
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.classList.remove('active');
             });
             
-            event.target.classList.add('active');
+            // Only update nav item if event exists (not called programmatically)
+            if (event) {
+                event.target.classList.add('active');
+            }
             
             if (window.innerWidth < 1024 && isSidebarOpen) {
                 toggleSidebar();
@@ -283,8 +289,15 @@
 
             editorFrame.src = url;
 
-            document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
+            // Hide all sections and remove active class
+            document.querySelectorAll('.section').forEach(s => {
+                s.classList.add('hidden');
+                s.classList.remove('active');
+            });
+            
+            // Show editor section
             editorSection.classList.remove('hidden');
+            editorSection.classList.add('active');
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }

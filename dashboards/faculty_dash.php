@@ -421,7 +421,7 @@ if ($_SESSION['user_role'] === 'research_faculty') {
 
         <!-- Thesis Submissions Section -->
         <section id="submission-section" class="section hidden">
-            <iframe src="/THESIS/pages/group_details.php"
+            <iframe src="../pages/group_details.php"
                     width="100%" height="100%" 
                     style="border:none; min-height:90vh;">
             </iframe>

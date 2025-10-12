@@ -630,11 +630,18 @@
         });
 
         document.getElementById('btnTextEditor').addEventListener('click', () => {
-            if (typeof window.parent.showEditorWithDoc === 'function') {
-                window.parent.showEditorWithDoc(docId, 'text');
-                Swal.close();
-            } else {
-                alert('Editor not available in this dashboard.');
+            try {
+                if (window.parent && typeof window.parent.showEditorWithDoc === 'function') {
+                    window.parent.showEditorWithDoc(docId, 'text');
+                    Swal.close();
+                } else {
+                    console.log('Parent window:', window.parent);
+                    console.log('ShowEditorWithDoc exists:', typeof window.parent.showEditorWithDoc);
+                    alert('Editor not available in this dashboard. Please ensure you are using a compatible dashboard.');
+                }
+            } catch (error) {
+                console.error('Error accessing parent window:', error);
+                alert('Unable to access editor. This might be due to security restrictions.');
             }
         });
 
@@ -649,42 +656,6 @@
         }
     });
     }
-
-    // function openEditor(docId, type) {
-    //     console.log('Fetching:', `../queries/get_documents.php?id=${docId}`);
-        
-    //     // Show loading state
-    //     const editorContainer = document.getElementById('editorContainer');
-    //     editorContainer.style.display = 'block';
-        
-    //     fetch(`../queries/get_documents.php?id=${docId}`)
-    //         .then(res => res.json())
-    //         .then(data => {
-    //             if (!data.success) {
-    //                 Swal.fire('Error', data.message || 'Failed to load document.', 'error');
-    //                 return;
-    //             }
-
-    //             let url = type === 'text' ? `editor.php?id=${docId}` : `spreadsheet.php?id=${docId}`;
-
-    //             const editorFrame = document.getElementById('editorFrame');
-    //             const editorContainer = document.getElementById('editorContainer');
-
-    //             editorFrame.src = url;
-    //             editorContainer.style.display = 'block';
-
-    //             editorFrame.onload = () => {
-    //                 editorFrame.contentWindow.postMessage({
-    //                     type: 'loadDocument',
-    //                     document: data.document.html // HTML content ng docx
-    //                 }, '*');
-    //             };
-    //         })
-    //         .catch(err => {
-    //             console.error('FETCH ERROR:', err);
-    //             Swal.fire('Error', err.message || 'Something went wrong.', 'error');
-    //         });
-    // }
 
     window.addEventListener('message', (event) => {
     if (event.data.type === 'saveDocument') {

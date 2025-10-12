@@ -8,12 +8,6 @@ if (!isset($_SESSION['user_id'])) {
 $hour = date('H');
 $greeting = $hour < 12 ? 'Good morning!' : ($hour < 18 ? 'Good afternoon!' : 'Good evening!');
 
-$stats = [
-    'datasets_analyzed' => 24,
-    'active_projects' => 8,
-    'models_generated' => 15,
-    'reports_completed' => 11
-];
 ?>
 
 <!DOCTYPE html>
@@ -23,6 +17,7 @@ $stats = [
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Statistician Dashboard</title>
     <link rel="stylesheet" href="/THESIS/src/statistician.css">
+
 </head>
 <body>
 
@@ -57,12 +52,12 @@ $stats = [
             <h2 class="sidebar-title">Navigation</h2>
             <nav>
                 <a class="nav-item active" onclick="showSection('dashboard')">Dashboard</a>
-                <a class="nav-item" onclick="showSection('analysis')">Data Analysis</a>
-                <a class="nav-item" onclick="showSection('reports')">Reports</a>
+                <a class="nav-item" onclick="showSection('editor')">Text Editor</a>
                 <a class="nav-item" onclick="showSection('visualization')">Visualization Tools</a>
                 <a class="nav-item" onclick="showSection('import')">Data Import</a>
                 <a class="nav-item" onclick="showSection('export')">Export Results</a>
-                <a class="nav-item">Submissions</a>
+                <a class="nav-item" onclick="showSection('submissions')">Submissions</a>
+                <a class="nav-item" onclick="showSection('reports')">Reports</a>
                 <a class="nav-item logout" onclick="confirmLogout()">Logout</a>
             </nav>
         </div>
@@ -80,41 +75,27 @@ $stats = [
                 <div class="stats-grid">
                     <div class="stat-card">
                         <h3 class="stat-label">Datasets Analyzed</h3>
-                        <p class="stat-value"><?php echo $stats['datasets_analyzed']; ?></p>
+                        <p class="stat-value"></p>
                     </div>
                     <div class="stat-card">
                         <h3 class="stat-label">Active Projects</h3>
-                        <p class="stat-value"><?php echo $stats['active_projects']; ?></p>
+                        <p class="stat-value"></p>
                     </div>
                     <div class="stat-card">
                         <h3 class="stat-label">Models Generated</h3>
-                        <p class="stat-value"><?php echo $stats['models_generated']; ?></p>
+                        <p class="stat-value"></p>
                     </div>
                     <div class="stat-card">
                         <h3 class="stat-label">Reports Completed</h3>
-                        <p class="stat-value"><?php echo $stats['reports_completed']; ?></p>
+                        <p class="stat-value"></p>
                     </div>
                 </div>
             </div>
 
-            <!-- Data Analysis Section -->
-            <div id="analysis-section" class="section">
-                <h2 class="page-title">Data Analysis</h2>
-                <div class="card-grid">
-                    <div class="card">
-                        <h3>Descriptive Statistics</h3>
-                        <p>Calculate mean, median, mode, and standard deviation.</p>
-                    </div>
-                    <div class="card">
-                        <h3>Hypothesis Testing</h3>
-                        <p>Perform t-tests, ANOVA, and chi-square tests.</p>
-                    </div>
-                    <div class="card">
-                        <h3>Regression Analysis</h3>
-                        <p>Linear and logistic regression modeling.</p>
-                    </div>
-                </div>
-            </div>
+             <!-- Editor Section -->
+            <section id="editor-section" class="section hidden">
+                <iframe id="editorFrame" src="" style="width:100%; height:90vh; border:none;"></iframe>
+            </section>
 
             <!-- Reports Section -->
             <div id="reports-section" class="section">
@@ -179,6 +160,13 @@ $stats = [
                     </ul>
                 </div>
             </div>
+            <!-- submmissions -->
+            <section id="submissions-section" class="section hidden">
+                <iframe src="../pages/group_details.php" 
+                        width="100%" height="100%" 
+                        style="border:none; min-height:90vh;">
+                </iframe>
+            </section>
         </main>
     </div>
 
@@ -277,24 +265,53 @@ $stats = [
         });
 
         function showSection(sectionName) {
+            // Hide all sections first
             document.querySelectorAll('.section').forEach(section => {
                 section.classList.remove('active');
+                section.classList.add('hidden');
             });
             
             const targetSection = document.getElementById(sectionName + '-section');
             if (targetSection) {
                 targetSection.classList.add('active');
+                targetSection.classList.remove('hidden');
             }
             
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.classList.remove('active');
             });
             
-            event.target.classList.add('active');
+            // Only update nav item if event exists (not called programmatically)
+            if (event) {
+                event.target.classList.add('active');
+            }
             
             if (window.innerWidth < 1024 && isSidebarOpen) {
                 toggleSidebar();
             }
+        }
+        //para sa editor galing sa group details
+        function showEditorWithDoc(docId, type) {
+            const editorFrame = document.getElementById('editorFrame');
+            const editorSection = document.getElementById('editor-section');
+
+            const url = type === 'text' 
+                ? `../pages/editor.php?id=${docId}` 
+                : `../pages/spreadsheet.php?id=${docId}`;
+
+            editorFrame.src = url;
+
+            // Hide all sections and remove active class
+            document.querySelectorAll('.section').forEach(s => {
+                s.classList.add('hidden');
+                s.classList.remove('active');
+            });
+            
+            // Show editor section
+            editorSection.classList.remove('hidden');
+            editorSection.classList.add('active');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function confirmLogout() {
