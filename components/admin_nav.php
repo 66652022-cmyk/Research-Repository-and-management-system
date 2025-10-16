@@ -12,11 +12,13 @@
       </div>
 
       <div class="flex items-center space-x-4">
-        <div class="text-white text-right">
+        <button id="profile-btn" class="text-white text-right p-2 rounded-lg hover:bg-royal-blue-dark transition-colors duration-200 flex flex-col items-end">
           <p class="opacity-90 mb-1"><?php echo $greeting; ?></p>
-          <strong><?php echo htmlspecialchars($_SESSION['user_name'] ?? ''); ?></strong><br>
-          <small><?php echo htmlspecialchars($_SESSION['user_email'] ?? ''); ?></small><br>
-        </div>
+          <div class="flex items-center space-x-2">
+            <strong><?php echo htmlspecialchars($_SESSION['user_name'] ?? ''); ?></strong>
+          </div>
+          <small><?php echo htmlspecialchars($_SESSION['user_email'] ?? ''); ?></small>
+        </button>
       </div>
     </div>
   </header>
@@ -28,7 +30,7 @@
   <aside id="sidebar" class="fixed top-16 left-0 w-64 bg-royal-blue-dark text-white shadow-lg transform transition-transform duration-300 ease-in-out z-10 pointer-events-auto overflow-y-auto" style="height: calc(100vh - 4rem);">
     <div class="p-4 relative">
       <!-- Close button - visible on desktop and mobile -->
-      <button id="close-sidebar" class="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors duration-200">
+      <button id="close-sidebar" class="absolute top-4 right-4 text-white hover:text-gray-400 transition-colors duration-200">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
         </svg>
@@ -99,18 +101,55 @@
           </svg>
           Student
         </a>
+      </nav>
+    </div>
+  </aside>
 
-        <div class="border-t border-royal-blue-light my-4"></div>
+  <!-- Profile Sidebar Overlay -->
+  <div id="profile-overlay"
+     class="fixed inset-0  bg-opacity-40 hidden z-40 pointer-events-none transition-opacity duration-300">
+</div>
 
-        <a href="#" onclick="confirmLogout()" class="nav-item flex items-center p-3 rounded-lg hover:bg-red-600 transition-colors duration-200">
+
+  <!-- Profile Sidebar -->
+  <aside id="profile-sidebar" class="fixed top-0 right-0 w-80 bg-royal-blue-dark text-white h-full shadow-lg transform translate-x-full transition-transform duration-300 ease-in-out z-60 pointer-events-auto">
+    <div class="p-6 flex flex-col h-full">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-lg font-semibold">Profile</h2>
+        <button id="close-profile" class="text-white hover:text-gray-400">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Profile Info -->
+      <div class="flex flex-col items-center text-center mb-6">
+        <div class="w-20 h-20 bg-royal-blue text-white flex items-center justify-center rounded-full text-2xl font-bold mb-3">
+          <?php
+            $initials = strtoupper(substr($_SESSION['user_name'] ?? 'U', 0, 1));
+            echo $initials;
+          ?>
+        </div>
+        <p class="font-bold text-lg"><?php echo htmlspecialchars($_SESSION['user_name'] ?? ''); ?></p>
+        <p class="text-sm text-white"><?php echo htmlspecialchars($_SESSION['user_email'] ?? ''); ?></p>
+      </div>
+
+      <!-- Actions -->
+      <div class="mt-auto space-y-2">
+        <button class="w-full p-3 bg-royal-blue text-white rounded-lg hover:bg-royal-blue-dark transition-colors">
+          View Profile
+        </button>
+        <a href="#" onclick="confirmLogout()" class="nav-item flex items-center p-3 rounded-lg hover:bg-red-600 transition-colors duration-200 text-white">
           <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
             <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"></path>
           </svg>
           Logout
         </a>
-      </nav>
+      </div>
     </div>
   </aside>
+
 </div>
 
 <script>
@@ -231,19 +270,42 @@ document.addEventListener('keydown', function(e) {
   }
 });
 
-// Click outside to close sidebar (works on both mobile and desktop)
-document.addEventListener('click', function(e) {
-  if (isSidebarOpen && 
-      !e.target.closest('#sidebar') && 
-      !e.target.closest('#burger-menu')) {
-    toggleSidebar();
-  }
-});
-
 // Prevent sidebar clicks from bubbling up
 document.addEventListener('click', function(e) {
   if (e.target.closest('#sidebar')) {
     e.stopPropagation();
   }
 });
+
+// Profile sidebar toggle
+const profileBtn = document.getElementById('profile-btn');
+const profileSidebar = document.getElementById('profile-sidebar');
+const profileOverlay = document.getElementById('profile-overlay');
+const closeProfile = document.getElementById('close-profile');
+
+function toggleProfileSidebar(show) {
+  if (show) {
+    profileSidebar.classList.remove('translate-x-full');
+    profileOverlay.classList.remove('hidden');
+    profileOverlay.classList.remove('pointer-events-none');
+    profileOverlay.classList.add('pointer-events-auto');
+    document.body.style.overflow = 'hidden';
+  } else {
+    profileSidebar.classList.add('translate-x-full');
+    profileOverlay.classList.add('hidden');
+    profileOverlay.classList.remove('pointer-events-auto');
+    profileOverlay.classList.add('pointer-events-none');
+    document.body.style.overflow = '';
+  }
+}
+
+
+if (profileBtn) profileBtn.addEventListener('click', () => toggleProfileSidebar(true));
+if (closeProfile) closeProfile.addEventListener('click', () => toggleProfileSidebar(false));
+
+// ESC key support
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') toggleProfileSidebar(false);
+});
+
 </script>

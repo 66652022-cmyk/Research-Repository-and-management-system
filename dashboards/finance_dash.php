@@ -1,3 +1,35 @@
+<?php 
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (!isset($_SESSION['user_id'])) {
+    header('Location: /THESIS/pages/Login.php');
+    exit;
+}
+
+if (!in_array($_SESSION['user_role'], ['financial_critique', 'super_admin'])) {
+    header('Location: /THESIS/pages/Login.php');
+    exit;
+}
+$hour = date('H');
+$greeting = $hour < 12 ? 'Good morning!' : ($hour < 18 ? 'Good afternoon!' : 'Good evening!');
+
+require_once '../config/database.php';
+
+$db = new Database();
+$dbConn = $db->connect();
+
+include "../queries/get_assigned_groups.php";
+
+$data = getUserGroupsAndStats($dbConn, $_SESSION['user_role'], $_SESSION['user_id']);
+$groups = $data['groups'];
+$stats  = $data['stats'];
+
+$assignedGroups = $data['groups'];
+$stats = $data['stats'];
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,7 +37,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Financial Analyst Dashboard</title>
     <link rel="stylesheet" href="/THESIS/src/finance.css">
+    <link rel="stylesheet" href="/THESIS/src/output.css">
 </head>
+<style>
+        /* Custom Royal Blue Theme */
+        .bg-royal-blue { background-color: #4169E1; }
+        .bg-royal-blue-dark { background-color: #1E3A8A; }
+        .bg-royal-blue-light { background-color: #6366F1; }
+        .hover\:bg-royal-blue:hover { background-color: #4169E1; }
+        .hover\:bg-royal-blue-dark:hover { background-color: #1E3A8A; }
+        .hover\:bg-royal-blue-light:hover { background-color: #6366F1; }
+        .text-royal-blue { color: #4169E1; }
+        .border-royal-blue { border-color: #4169E1; }
+    </style>
 <body>
 
     <!-- Header -->
@@ -20,14 +64,28 @@
                 <h1>Financial Analyst Dashboard</h1>
             </div>
 
-            <div class="user-info">
-                <p class="user-greeting">Good morning!</p>
-                <strong class="user-name">John Doe</strong><br>
-                <small class="user-role">Financial Analyst</small>
-            </div>
+            <?php if ($_SESSION['user_role'] === 'super_admin'): ?>
+                    <style>
+                    #profileButton {
+                        pointer-events: none;
+                        cursor: not-allowed;
+                    }
+                    </style>
+                <?php endif; ?>    
+
+                <div class="flex items-center space-x-4">
+                    <button id="profileButton" onclick="toggleProfileSidebar()" class="flex items-center space-x-2 text-white hover:opacity-80 transition">
+                    <div class="text-right">
+                        <p class="opacity-90 mb-1"><?php echo $greeting; ?></p>
+                        <strong><?php echo htmlspecialchars($_SESSION['user_name']); ?></strong><br>
+                        <small class="text-sm">Research Adviser</small>
+                    </div>
+                    </button>
+                </div>
         </div>
     </header>
-
+    <!-- Overlay -->
+    <div id="sidebar-overlay" class="sidebar-overlay"></div>
     <!-- Sidebar -->
     <aside id="sidebar" class="sidebar">
         <div class="sidebar-mobile-header">
@@ -38,20 +96,66 @@
         <div class="sidebar-content">
             <h2 class="sidebar-title">Navigation</h2>
             <nav>
-                <a class="nav-item" onclick="showSection('dashboard')">Dashboard</a>
+                <a class="nav-item active" onclick="showSection('dashboard')">Dashboard</a>
                 <a class="nav-item" onclick="showSection('editor')">Text Editor</a>
                 <a class="nav-item" onclick="showSection('financial')">Financial Reports</a>
-                <a class="nav-item" onclick="showSection('forecasting')">Forecasting</a>
+                <a class="nav-item" onclick="showSection('spreadsheet')">Spreadsheet</a>
                 <a class="nav-item" onclick="showSection('audit')">Audit Management</a>
                 <a class="nav-item" onclick="showSection('expense')">Expense Tracking</a>
                 <a class="nav-item" onclick="showSection('submissions')">Submissions</a>
-                <a class="nav-item logout" onclick="confirmLogout()">Logout</a>
             </nav>
         </div>
     </aside>
+    <!-- profile Sidebar -->
+    <aside 
+    id="profile-sidebar" 
+    class="fixed top-0 right-0 w-80 bg-royal-blue-dark text-white h-full shadow-lg transform translate-x-full transition-transform duration-300 ease-in-out z-50 pointer-events-auto">
+    
+        <div class="p-6 flex flex-col h-full">
+            <!-- Header -->
+            <div class="flex justify-between items-center mb-6">
+            <h2 class="text-lg font-semibold">Profile</h2>
+            <button id="close-profile" class="text-white hover:text-gray-400 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            </div>
 
-    <!-- Overlay -->
-    <div id="sidebar-overlay" class="sidebar-overlay"></div>
+            <!-- Profile Info -->
+            <div class="flex flex-col items-center text-center mb-6">
+            <div class="w-20 h-20 bg-royal-blue text-white flex items-center justify-center rounded-full text-2xl font-bold mb-3">
+                <?php
+                $initials = strtoupper(substr($_SESSION['user_name'] ?? 'U', 0, 1));
+                echo $initials;
+                ?>
+            </div>
+            <p class="font-bold text-lg">
+                <?php echo htmlspecialchars($_SESSION['user_name'] ?? ''); ?>
+            </p>
+            <p class="text-sm text-white opacity-80">
+                <?php echo htmlspecialchars($_SESSION['user_email'] ?? ''); ?>
+            </p>
+            </div>
+
+            <!-- Actions -->
+            <div class="mt-auto space-y-2">
+            <button 
+                class="w-full p-3 bg-royal-blue text-white rounded-lg hover:bg-royal-blue-dark transition-colors">
+                View Profile
+            </button>
+
+            <a href="#" 
+                onclick="confirmLogout()" 
+                class="nav-item flex items-center p-3 rounded-lg hover:bg-red-600 transition-colors duration-200 text-white">
+                <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"></path>
+                </svg>
+                Logout
+            </a>
+            </div>
+        </div>
+    </aside>
 
     <!-- Main Content -->
     <div id="contentWrapper" class="content-wrapper">
@@ -146,7 +250,12 @@
             </div>
             <!-- Text Editor Section -->
             <section id="editor-section" class="section hidden">
-                <iframe id="editorFrame" src="" style="width:100%; height:90vh; border:none;"></iframe>
+                <iframe id="editorFrame" src="../pages/editor.php" style="width:100%; height:90vh; border:none;"></iframe>
+            </section>
+
+             <!-- spread Sheet Section -->
+            <section id="spreadsheet-section" class="section hidden">
+                <iframe id="spreadsheetframe" src="../pages/spreadsheet.php" style="width:100%; height:800px; border:none;"></iframe>
             </section>
             <!-- submissions page -->
             <section id="submissions-section" class="section hidden">
@@ -157,7 +266,7 @@
             </section>
         </main>
     </div>
-
+    <script src="../js/right-sidebar.js"></script>
     <script>
         let isSidebarOpen = false;
 
@@ -300,12 +409,6 @@
             editorSection.classList.add('active');
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function confirmLogout() {
-            if (confirm("Are you sure you want to log out?")) {
-                alert("Logout successful!");
-            }
         }
     </script>
 </body>

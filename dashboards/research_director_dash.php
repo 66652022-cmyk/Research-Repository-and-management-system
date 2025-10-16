@@ -16,6 +16,10 @@ if (!in_array($_SESSION['user_role'], ['research_director', 'super_admin'])) {
     exit;
 }
 
+$hour = date('H');
+$greeting = $hour < 12 ? 'Good morning!' : ($hour < 18 ? 'Good afternoon!' : 'Good evening!');
+
+
 include "../director_api/get_groups.php";
 ?>
 <!DOCTYPE html>
@@ -46,9 +50,24 @@ include "../director_api/get_groups.php";
 
             <div class="flex items-center space-x-4">
                 <div class="text-white text-right">
-                    <p class="opacity-90 mb-1">Good morning!</p>
-                    <strong>Admin 1</strong><br>
-                    <small class="text-royal-blue-light">Research Director</small>
+                    <?php if ($_SESSION['user_role'] === 'super_admin'): ?>
+                    <style>
+                    #profileButton {
+                        pointer-events: none;
+                        cursor: not-allowed;
+                    }
+                    </style>
+                <?php endif; ?>    
+
+                <div class="flex items-center space-x-4">
+                    <button id="profileButton" onclick="toggleProfileSidebar()" class="flex items-center space-x-2 text-white hover:opacity-80 transition">
+                    <div class="text-right">
+                        <p class="opacity-90 mb-1"><?php echo $greeting; ?></p>
+                        <strong><?php echo htmlspecialchars($_SESSION['user_name']); ?></strong><br>
+                        <small class="text-sm">Research Adviser</small>
+                    </div>
+                    </button>
+                </div>
                 </div>
             </div>
         </div>
@@ -78,11 +97,11 @@ include "../director_api/get_groups.php";
                     </svg>
                     Group Assignments
                 </a>
-                <a href="#" onclick="showSection('submissions')" class="nav-item">
+                <a href="#" onclick="showSection('publish')" class="nav-item">
                     <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z" clip-rule="evenodd"></path>
                     </svg>
-                    Research Submissions
+                    Publish Research
                 </a>
                 <a href="#" onclick="showSection('repository')" class="nav-item">
                     <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
@@ -97,15 +116,56 @@ include "../director_api/get_groups.php";
                     Analytics & Reports
                 </a>
             </nav>
-            
-            <div class="border-t border-royal-blue-light my-6"></div>
-            
-            <a href="#" onclick="confirmLogout()" class="nav-item hover:bg-red-600">
+        </div>
+    </aside>
+    <!-- profile Sidebar -->
+    <aside 
+    id="profile-sidebar" 
+    class="fixed top-0 right-0 w-80 bg-royal-blue-dark text-white h-full shadow-lg transform translate-x-full transition-transform duration-300 ease-in-out z-50 pointer-events-auto">
+    
+        <div class="p-6 flex flex-col h-full">
+            <!-- Header -->
+            <div class="flex justify-between items-center mb-6">
+            <h2 class="text-lg font-semibold">Profile</h2>
+            <button id="close-profile" class="text-white hover:text-gray-400 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            </div>
+
+            <!-- Profile Info -->
+            <div class="flex flex-col items-center text-center mb-6">
+            <div class="w-20 h-20 bg-royal-blue text-white flex items-center justify-center rounded-full text-2xl font-bold mb-3">
+                <?php
+                $initials = strtoupper(substr($_SESSION['user_name'] ?? 'U', 0, 1));
+                echo $initials;
+                ?>
+            </div>
+            <p class="font-bold text-lg">
+                <?php echo htmlspecialchars($_SESSION['user_name'] ?? ''); ?>
+            </p>
+            <p class="text-sm text-white opacity-80">
+                <?php echo htmlspecialchars($_SESSION['user_email'] ?? ''); ?>
+            </p>
+            </div>
+
+            <!-- Actions -->
+            <div class="mt-auto space-y-2">
+            <button 
+                class="w-full p-3 bg-royal-blue text-white rounded-lg hover:bg-royal-blue-dark transition-colors">
+                View Profile
+            </button>
+
+            <a href="#" 
+                onclick="confirmLogout()" 
+                class="nav-item flex items-center p-3 rounded-lg hover:bg-red-600 transition-colors duration-200 text-white">
                 <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"></path>
+                <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"></path>
                 </svg>
                 Logout
             </a>
+            </div>
         </div>
     </aside>
 
@@ -114,7 +174,7 @@ include "../director_api/get_groups.php";
         <div class="content-wrapper">
             <!-- Dashboard Overview Section -->
             <section id="dashboard-section" class="section active">
-                <!-- Statistics Cards -->
+                <!-- Cards -->
                 <div class="stats-grid">
                     <div class="stats-card fade-in" style="border-left-color: #3b82f6;">
                         <div class="p-6 flex items-center">
@@ -125,7 +185,21 @@ include "../director_api/get_groups.php";
                             </div>
                             <div class="ml-5 flex-1">
                                 <div class="text-sm font-medium text-gray-500">Active Groups</div>
-                                <div class="text-3xl font-semibold text-gray-900">0</div>
+                                <div class="text-3xl font-semibold text-gray-900" id="active-groups"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stats-card fade-in" style="border-left-color: #10b981;">
+                        <div class="p-6 flex items-center">
+                            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                                <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"></path>
+                                </svg>
+                            </div>
+                            <div class="ml-5 flex-1">
+                                <div class="text-sm font-medium text-gray-500">Active Advisory Panels</div>
+                                <div class="text-3xl font-semibold text-gray-900" id="active-panels"></div>
                             </div>
                         </div>
                     </div>
@@ -138,22 +212,8 @@ include "../director_api/get_groups.php";
                                 </svg>
                             </div>
                             <div class="ml-5 flex-1">
-                                <div class="text-sm font-medium text-gray-500">Pending Submissions</div>
-                                <div class="text-3xl font-semibold text-gray-900">0</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="stats-card fade-in" style="border-left-color: #10b981;">
-                        <div class="p-6 flex items-center">
-                            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                                <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                                </svg>
-                            </div>
-                            <div class="ml-5 flex-1">
-                                <div class="text-sm font-medium text-gray-500">Approved Researches</div>
-                                <div class="text-3xl font-semibold text-gray-900">0</div>
+                                <div class="text-sm font-medium text-gray-500">Pending for Publishion</div>
+                                <div class="text-3xl font-semibold text-gray-900" id="pending-publish"></div>
                             </div>
                         </div>
                     </div>
@@ -166,8 +226,8 @@ include "../director_api/get_groups.php";
                                 </svg>
                             </div>
                             <div class="ml-5 flex-1">
-                                <div class="text-sm font-medium text-gray-500">Completed Groups</div>
-                                <div class="text-3xl font-semibold text-gray-900">0</div>
+                                <div class="text-sm font-medium text-gray-500">Published Researches</div>
+                                <div class="text-3xl font-semibold text-gray-900" id="completed-groups"></div>
                             </div>
                         </div>
                     </div>
@@ -185,36 +245,36 @@ include "../director_api/get_groups.php";
                                     <span class="text-sm font-medium text-gray-600">1st Year</span>
                                     <div class="flex items-center space-x-2">
                                         <div class="w-24 bg-gray-200 rounded-full h-2">
-                                            <div class="bg-royal-blue h-2 rounded-full" style="width: 0%"></div>
+                                            <div class="bg-royal-blue h-2 rounded-full" id="year-1-bar"></div>
                                         </div>
-                                        <span class="text-sm font-semibold text-gray-900">0</span>
+                                        <span id="year-1-count">0</span>
                                     </div>
                                 </div>
                                 <div class="flex items-center justify-between">
                                     <span class="text-sm font-medium text-gray-600">2nd Year</span>
                                     <div class="flex items-center space-x-2">
                                         <div class="w-24 bg-gray-200 rounded-full h-2">
-                                            <div class="bg-royal-blue h-2 rounded-full" style="width: 0%"></div>
+                                            <div class="bg-royal-blue h-2 rounded-full" id="year-2-bar"></div>
                                         </div>
-                                        <span class="text-sm font-semibold text-gray-900">0</span>
+                                        <span id="year-2-count">0</span>
                                     </div>
                                 </div>
                                 <div class="flex items-center justify-between">
                                     <span class="text-sm font-medium text-gray-600">3rd Year</span>
                                     <div class="flex items-center space-x-2">
                                         <div class="w-24 bg-gray-200 rounded-full h-2">
-                                            <div class="bg-royal-blue h-2 rounded-full" style="width: 0%"></div>
+                                            <div class="bg-royal-blue h-2 rounded-full" id="year-3-bar"></div>
                                         </div>
-                                        <span class="text-sm font-semibold text-gray-900">0</span>
+                                        <span id="year-3-count">0</span>
                                     </div>
                                 </div>
                                 <div class="flex items-center justify-between">
                                     <span class="text-sm font-medium text-gray-600">4th Year</span>
                                     <div class="flex items-center space-x-2">
                                         <div class="w-24 bg-gray-200 rounded-full h-2">
-                                            <div class="bg-royal-blue h-2 rounded-full" style="width: 0%"></div>
+                                            <div class="bg-royal-blue h-2 rounded-full" id="year-4-bar"></div>
                                         </div>
-                                        <span class="text-sm font-semibold text-gray-900">0</span>
+                                        <span id="year-4-count">0</span>
                                     </div>
                                 </div>
                             </div>
@@ -226,8 +286,8 @@ include "../director_api/get_groups.php";
                             <h3 class="text-lg font-semibold text-gray-900">Research Groups by Course</h3>
                         </div>
                         <div class="p-6">
-                            <div class="space-y-4">
-                                <div class="text-gray-500 text-sm">No course data available</div>
+                            <div id="course-list" class="space-y-4">
+                                <!-- nasa js na -->
                             </div>
                         </div>
                     </div>
@@ -238,28 +298,8 @@ include "../director_api/get_groups.php";
                     <div class="table-header">
                         <h3 class="text-lg font-semibold text-gray-900">Recent Activity</h3>
                     </div>
-                    <div class="p-6 space-y-4">
-                        <div class="flex items-center space-x-3 p-4 rounded-lg bg-blue-50">
-                            <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
-                            <div class="flex-1">
-                                <p class="text-sm font-medium text-gray-900">New research submission from BSCS Group Alpha</p>
-                                <p class="text-xs text-gray-500">2 hours ago</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center space-x-3 p-4 rounded-lg bg-green-50">
-                            <div class="w-2 h-2 bg-green-500 rounded-full"></div>
-                            <div class="flex-1">
-                                <p class="text-sm font-medium text-gray-900">Research by BSIT Team Beta approved for repository</p>
-                                <p class="text-xs text-gray-500">1 day ago</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center space-x-3 p-4 rounded-lg bg-amber-50">
-                            <div class="w-2 h-2 bg-amber-500 rounded-full"></div>
-                            <div class="flex-1">
-                                <p class="text-sm font-medium text-gray-900">Assignment completed for BSCS Group Gamma</p>
-                                <p class="text-xs text-gray-500">2 days ago</p>
-                            </div>
-                        </div>
+                    <div id="recent-activity" class="p-6 space-y-4">
+                        <!-- nasa js na -->
                     </div>
                 </div>
             </section>
@@ -334,13 +374,8 @@ include "../director_api/get_groups.php";
                                             <td class="px-6 py-4 whitespace-nowrap"><?= date('Y-m-d', strtotime($group['created_at'])) ?></td>
 
                                             <td class="px-6 py-4 whitespace-nowrap space-x-2 text-sm font-medium">
-                                                <button class="assign-btn text-royal-blue hover:text-royal-blue-dark" 
-                                                        data-group-id="<?= $group['id'] ?>" 
-                                                        data-group-name="<?= htmlspecialchars($group['name']) ?>" 
-                                                        data-members='<?= json_encode($group['members']) ?>'>
-                                                    assign critiques
-                                                </button>
                                                 <button class="text-green-600 hover:text-green-900" data-id="<?= htmlspecialchars($group['id']) ?>">Edit</button>
+                                                <button class="text-red-600 hover:text-red-900" data-id="<?= htmlspecialchars($group['id']) ?>">Delete</button>
                                             </td>
                                         </tr>
                                 <?php 
@@ -361,12 +396,6 @@ include "../director_api/get_groups.php";
             <section id="assignments-section" class="section">
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
                     <h2 class="text-2xl font-bold text-gray-900">Group Assignments Management</h2>
-                    <button onclick="refreshAssignments()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors duration-200">
-                        <svg class="w-4 h-4 inline mr-2" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"></path>
-                        </svg>
-                        Refresh
-                    </button>
                 </div>
 
                 <!-- Assignment Summary Cards -->
@@ -380,12 +409,11 @@ include "../director_api/get_groups.php";
                             </div>
                             <div class="ml-4">
                                 <h3 class="text-lg font-semibold text-gray-900">English Critiques</h3>
-                                <p class="text-sm text-gray-600">Groups assigned for English review</p>
+                                <p class="text-sm text-gray-600">Currently assigned English Critiques</p>
                             </div>
                         </div>
                         <div class="mt-4 ml-7">
-                            <div id="english-critique-count" class="text-2xl font-bold text-blue-600">0</div>
-                            <p class="text-sm text-gray-500">assigned groups</p>
+                            <div id="english-critique-count" class="text-2xl font-bold text-blue-600"></div>
                         </div>
                     </div>
 
@@ -398,12 +426,11 @@ include "../director_api/get_groups.php";
                             </div>
                             <div class="ml-4">
                                 <h3 class="text-lg font-semibold text-gray-900">Statisticians</h3>
-                                <p class="text-sm text-gray-600">Groups assigned for statistical review</p>
+                                <p class="text-sm text-gray-600">Currently assigned Statisticians</p>
                             </div>
                         </div>
                         <div class="mt-4 ml-7">
-                            <div id="statistician-count" class="text-2xl font-bold text-green-600">0</div>
-                            <p class="text-sm text-gray-500">assigned groups</p>
+                            <div id="statistician-count" class="text-2xl font-bold text-green-600"></div>
                         </div>
                     </div>
 
@@ -417,17 +444,16 @@ include "../director_api/get_groups.php";
                             </div>
                             <div class="ml-4">
                                 <h3 class="text-lg font-semibold text-gray-900">Financial Analysts</h3>
-                                <p class="text-sm text-gray-600">Groups assigned for financial review</p>
+                                <p class="text-sm text-gray-600">Currently assigned Financial Analysts</p>
                             </div>
                         </div>
                         <div class="mt-4 ml-7">
-                            <div id="financial-analyst-count" class="text-2xl font-bold text-purple-600">0</div>
-                            <p class="text-sm text-gray-500">assigned groups</p>
+                            <div id="financial-analyst-count" class="text-2xl font-bold text-purple-600"></div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Groups Assignment Table -->
+                <!-- Groups Table -->
                 <div class="table-container">
                     <div class="table-header">
                         <h3 class="text-lg font-semibold text-gray-900">Group Assignment Management</h3>
@@ -498,12 +524,25 @@ include "../director_api/get_groups.php";
 
                                             <td class="px-6 py-4 whitespace-nowrap space-x-2 text-sm font-medium">
                                                 <button class="assign-btn text-royal-blue hover:text-royal-blue-dark" 
-                                                        data-group-id="<?= $group['id'] ?>" 
-                                                        data-group-name="<?= htmlspecialchars($group['name']) ?>" 
-                                                        data-members='<?= json_encode($group['members']) ?>'>
-                                                    assign critiques
+                                                    data-group-id="<?= $group['id'] ?>" 
+                                                    data-group-name="<?= htmlspecialchars($group['name']) ?>" 
+                                                    data-members='<?= json_encode($group['members']) ?>'
+                                                    data-adviser-id="<?= htmlspecialchars($group['adviser_id'] ?? '') ?>"
+                                                    data-english-id="<?= htmlspecialchars($group['english_critique_id'] ?? '') ?>"
+                                                    data-statistician-id="<?= htmlspecialchars($group['statistician_id'] ?? '') ?>"
+                                                    data-financial-id="<?= htmlspecialchars($group['financial_analyst_id'] ?? '') ?>">
+                                                    Assign Advisory Panel
                                                 </button>
-                                                <button class="text-green-600 hover:text-green-900" data-id="<?= htmlspecialchars($group['id']) ?>">Edit</button>
+                                                <button class="assign-btn text-green-600 hover:text-green-900" 
+                                                    data-group-id="<?= $group['id'] ?>" 
+                                                    data-group-name="<?= htmlspecialchars($group['name']) ?>" 
+                                                    data-members='<?= json_encode($group['members']) ?>'
+                                                    data-adviser-id="<?= htmlspecialchars($group['adviser_id'] ?? '') ?>"
+                                                    data-english-id="<?= htmlspecialchars($group['english_critique_id'] ?? '') ?>"
+                                                    data-statistician-id="<?= htmlspecialchars($group['statistician_id'] ?? '') ?>"
+                                                    data-financial-id="<?= htmlspecialchars($group['financial_analyst_id'] ?? '') ?>">
+                                                    Edit
+                                                </button>
                                             </td>
                                         </tr>
                                 <?php 
@@ -520,13 +559,13 @@ include "../director_api/get_groups.php";
                 </div>
             </section>
 
-            <!-- Research Submissions Section -->
-            <section id="submissions-section" class="section">
-                <h2 class="text-2xl font-bold text-gray-900 mb-6">Research Submissions Management</h2>
+            <!-- Research publish Section -->
+            <section id="publish-section" class="section">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">Research Publishion Management</h2>
                 <div class="table-container">
                     <div class="table-header">
-                        <h3 class="text-lg font-semibold text-gray-900">Research Submissions</h3>
-                        <p class="text-sm text-gray-600 mt-1">Review and manage research submissions awaiting approval.</p>
+                        <h3 class="text-lg font-semibold text-gray-900">Publish Research</h3>
+                        <p class="text-sm text-gray-600 mt-1">Review and manage researches awaiting approval.</p>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200">
@@ -543,7 +582,7 @@ include "../director_api/get_groups.php";
                             <tbody class="bg-white divide-y divide-gray-200">
                                 <tr>
                                     <td colspan="6" class="px-6 py-8 text-center text-gray-500">
-                                        No submissions found.
+                                        No research found.
                                     </td>
                                 </tr>
                             </tbody>
@@ -620,7 +659,7 @@ include "../director_api/get_groups.php";
                                     <span class="font-semibold">0</span>
                                 </div>
                                 <div class="flex justify-between items-center">
-                                    <span class="text-sm text-gray-600">Submissions This Month</span>
+                                    <span class="text-sm text-gray-600">published This Month</span>
                                     <span class="font-semibold">0</span>
                                 </div>
                                 <div class="flex justify-between items-center">
@@ -634,7 +673,8 @@ include "../director_api/get_groups.php";
             </section>
         </div>
     </main>
-
+    <script src="../js/right-sidebar.js"></script>
+    <script src="../js/director_js/dashboard-data.js"></script>
     <script>
         // Global variables
         let currentSection = 'dashboard';
@@ -701,105 +741,139 @@ include "../director_api/get_groups.php";
         }
         // Enhanced SweetAlert2 Role Assignment
         document.addEventListener('DOMContentLoaded', function() {
-            const assignButtons = document.querySelectorAll('.assign-btn');
-            // dapat sa critiques kukuha ng data
-            assignButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const groupId = this.getAttribute('data-group-id');
-                    const groupName = this.getAttribute('data-group-name');
-                    const members = JSON.parse(this.getAttribute('data-members'));
-                    
-                    showRoleAssignmentModal(groupId, groupName, members);
-                });
+            document.addEventListener('click', function(e) {
+                const btn = e.target.closest('.assign-btn');
+                if (btn) {
+                    const groupId = btn.getAttribute('data-group-id');
+                    const groupName = btn.getAttribute('data-group-name');
+                    const members = JSON.parse(btn.getAttribute('data-members'));
+                    const currentAdviser = btn.getAttribute('data-adviser-id') || '';
+                    const currentEnglish = btn.getAttribute('data-english-id') || '';
+                    const currentStatistician = btn.getAttribute('data-statistician-id') || '';
+                    const currentFinancial = btn.getAttribute('data-financial-id') || '';
+
+                    showRoleAssignmentModal(groupId, groupName, members, {
+                        adviser: currentAdviser,
+                        english: currentEnglish,
+                        statistician: currentStatistician,
+                        financial: currentFinancial
+                    });
+                }
             });
         });
 
-        async function showRoleAssignmentModal(groupId, groupName, members) {
-        const roleUsers = await fetchRoleUsers();
+        async function showRoleAssignmentModal(groupId, groupName, members, currentAssignments = {}) {
+            const roleUsers = await fetchRoleUsers();
 
-        // Group by role
-        const englishOptions = roleUsers
+            const adviserOptions = roleUsers
+            .filter(u => u.role === 'adviser')
+            .map(u => {
+                const isSelected = String(u.id) === String(currentAssignments.adviser);
+                return `<option value="${u.id}" ${isSelected ? 'selected' : ''}>${u.name}</option>`;
+            })
+            .join('');
+
+            const englishOptions = roleUsers
             .filter(u => u.role === 'critique_english')
-            .map(u => `<option value="${u.id}">${u.name}</option>`)
+            .map(u => {
+                const isSelected = String(u.id) === String(currentAssignments.english);
+                return `<option value="${u.id}" ${isSelected ? 'selected' : ''}>${u.name}</option>`;
+            })
             .join('');
 
-        const statisticianOptions = roleUsers
+            const statisticianOptions = roleUsers
             .filter(u => u.role === 'critique_statistician')
-            .map(u => `<option value="${u.id}">${u.name}</option>`)
+            .map(u => {
+                const isSelected = String(u.id) === String(currentAssignments.statistician);
+                return `<option value="${u.id}" ${isSelected ? 'selected' : ''}>${u.name}</option>`;
+            })
             .join('');
 
-        const financialOptions = roleUsers
+            const financialOptions = roleUsers
             .filter(u => u.role === 'financial_critique')
-            .map(u => `<option value="${u.id}">${u.name}</option>`)
+            .map(u => {
+                const isSelected = String(u.id) === String(currentAssignments.financial);
+                return `<option value="${u.id}" ${isSelected ? 'selected' : ''}>${u.name}</option>`;
+            })
             .join('');
 
-        Swal.fire({
-            title: `Assign Roles - ${groupName}`,
-            html: `
-                <div class="text-left space-y-4">
-                    <div class="mb-4">
-                        <p class="text-sm text-gray-600 mb-2">Group ID: <strong>#GRP${String(groupId).padStart(3, '0')}</strong></p>
-                        <p class="text-sm text-gray-600">Members: <strong>${members.join(', ')}</strong></p>
-                    </div>
-                    
-                    <div class="grid gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">English Critique</label>
-                            <select id="englishCritique" class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                                <option value="">Select English Critique</option>
-                                ${englishOptions}
-                            </select>
+            Swal.fire({
+                title: `Assign Roles - ${groupName}`,
+                html: `
+                    <div class="text-left space-y-4">
+                        <div class="mb-4">
+                            <p class="text-sm text-gray-600 mb-2">Group ID: <strong>#GRP${String(groupId).padStart(3, '0')}</strong></p>
+                            <p class="text-sm text-gray-600">Members: <strong>${members.join(', ')}</strong></p>
                         </div>
                         
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Statistician</label>
-                            <select id="statistician" class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                                <option value="">Select Statistician</option>
-                                ${statisticianOptions}
-                            </select>
-                        </div>
-                        
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Financial Analyst</label>
-                            <select id="financialAnalyst" class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                                <option value="">Select Financial Analyst</option>
-                                ${financialOptions}
-                            </select>
+                        <div class="grid gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Adviser</label>
+                                <select id="adviser" class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                    <option value="">Select Adviser</option>
+                                    ${adviserOptions}
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">English Critique</label>
+                                <select id="englishCritique" class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                    <option value="">Select English Critique</option>
+                                    ${englishOptions}
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Statistician</label>
+                                <select id="statistician" class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                    <option value="">Select Statistician</option>
+                                    ${statisticianOptions}
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Financial Analyst (If Applicable)</label>
+                                <select id="financialAnalyst" class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                    <option value="">Select Financial Analyst (If applicable)</option>
+                                    ${financialOptions}
+                                </select>
+                            </div>
                         </div>
                     </div>
-                </div>
-            `,
-            showCancelButton: true,
-            confirmButtonText: 'Save Assignments',
-            preConfirm: () => {
-                const englishCritique = document.getElementById('englishCritique').value;
-                const statistician = document.getElementById('statistician').value;
-                const financialAnalyst = document.getElementById('financialAnalyst').value;
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'Save Assignments',
+                preConfirm: () => {
+                    const adviser = document.getElementById('adviser').value;
+                    const englishCritique = document.getElementById('englishCritique').value;
+                    const statistician = document.getElementById('statistician').value;
+                    const financialAnalyst = document.getElementById('financialAnalyst').value;
 
-                if (!englishCritique || !statistician || !financialAnalyst) {
-                    Swal.showValidationMessage('Please assign all three roles');
-                    return false;
+                    if (!adviser || !englishCritique || !statistician || !financialAnalyst) {
+                        Swal.showValidationMessage('Please assign all roles');
+                        return false;
+                    }
+
+                    const assignments = [adviser, englishCritique, statistician, financialAnalyst];
+                    if (new Set(assignments).size !== assignments.length) {
+                        Swal.showValidationMessage('Each member can only be assigned to one role');
+                        return false;
+                    }
+
+                    return {
+                        groupId,
+                        adviser,
+                        englishCritique,
+                        statistician,
+                        financialAnalyst
+                    };
                 }
-
-                const assignments = [englishCritique, statistician, financialAnalyst];
-                if (new Set(assignments).size !== assignments.length) {
-                    Swal.showValidationMessage('Each member can only be assigned to one role');
-                    return false;
+            }).then(result => {
+                if (result.isConfirmed) {
+                    saveRoleAssignments(result.value);
                 }
-
-                return {
-                    groupId,
-                    englishCritique,
-                    statistician,
-                    financialAnalyst
-                };
-            }
-        }).then(result => {
-            if (result.isConfirmed) {
-                saveRoleAssignments(result.value);
-            }
-        });
-    }
+            });
+        }
         function saveRoleAssignments(assignments) {
         fetch('../director_api/save_role_assignment.php', {
             method: 'POST',
@@ -818,6 +892,8 @@ include "../director_api/get_groups.php";
                     confirmButtonColor: '#10b981',
                     timer: 3000,
                     showConfirmButton: false
+                }).then(() => {
+                    location.reload();
                 });
             } else {
                 Swal.fire({
@@ -854,12 +930,6 @@ include "../director_api/get_groups.php";
         function unassignGroup(groupId, type) {
             if (confirm('Are you sure you want to unassign this group?')) {
                 alert('Group ' + groupId + ' unassigned from ' + type);
-            }
-        }
-
-        function confirmLogout() {
-            if (confirm('Are you sure you want to logout?')) {
-                window.location.href = '/THESIS/pages/Login.php';
             }
         }
 

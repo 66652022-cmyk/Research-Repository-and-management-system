@@ -240,6 +240,20 @@ $stats = [
                             style="border:none; min-height:90vh;">
                     </iframe>
                 </div>
+                <!-- financial analyst -->
+                <div id="financial-analyst-section" class="section pt-20 hidden">
+                    <iframe src="/THESIS/dashboards/finance_dash.php" 
+                            width="100%" height="100%" 
+                            style="border:none; min-height:90vh;">
+                    </iframe>
+                </div>
+                <!-- statistician -->
+                <div id="statistician-section" class="section pt-20 hidden">
+                    <iframe src="/THESIS/dashboards/statistician_dash.php" 
+                            width="100%" height="100%" 
+                            style="border:none; min-height:90vh;">
+                    </iframe>
+                </div>
                 <!-- research faculty page -->
                 <div id="faculty-section" class="section pt-20 hidden">
                     <iframe src="/THESIS/dashboards/faculty_dash.php" 
@@ -273,7 +287,7 @@ $stats = [
         <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md"
             onclick="event.stopPropagation()">
             <h2 class="text-2xl font-bold mb-6">Add New User</h2>
-            <form id="addUserForm">
+            <form id="addUserForm" >
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Name:</label>
                 <input type="text" id="userName" required class="w-full border border-gray-300 rounded-md px-3 py-2">

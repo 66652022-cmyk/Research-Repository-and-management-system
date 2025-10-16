@@ -117,23 +117,35 @@ if ($_SESSION['user_role'] === 'research_faculty') {
 <body class="bg-gray-50 min-h-screen">
 
     <!-- Header -->
-    <header class="bg-white shadow-lg">
+    <header class="bg-royal-blue shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center py-6">
-                <button id="menu-button" class="p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-royal-blue mr-4">
+                <button id="menu-button" class="p-2 rounded-md text-white hover:text-gray-400 focus:outline-none focus:ring-2 focus:ring-royal-blue mr-4">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
                 </button>
-                <h1 class="text-3xl font-bold text-gray-900 flex-1">Research Faculty Dashboard</h1>
+                <h1 class="text-3xl font-bold text-white flex-1">Research Faculty Dashboard</h1>
                 <div class="flex items-center space-x-4">
-                    <div class="text-right">
-                        <p class="text-sm text-gray-600"><?php echo $greeting; ?></p>
-                        <p class="font-semibold text-gray-900"><?php echo htmlspecialchars($_SESSION['user_name']); ?></p>
-                        <p class="text-sm text-royal-blue">Research Faculty</p>
-                    </div>
-                </div>
+                    <?php if ($_SESSION['user_role'] === 'super_admin'): ?>
+                    <style>
+                    #profileButton {
+                        pointer-events: none;
+                        cursor: not-allowed;
+                    }
+                    </style>
+                <?php endif; ?>    
 
+                <div class="flex items-center space-x-4">
+                    <button id="profileButton" onclick="toggleProfileSidebar()" class="flex items-center space-x-2 text-white hover:opacity-80 transition">
+                    <div class="text-right">
+                        <p class="opacity-90 mb-1"><?php echo $greeting; ?></p>
+                        <strong><?php echo htmlspecialchars($_SESSION['user_name']); ?></strong><br>
+                        <small class="text-sm">Research Adviser</small>
+                    </div>
+                    </button>
+                </div>
+                </div>
             </div>
         </div>
     </header>
@@ -194,13 +206,56 @@ if ($_SESSION['user_role'] === 'research_faculty') {
                     Reviews & Feedback
                 </a>
             </nav>
-            <div class="border-t border-royal-blue-light my-4"></div>
-            <button onclick="confirmLogout()" class="flex items-center px-4 py-3 text-white rounded-lg hover:bg-red-600 transition-colors duration-200">
+        </div>
+    </aside>
+    <!-- profile Sidebar -->
+    <aside 
+    id="profile-sidebar" 
+    class="fixed top-0 right-0 w-80 bg-royal-blue-dark text-white h-full shadow-lg transform translate-x-full transition-transform duration-300 ease-in-out z-50 pointer-events-auto">
+    
+        <div class="p-6 flex flex-col h-full">
+            <!-- Header -->
+            <div class="flex justify-between items-center mb-6">
+            <h2 class="text-lg font-semibold">Profile</h2>
+            <button id="close-profile" class="text-white hover:text-gray-400 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            </div>
+
+            <!-- Profile Info -->
+            <div class="flex flex-col items-center text-center mb-6">
+            <div class="w-20 h-20 bg-royal-blue text-white flex items-center justify-center rounded-full text-2xl font-bold mb-3">
+                <?php
+                $initials = strtoupper(substr($_SESSION['user_name'] ?? 'U', 0, 1));
+                echo $initials;
+                ?>
+            </div>
+            <p class="font-bold text-lg">
+                <?php echo htmlspecialchars($_SESSION['user_name'] ?? ''); ?>
+            </p>
+            <p class="text-sm text-white opacity-80">
+                <?php echo htmlspecialchars($_SESSION['user_email'] ?? ''); ?>
+            </p>
+            </div>
+
+            <!-- Actions -->
+            <div class="mt-auto space-y-2">
+            <button 
+                class="w-full p-3 bg-royal-blue text-white rounded-lg hover:bg-royal-blue-dark transition-colors">
+                View Profile
+            </button>
+
+            <a href="#" 
+                onclick="confirmLogout()" 
+                class="nav-item flex items-center p-3 rounded-lg hover:bg-red-600 transition-colors duration-200 text-white">
                 <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"></path>
+                <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"></path>
                 </svg>
                 Logout
-            </button>
+            </a>
+            </div>
         </div>
     </aside>
 
@@ -546,6 +601,7 @@ if ($_SESSION['user_role'] === 'research_faculty') {
 
 
     <script src="/THESIS/js/faculty_js/faculty_dashboard.js"></script>
+    <script src="../js/right-sidebar.js"></script>
     <script>
         //para sa editor galing sa group details
         function showEditorWithDoc(docId, type) {

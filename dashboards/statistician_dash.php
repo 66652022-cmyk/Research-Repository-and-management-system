@@ -53,7 +53,7 @@ $greeting = $hour < 12 ? 'Good morning!' : ($hour < 18 ? 'Good afternoon!' : 'Go
             <nav>
                 <a class="nav-item active" onclick="showSection('dashboard')">Dashboard</a>
                 <a class="nav-item" onclick="showSection('editor')">Text Editor</a>
-                <a class="nav-item" onclick="showSection('visualization')">Visualization Tools</a>
+                <a class="nav-item" onclick="showSection('spreadsheet')">Spreadsheet</a>
                 <a class="nav-item" onclick="showSection('import')">Data Import</a>
                 <a class="nav-item" onclick="showSection('export')">Export Results</a>
                 <a class="nav-item" onclick="showSection('submissions')">Submissions</a>
@@ -95,6 +95,11 @@ $greeting = $hour < 12 ? 'Good morning!' : ($hour < 18 ? 'Good afternoon!' : 'Go
              <!-- Editor Section -->
             <section id="editor-section" class="section hidden">
                 <iframe id="editorFrame" src="" style="width:100%; height:90vh; border:none;"></iframe>
+            </section>
+
+             <!-- spread Sheet Section -->
+            <section id="spreadsheet-section" class="section hidden">
+                <iframe id="spreadsheetframe" src="../pages/spreadsheet.php" style="width:100%; height:800px; border:none;"></iframe>
             </section>
 
             <!-- Reports Section -->

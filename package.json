@@ -3,5 +3,16 @@
     "@tailwindcss/cli": "^4.1.12",
     "tailwindcss": "^4.1.12",
     "tinymce": "^8.1.2"
-  }
+  },
+  "name": "thesis",
+  "version": "1.0.0",
+  "description": "When you're ready, start your application by running: `docker compose up --build`.",
+  "main": "tailwind.config.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }

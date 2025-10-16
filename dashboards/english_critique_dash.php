@@ -52,12 +52,23 @@ $stats = [
                     <h1 class="text-white text-xl font-bold">English Critique Dashboard</h1>
                 </div>
 
+                <?php if ($_SESSION['user_role'] === 'super_admin'): ?>
+                    <style>
+                    #profileButton {
+                        pointer-events: none;
+                        cursor: not-allowed;
+                    }
+                    </style>
+                <?php endif; ?>    
+
                 <div class="flex items-center space-x-4">
-                    <div class="text-white text-right">
+                    <button id="profileButton" onclick="toggleProfileSidebar()" class="flex items-center space-x-2 text-white hover:opacity-80 transition">
+                    <div class="text-right">
                         <p class="opacity-90 mb-1"><?php echo $greeting; ?></p>
                         <strong><?php echo htmlspecialchars($_SESSION['user_name']); ?></strong><br>
-                        <small class="text-sm">English Critique</small><br>
+                        <small class="text-sm">Research Adviser</small>
                     </div>
+                    </button>
                 </div>
             </div>
         </header>
@@ -77,9 +88,58 @@ $stats = [
                     <a href="#" onclick="showSection('workflow')" class="nav-item block p-3 rounded-lg hover:bg-royal-blue-light">Approval Workflow</a>
                     <a href="#" onclick="showSection('management')" class="nav-item block p-3 rounded-lg hover:bg-royal-blue-light">Document Management</a>
                     <a href="#" onclick="showSection('submissions')" class="nav-item block p-3 rounded-lg hover:bg-royal-blue-light">Submissions</a>
-                    <a href="#" onclick="confirmLogout()" class="nav-item block p-3 rounded-lg hover:bg-red-600">Logout</a>
                 </nav>
         </div>
+    </aside>
+    <!-- profile Sidebar -->
+    <aside 
+    id="profile-sidebar" 
+    class="fixed top-0 right-0 w-80 bg-royal-blue-dark text-white h-full shadow-lg transform translate-x-full transition-transform duration-300 ease-in-out z-50 pointer-events-auto">
+    
+      <div class="p-6 flex flex-col h-full">
+          <!-- Header -->
+          <div class="flex justify-between items-center mb-6">
+          <h2 class="text-lg font-semibold">Profile</h2>
+          <button id="close-profile" class="text-white hover:text-gray-400 transition-colors">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+          </button>
+          </div>
+
+          <!-- Profile Info -->
+          <div class="flex flex-col items-center text-center mb-6">
+          <div class="w-20 h-20 bg-royal-blue text-white flex items-center justify-center rounded-full text-2xl font-bold mb-3">
+              <?php
+              $initials = strtoupper(substr($_SESSION['user_name'] ?? 'U', 0, 1));
+              echo $initials;
+              ?>
+          </div>
+          <p class="font-bold text-lg">
+              <?php echo htmlspecialchars($_SESSION['user_name'] ?? ''); ?>
+          </p>
+          <p class="text-sm text-white opacity-80">
+              <?php echo htmlspecialchars($_SESSION['user_email'] ?? ''); ?>
+          </p>
+          </div>
+
+          <!-- Actions -->
+          <div class="mt-auto space-y-2">
+          <button 
+              class="w-full p-3 bg-royal-blue text-white rounded-lg hover:bg-royal-blue-dark transition-colors">
+              View Profile
+          </button>
+
+          <a href="#" 
+              onclick="confirmLogout()" 
+              class="nav-item flex items-center p-3 rounded-lg hover:bg-red-600 transition-colors duration-200 text-white">
+              <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"></path>
+              </svg>
+              Logout
+          </a>
+          </div>
+      </div>
     </aside>
 
 <!-- Overlay for mobile -->
@@ -182,7 +242,8 @@ $stats = [
     </div>
   </main>
 </div>
-
+</body>
+<script src="../js/right-sidebar.js"></script>
     <script>
         // Initialize sidebar state - true means open (for desktop), false means closed (for mobile)
         let isSidebarOpen = false;
@@ -363,5 +424,4 @@ $stats = [
             }
         }
     </script>
-</body>
 </html>

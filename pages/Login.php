@@ -60,9 +60,12 @@ if ($_POST) {
             if (!str_starts_with($dashboardUrl, '/') && !str_starts_with($dashboardUrl, 'http')) {
                 $dashboardUrl = '/THESIS/' . $dashboardUrl;
             }
-            
-            // Redirect to appropriate dashboard
-            header('Location: ' . $dashboardUrl);
+
+            // Instead of immediate redirect
+            echo "<script>
+                    localStorage.setItem('redirect_url', '$dashboardUrl');
+                    window.location.href = '../classes/loading.php';
+                </script>";
             exit();
         } else {
             $error = $result['message'];
@@ -328,16 +331,22 @@ if ($_POST) {
             </div>
         </div>
     </div>
+    <!-- LOADING OVERLAY -->
+    <div id="loadingOverlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white rounded-lg p-6 flex flex-col items-center shadow-lg">
+            <div class="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+            <p class="text-gray-700 font-medium">Please wait, loading dashboard...</p>
+        </div>
+    </div>
 
-    <!-- Include your existing Google login handler -->
+</body>
     <script src="../js/handleGoogleLogin.js"></script>
     
     <!-- Google Sign-In Library -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 
-    <!-- Enhanced JavaScript for connection status only -->
-    <script>
-        // Connection status management
+    <!-- <script>
+        
         let isOnline = navigator.onLine;
 
         function updateConnectionStatus() {
@@ -346,7 +355,7 @@ if ($_POST) {
             const offlineBtn = document.getElementById('offlineGoogleBtn');
 
             if (!isOnline) {
-                // Show offline state
+                
                 statusEl.className = 'block text-center text-sm p-3 rounded-lg bg-yellow-50 border border-yellow-200 text-yellow-800';
                 statusEl.innerHTML = '⚠️ No internet connection. Google Sign-In unavailable.';
                 statusEl.classList.remove('hidden');
@@ -355,14 +364,14 @@ if ($_POST) {
                 offlineBtn.classList.remove('hidden');
                 offlineBtn.classList.add('flex');
             } else {
-                // Hide offline elements when online
+                
                 statusEl.classList.add('hidden');
                 offlineBtn.classList.add('hidden');
                 googleBtnContainer.classList.remove('hidden');
             }
         }
 
-        // Event listeners for connection changes
+        
         window.addEventListener('online', () => {
             isOnline = true;
             console.log('Connection restored');
@@ -375,10 +384,8 @@ if ($_POST) {
             updateConnectionStatus();
         });
 
-        // Initialize connection status check
         document.addEventListener('DOMContentLoaded', function() {
             updateConnectionStatus();
         });
-    </script>
-</body>
+    </script> -->
 </html>
